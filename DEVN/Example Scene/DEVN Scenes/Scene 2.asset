@@ -1,0 +1,232 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f97195559373da409a1adde84887dff, type: 3}
+  m_Name: Scene 2
+  m_EditorClassIdentifier: 
+  m_currentID: 6
+  m_nodes:
+  - {fileID: 114706073325118772}
+  - {fileID: 114917498350415224}
+  - {fileID: 114627764919255198}
+  - {fileID: 114809891459578534}
+  - {fileID: 114397566723044286}
+  - {fileID: 114718091601819450}
+--- !u!114 &114397566723044286
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b19fd96f384d73488a80aba14d3f33d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 4
+  m_rectangle:
+    serializedVersion: 2
+    x: 268
+    y: 28
+    width: 364
+    height: 186
+  m_title: Dialogue
+  m_inputs: 03000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 258
+    y: 111
+    width: 10
+    height: 20
+  m_outputs: 05000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 632
+    y: 111
+    width: 10
+    height: 20
+  m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
+  m_sprite: {fileID: 21300000, guid: bf709ebdf31e80943b36077534b20628, type: 3}
+  m_characterAudio: {fileID: 0}
+  m_dialogueAudio: {fileID: 0}
+  m_dialogue: Hello again.
+--- !u!114 &114627764919255198
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4736a76f54eabd498ec4ac540793476, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 2
+  m_rectangle:
+    serializedVersion: 2
+    x: -259
+    y: 52
+    width: 272
+    height: 154
+  m_title: Character
+  m_inputs: 01000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: -269
+    y: 119
+    width: 10
+    height: 20
+  m_outputs: 03000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 13
+    y: 119
+    width: 10
+    height: 20
+  m_toggleSelection: 0
+  m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
+  m_sprite: {fileID: 21300000, guid: 763fbdcecf049eb4cb6fe84dbc51e2a2, type: 3}
+  m_xPosition: 30.6
+  m_fadeTime: 0.5
+  m_isInverted: 0
+--- !u!114 &114706073325118772
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bf1f0fa704193a4d9f493dbabc686e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 0
+  m_rectangle:
+    serializedVersion: 2
+    x: -745
+    y: 25
+    width: 100
+    height: 50
+  m_title: Start
+  m_inputs: 
+  m_inputPoint:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 10
+    height: 20
+  m_outputs: 01000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: -645
+    y: 40
+    width: 10
+    height: 20
+--- !u!114 &114718091601819450
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b23ffe4043565e46a04a1affa3e64e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 5
+  m_rectangle:
+    serializedVersion: 2
+    x: 853
+    y: 29
+    width: 200
+    height: 60
+  m_title: End
+  m_inputs: 04000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 843
+    y: 49
+    width: 10
+    height: 20
+  m_outputs: 
+  m_outputPoints: []
+  m_nextScene: {fileID: 0}
+--- !u!114 &114809891459578534
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f5d16997c22cc241bd5f4c6cf433796, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 3
+  m_rectangle:
+    serializedVersion: 2
+    x: 104
+    y: 40
+    width: 128
+    height: 42
+  m_title: Dialogue Box
+  m_inputs: 02000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 94
+    y: 51
+    width: 10
+    height: 20
+  m_outputs: 04000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 232
+    y: 51
+    width: 10
+    height: 20
+  m_toggleSelection: 0
+--- !u!114 &114917498350415224
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 268926b0572e1734695332a363e32b77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 1
+  m_rectangle:
+    serializedVersion: 2
+    x: -547
+    y: 31
+    width: 170
+    height: 198
+  m_title: Background
+  m_inputs: 00000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: -557
+    y: 120
+    width: 10
+    height: 20
+  m_outputs: 02000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: -377
+    y: 120
+    width: 10
+    height: 20
+  m_toggleSelection: 0
+  m_background: {fileID: 21300000, guid: 7bbabb66e5c19f6469f3902c87adaffd, type: 3}
+  m_fadeColour: {r: 0, g: 0, b: 0, a: 1}
+  m_fadeTime: 0.5
+  m_nodeHeight: 108
