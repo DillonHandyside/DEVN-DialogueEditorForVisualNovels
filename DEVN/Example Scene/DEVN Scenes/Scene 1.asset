@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f97195559373da409a1adde84887dff, type: 3}
   m_Name: Scene 1
   m_EditorClassIdentifier: 
-  m_currentID: 18
+  m_currentID: 21
   m_nodes:
   - {fileID: 114971391588808450}
   - {fileID: 114483568097820382}
@@ -21,7 +21,8 @@ MonoBehaviour:
   - {fileID: 114283072914304348}
   - {fileID: 114874390855199106}
   - {fileID: 114547329688469228}
-  - {fileID: 114881614368431736}
+  - {fileID: 114577393489869796}
+  - {fileID: 114638757635098840}
 --- !u!114 &114164690702951974
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -36,23 +37,23 @@ MonoBehaviour:
   m_nodeID: 5
   m_rectangle:
     serializedVersion: 2
-    x: -360
-    y: 18
+    x: 673
+    y: 13
     width: 128
     height: 42
   m_title: Dialogue Box
-  m_inputs: 02000000
+  m_inputs: 12000000
   m_inputPoint:
     serializedVersion: 2
-    x: -370
-    y: 29
+    x: 663
+    y: 24
     width: 10
     height: 20
   m_outputs: 07000000
   m_outputPoints:
   - serializedVersion: 2
-    x: -232
-    y: 29
+    x: 801
+    y: 24
     width: 10
     height: 20
   m_toggleSelection: 0
@@ -105,22 +106,22 @@ MonoBehaviour:
   m_nodeID: 8
   m_rectangle:
     serializedVersion: 2
-    x: 225
+    x: 1701
     y: 22
     width: 128
     height: 42
   m_title: Dialogue Box
-  m_inputs: 07000000
+  m_inputs: 13000000
   m_inputPoint:
     serializedVersion: 2
-    x: 215
+    x: 1691
     y: 33
     width: 10
     height: 20
   m_outputs: 09000000
   m_outputPoints:
   - serializedVersion: 2
-    x: 353
+    x: 1829
     y: 33
     width: 10
     height: 20
@@ -209,23 +210,23 @@ MonoBehaviour:
   m_nodeID: 1
   m_rectangle:
     serializedVersion: 2
-    x: -858
-    y: 18
+    x: -165
+    y: 12
     width: 170
     height: 198
   m_title: Background
   m_inputs: 00000000
   m_inputPoint:
     serializedVersion: 2
-    x: -868
-    y: 107
+    x: -175
+    y: 101
     width: 10
     height: 20
   m_outputs: 02000000
   m_outputPoints:
   - serializedVersion: 2
-    x: -688
-    y: 107
+    x: 5
+    y: 101
     width: 10
     height: 20
   m_toggleSelection: 0
@@ -247,29 +248,29 @@ MonoBehaviour:
   m_nodeID: 2
   m_rectangle:
     serializedVersion: 2
-    x: -659
-    y: 16
+    x: 34
+    y: 10
     width: 272
     height: 154
   m_title: Character
   m_inputs: 01000000
   m_inputPoint:
     serializedVersion: 2
-    x: -669
-    y: 83
+    x: 24
+    y: 77
     width: 10
     height: 20
-  m_outputs: 05000000
+  m_outputs: 12000000
   m_outputPoints:
   - serializedVersion: 2
-    x: -387
-    y: 83
+    x: 306
+    y: 77
     width: 10
     height: 20
   m_toggleSelection: 0
   m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
   m_sprite: {fileID: 21300000, guid: bf709ebdf31e80943b36077534b20628, type: 3}
-  m_xPosition: 75
+  m_xPosition: 54
   m_fadeTime: 0.5
   m_isInverted: 0
 --- !u!114 &114547329688469228
@@ -286,21 +287,98 @@ MonoBehaviour:
   m_nodeID: 10
   m_rectangle:
     serializedVersion: 2
-    x: 1029
-    y: 19
+    x: 2490
+    y: 30
     width: 200
     height: 60
   m_title: End
-  m_inputs: 0b000000
+  m_inputs: 09000000
   m_inputPoint:
     serializedVersion: 2
-    x: 1019
-    y: 39
+    x: 2480
+    y: 50
     width: 10
     height: 20
   m_outputs: 
   m_outputPoints: []
   m_nextScene: {fileID: 11400000, guid: 46dd9678ed7bb0b4e8739d55615c6691, type: 2}
+--- !u!114 &114577393489869796
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4736a76f54eabd498ec4ac540793476, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 18
+  m_rectangle:
+    serializedVersion: 2
+    x: 360
+    y: 10
+    width: 272
+    height: 154
+  m_title: Character
+  m_inputs: 02000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 350
+    y: 77
+    width: 10
+    height: 20
+  m_outputs: 05000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 632
+    y: 77
+    width: 10
+    height: 20
+  m_toggleSelection: 0
+  m_character: {fileID: 11400000, guid: 37a7047b0285e114f9cdf6d178e9b2ce, type: 2}
+  m_sprite: {fileID: 21300000, guid: 7f5c63e3a8e4330429c1043f0f61786e, type: 3}
+  m_xPosition: 46
+  m_fadeTime: 0.5
+  m_isInverted: 0
+--- !u!114 &114638757635098840
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b19fd96f384d73488a80aba14d3f33d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 19
+  m_rectangle:
+    serializedVersion: 2
+    x: 1256
+    y: 25
+    width: 364
+    height: 186
+  m_title: Dialogue
+  m_inputs: 07000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 1246
+    y: 108
+    width: 10
+    height: 20
+  m_outputs: 08000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 1620
+    y: 108
+    width: 10
+    height: 20
+  m_character: {fileID: 11400000, guid: 37a7047b0285e114f9cdf6d178e9b2ce, type: 2}
+  m_sprite: {fileID: 21300000, guid: 7f5c63e3a8e4330429c1043f0f61786e, type: 3}
+  m_characterAudio: {fileID: 0}
+  m_dialogueAudio: {fileID: 0}
+  m_dialogue: Hey, what's up?
 --- !u!114 &114744669112912828
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -375,6 +453,45 @@ MonoBehaviour:
   m_bgmAudio: {fileID: 0}
   m_ambientAudio:
   - {fileID: 0}
+--- !u!114 &114862749477084950
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4736a76f54eabd498ec4ac540793476, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 20
+  m_rectangle:
+    serializedVersion: 2
+    x: 951
+    y: 50
+    width: 272
+    height: 154
+  m_title: Character
+  m_inputs: 
+  m_inputPoint:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 10
+    height: 20
+  m_outputs: ffffffff
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 0
+    y: 0
+    width: 10
+    height: 20
+  m_toggleSelection: 0
+  m_character: {fileID: 0}
+  m_sprite: {fileID: 0}
+  m_xPosition: 50
+  m_fadeTime: 0.5
+  m_isInverted: 0
 --- !u!114 &114874390855199106
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -389,7 +506,7 @@ MonoBehaviour:
   m_nodeID: 9
   m_rectangle:
     serializedVersion: 2
-    x: 443
+    x: 1877
     y: 15
     width: 272
     height: 154
@@ -397,14 +514,14 @@ MonoBehaviour:
   m_inputs: 08000000
   m_inputPoint:
     serializedVersion: 2
-    x: 433
+    x: 1867
     y: 82
     width: 10
     height: 20
-  m_outputs: 0b000000
+  m_outputs: 0a000000
   m_outputPoints:
   - serializedVersion: 2
-    x: 715
+    x: 2149
     y: 82
     width: 10
     height: 20
@@ -414,44 +531,6 @@ MonoBehaviour:
   m_xPosition: 75
   m_fadeTime: 0.5
   m_isInverted: 0
---- !u!114 &114881614368431736
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 268926b0572e1734695332a363e32b77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_nodeID: 11
-  m_rectangle:
-    serializedVersion: 2
-    x: 785
-    y: 20
-    width: 170
-    height: 108
-  m_title: Background
-  m_inputs: 09000000
-  m_inputPoint:
-    serializedVersion: 2
-    x: 775
-    y: 64
-    width: 10
-    height: 20
-  m_outputs: 0a000000
-  m_outputPoints:
-  - serializedVersion: 2
-    x: 955
-    y: 64
-    width: 10
-    height: 20
-  m_toggleSelection: 1
-  m_background: {fileID: 0}
-  m_fadeColour: {r: 0, g: 0, b: 0, a: 1}
-  m_fadeTime: 2
-  m_nodeHeight: 108
 --- !u!114 &114917513007576620
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -466,23 +545,23 @@ MonoBehaviour:
   m_nodeID: 7
   m_rectangle:
     serializedVersion: 2
-    x: -201
-    y: 18
+    x: 847
+    y: 11
     width: 364
     height: 186
   m_title: Dialogue
   m_inputs: 05000000
   m_inputPoint:
     serializedVersion: 2
-    x: -211
-    y: 101
+    x: 837
+    y: 94
     width: 10
     height: 20
-  m_outputs: 08000000
+  m_outputs: 13000000
   m_outputPoints:
   - serializedVersion: 2
-    x: 163
-    y: 101
+    x: 1211
+    y: 94
     width: 10
     height: 20
   m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
@@ -542,8 +621,8 @@ MonoBehaviour:
   m_nodeID: 0
   m_rectangle:
     serializedVersion: 2
-    x: -994
-    y: 14
+    x: -301
+    y: 8
     width: 100
     height: 50
   m_title: Start
@@ -557,7 +636,7 @@ MonoBehaviour:
   m_outputs: 01000000
   m_outputPoints:
   - serializedVersion: 2
-    x: -894
-    y: 29
+    x: -201
+    y: 23
     width: 10
     height: 20

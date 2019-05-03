@@ -64,9 +64,13 @@ public class DialogueManager : MonoBehaviour
 
 		// convert current node to dialogue node
 		m_currentNode = m_sceneManager.GetCurrentNode() as DialogueNode;
+
+		CharacterManager characterManager = CharacterManager.GetInstance();
+		Character character = m_currentNode.GetCharacter();
 		
-		m_speaker.text = m_currentNode.GetCharacter().m_name; // update speaker text field
-		CharacterManager.GetInstance().ChangeSprite();
+		m_speaker.text = character.m_name; // update speaker text field
+		characterManager.ChangeSprite();
+		characterManager.HighlightSpeakingCharacter(character);
 		StartCoroutine(m_typewriteEvent = TypewriteText());
 	}
 

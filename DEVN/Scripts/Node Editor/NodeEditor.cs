@@ -245,7 +245,7 @@ public class NodeEditor : EditorWindow
 		float scrollBarLeftValue = Mathf.Clamp(minX / Screen.width, Mathf.NegativeInfinity, 0.0f);
 		float scrollBarRightValue = Mathf.Clamp(maxX / Screen.width, 1.0f, Mathf.Infinity);
 
-		m_scrollValue = GUI.HorizontalScrollbar(new Rect(0, Screen.height - 37.5f, Screen.width, 30), m_scrollValue, 1.0f, scrollBarLeftValue, scrollBarRightValue);
+		m_scrollValue = GUI.HorizontalScrollbar(new Rect(0, Screen.height - 36, Screen.width, 30), m_scrollValue, 1.0f, scrollBarLeftValue, scrollBarRightValue);
 
 		//Debug.Log(scrollBarLeftValue + "  " + scrollBarRightValue);
 

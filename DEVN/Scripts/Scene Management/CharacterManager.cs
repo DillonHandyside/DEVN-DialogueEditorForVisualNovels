@@ -8,11 +8,14 @@ namespace DEVN
 
 public class CharacterManager : MonoBehaviour
 {
+	// singleton
 	private static CharacterManager m_instance;
 
+	// scene manager ref
 	private SceneManager m_sceneManager;
 
-	public GameObject m_characterPanel;
+	public GameObject m_inactiveCharacterPanel;
+	public GameObject m_activeCharacterPanel;
 
 	public GameObject m_characterPrefab;
 	private List<GameObject> m_characters;
@@ -23,10 +26,14 @@ public class CharacterManager : MonoBehaviour
 
 	#endregion
 
-	// Use this for initialization
+	/// <summary>
+	/// 
+	/// </summary>
 	void Awake()
 	{
 		m_instance = this; // initialise singleton
+
+		// cache scene manager reference
 		m_sceneManager = GetComponent<SceneManager>();
 
 		m_characters = new List<GameObject>();
@@ -53,7 +60,7 @@ public class CharacterManager : MonoBehaviour
 	public void EnterCharacter(CharacterNode characterNode)
 	{
 		// check to see if the character already exists in the scene
-		if (FindCharacter(characterNode.GetCharacter()) != -1)
+		if (FindCharacter(characterNode.GetCharacter()) != null)
 		{
 			Debug.LogWarning("Don't attempt to enter two of the same characters!");
 			m_sceneManager.NextNode();
@@ -62,7 +69,7 @@ public class CharacterManager : MonoBehaviour
 
 		// create new character and parent it to canvas
 		GameObject character = Instantiate(m_characterPrefab);
-		character.transform.SetParent(m_characterPanel.transform, false);
+		character.transform.SetParent(m_inactiveCharacterPanel.transform, false);
 
 		// set sprite
 		Image characterImage = character.GetComponent<Image>();
@@ -71,7 +78,7 @@ public class CharacterManager : MonoBehaviour
 		
 		// adjust position
 		RectTransform characterTransform = character.GetComponent<RectTransform>();
-		float screenExtent = m_characterPanel.GetComponent<RectTransform>().rect.width * 0.5f;
+		float screenExtent = m_inactiveCharacterPanel.GetComponent<RectTransform>().rect.width * 0.5f;
 		float xScalar = (characterNode.GetXPosition() * 2 - 100.0f) * 0.01f; // between -1 and 1
 		Vector2 position = new Vector2(screenExtent * xScalar, characterTransform.anchoredPosition.y);
 		characterTransform.anchoredPosition = position;
@@ -92,12 +99,10 @@ public class CharacterManager : MonoBehaviour
     /// <param name="characterNode"></param>
 	public void ExitCharacter(CharacterNode characterNode)
 	{
-		int characterIndex = FindCharacter(characterNode.GetCharacter());
+		GameObject character = FindCharacter(characterNode.GetCharacter());
 
-		if (characterIndex != -1)
+		if (character != null)
 		{
-			GameObject character = m_characters[characterIndex];
-
 			// perform fade-out and removal
 			StartCoroutine(FadeOut(character, characterNode.GetFadeTime()));
 			return; // exit succeeded
@@ -114,9 +119,27 @@ public class CharacterManager : MonoBehaviour
 	{
 		DialogueNode currentNode = m_sceneManager.GetCurrentNode() as DialogueNode;
 		Character character = currentNode.GetCharacter();
-		int characterIndex = FindCharacter(character);
+		GameObject characterObject = FindCharacter(character);
 
-		m_characters[characterIndex].GetComponent<Image>().sprite = currentNode.GetSprite();
+		characterObject.GetComponent<Image>().sprite = currentNode.GetSprite();
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="speakingCharacter"></param>
+	public void HighlightSpeakingCharacter(Character speakingCharacter)
+	{
+		for (int i = 0; i < m_characters.Count; i++)
+		{
+			GameObject character = m_characters[i];
+			character.transform.SetParent(m_inactiveCharacterPanel.transform);
+			character.GetComponent<Image>().color = new Color(0.75f, 0.75f, 0.75f);
+		}
+		
+		GameObject characterToHighlight = FindCharacter(speakingCharacter);
+		characterToHighlight.transform.SetParent(m_activeCharacterPanel.transform);
+		characterToHighlight.GetComponent<Image>().color = new Color(1, 1, 1);
 	}
 
 	/// <summary>
@@ -124,7 +147,7 @@ public class CharacterManager : MonoBehaviour
 	/// </summary>
 	/// <param name="character"></param>
 	/// <returns></returns>
-	public int FindCharacter(Character character)
+	public GameObject FindCharacter(Character character)
 	{
 		// iterate over all characters in scene
 		for (int i = 0; i < m_characters.Count; i++)
@@ -133,10 +156,10 @@ public class CharacterManager : MonoBehaviour
 			CharacterInfo characterInfo = existingCharacter.GetComponent<CharacterInfo>();
 
 			if (characterInfo.GetCharacter() == character)
-				return i; // character found
+				return existingCharacter; // character found
 		}
 
-		return -1; // character not found
+		return null; // character not found
 	}
 
 	/// <summary>
