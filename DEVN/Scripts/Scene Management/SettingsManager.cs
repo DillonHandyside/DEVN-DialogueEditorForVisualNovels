@@ -62,6 +62,9 @@ public class SettingsManager : MonoBehaviour
 	/// </summary>
 	void Update ()
 	{
+        DialogueManager.GetInstance().SetDialogueSpeed(m_textSpeed);
+        DialogueManager.GetInstance().SetAutoSpeed(m_autoSpeed);
+
 		// update mixer settings. Volume between -80 to 0 db
 		AudioMixer audioMixer = AudioManager.GetInstance().GetAudioMixer();
 

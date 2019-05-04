@@ -71,8 +71,11 @@ public class CharacterManager : MonoBehaviour
 		GameObject character = Instantiate(m_characterPrefab);
 		character.transform.SetParent(m_inactiveCharacterPanel.transform, false);
 
-		// set sprite
-		Image characterImage = character.GetComponent<Image>();
+            if (characterNode.GetIsInverted())
+                character.transform.localScale = new Vector3(-1, 1, 1);
+
+        // set sprite
+        Image characterImage = character.GetComponent<Image>();
 		characterImage.sprite = characterNode.GetSprite();
 		characterImage.preserveAspect = true;
 		
@@ -82,6 +85,7 @@ public class CharacterManager : MonoBehaviour
 		float xScalar = (characterNode.GetXPosition() * 2 - 100.0f) * 0.01f; // between -1 and 1
 		Vector2 position = new Vector2(screenExtent * xScalar, characterTransform.anchoredPosition.y);
 		characterTransform.anchoredPosition = position;
+
 
 		// perform fade-in
 		StartCoroutine(FadeIn(character, characterNode.GetFadeTime()));

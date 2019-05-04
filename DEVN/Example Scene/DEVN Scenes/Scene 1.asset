@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f97195559373da409a1adde84887dff, type: 3}
   m_Name: Scene 1
   m_EditorClassIdentifier: 
-  m_currentID: 21
+  m_currentID: 26
   m_nodes:
   - {fileID: 114971391588808450}
   - {fileID: 114483568097820382}
@@ -23,6 +23,7 @@ MonoBehaviour:
   - {fileID: 114547329688469228}
   - {fileID: 114577393489869796}
   - {fileID: 114638757635098840}
+  - {fileID: 114840564012078926}
 --- !u!114 &114164690702951974
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -42,7 +43,7 @@ MonoBehaviour:
     width: 128
     height: 42
   m_title: Dialogue Box
-  m_inputs: 12000000
+  m_inputs: 1200000016000000
   m_inputPoint:
     serializedVersion: 2
     x: 663
@@ -92,6 +93,40 @@ MonoBehaviour:
     height: 20
   m_sfxAudio: {fileID: 0}
   m_waitForFinish: 0
+--- !u!114 &114258399706184208
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bd1cbef1d245f74ca981efefdd8c08a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 23
+  m_rectangle:
+    serializedVersion: 2
+    x: 325
+    y: 108
+    width: 190
+    height: 100
+  m_title: Delay
+  m_inputs: 
+  m_inputPoint:
+    serializedVersion: 2
+    x: 315
+    y: 148
+    width: 10
+    height: 20
+  m_outputs: ffffffff
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 515
+    y: 148
+    width: 10
+    height: 20
+  m_delayTime: 0
 --- !u!114 &114283072914304348
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -270,7 +305,7 @@ MonoBehaviour:
   m_toggleSelection: 0
   m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
   m_sprite: {fileID: 21300000, guid: bf709ebdf31e80943b36077534b20628, type: 3}
-  m_xPosition: 54
+  m_xPosition: 56
   m_fadeTime: 0.5
   m_isInverted: 0
 --- !u!114 &114547329688469228
@@ -316,30 +351,30 @@ MonoBehaviour:
   m_nodeID: 18
   m_rectangle:
     serializedVersion: 2
-    x: 360
-    y: 10
+    x: 332
+    y: 9
     width: 272
     height: 154
   m_title: Character
   m_inputs: 02000000
   m_inputPoint:
     serializedVersion: 2
-    x: 350
-    y: 77
+    x: 322
+    y: 76
     width: 10
     height: 20
-  m_outputs: 05000000
+  m_outputs: 16000000
   m_outputPoints:
   - serializedVersion: 2
-    x: 632
-    y: 77
+    x: 604
+    y: 76
     width: 10
     height: 20
   m_toggleSelection: 0
   m_character: {fileID: 11400000, guid: 37a7047b0285e114f9cdf6d178e9b2ce, type: 2}
   m_sprite: {fileID: 21300000, guid: 7f5c63e3a8e4330429c1043f0f61786e, type: 3}
-  m_xPosition: 46
-  m_fadeTime: 0.5
+  m_xPosition: 45.3
+  m_fadeTime: 1.77
   m_isInverted: 0
 --- !u!114 &114638757635098840
 MonoBehaviour:
@@ -417,6 +452,42 @@ MonoBehaviour:
   m_characterAudio: {fileID: 0}
   m_dialogueAudio: {fileID: 0}
   m_dialogue: 
+--- !u!114 &114840564012078926
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ca2f00872b8cba4bb418c41c75b53e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 22
+  m_rectangle:
+    serializedVersion: 2
+    x: 615
+    y: 94
+    width: 192
+    height: 116
+  m_title: BGM
+  m_inputs: 12000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 605
+    y: 142
+    width: 10
+    height: 20
+  m_outputs: 05000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 807
+    y: 142
+    width: 10
+    height: 20
+  m_bgmAudio: {fileID: 0}
+  m_ambientAudio:
+  - {fileID: 0}
 --- !u!114 &114860909810380304
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -545,30 +616,34 @@ MonoBehaviour:
   m_nodeID: 7
   m_rectangle:
     serializedVersion: 2
-    x: 847
-    y: 11
+    x: 690
+    y: 56
     width: 364
     height: 186
   m_title: Dialogue
   m_inputs: 05000000
   m_inputPoint:
     serializedVersion: 2
-    x: 837
-    y: 94
+    x: 680
+    y: 139
     width: 10
     height: 20
   m_outputs: 13000000
   m_outputPoints:
   - serializedVersion: 2
-    x: 1211
-    y: 94
+    x: 1054
+    y: 139
     width: 10
     height: 20
   m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
   m_sprite: {fileID: 21300000, guid: 763fbdcecf049eb4cb6fe84dbc51e2a2, type: 3}
   m_characterAudio: {fileID: 0}
   m_dialogueAudio: {fileID: 0}
-  m_dialogue: Hmph. test test test test test
+  m_dialogue: 'Hmph. test test test test test test test test test test
+
+    test test test test test test test test test test test test
+
+    test test test test test test test test test test test test'
 --- !u!114 &114967307286111632
 MonoBehaviour:
   m_ObjectHideFlags: 1

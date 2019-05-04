@@ -23,8 +23,6 @@ public class AudioManager : MonoBehaviour
 	[SerializeField] private AudioMixerGroup m_ambience;
 	[SerializeField] private AudioMixerGroup m_SFX;
 
-	[SerializeField] private AudioSource m_emptyAudioSource;
-
 	// reference to the current audio in the scene
 	[HideInInspector]
 	[SerializeField] private AudioSource m_bgmAudio;
@@ -67,8 +65,9 @@ public class AudioManager : MonoBehaviour
 		BGMNode bgmNode = m_sceneManager.GetCurrentNode() as BGMNode;
 		ClearBGM();
 
-		// background music
-		m_bgmAudio = Instantiate(m_emptyAudioSource); // create
+        // background music
+        GameObject bgmObject = new GameObject();
+		m_bgmAudio = bgmObject.AddComponent<AudioSource>(); // create
 
 		// set clip, mixer group and loop
 		m_bgmAudio.clip = bgmNode.GetBGM();
@@ -80,7 +79,8 @@ public class AudioManager : MonoBehaviour
 		// ambience
 		for (int i = 0; i < bgmNode.GetAmbientAudio().Count; i++)
 		{
-			AudioSource ambience = Instantiate(m_emptyAudioSource); // create
+            GameObject ambienceObject = new GameObject();
+			AudioSource ambience = ambienceObject.AddComponent<AudioSource>(); // create
 			m_ambientAudio.Add(ambience);
 			
 			// set clip, mixer group and loop
@@ -119,7 +119,8 @@ public class AudioManager : MonoBehaviour
 	{
 		SFXNode sfxNode = m_sceneManager.GetCurrentNode() as SFXNode;
 
-		AudioSource sfx = Instantiate(m_emptyAudioSource); // create
+        GameObject sfxObject = new GameObject();
+		AudioSource sfx = sfxObject.AddComponent<AudioSource>(); // create
 		m_sfxAudio.Add(sfx);
 
 		sfx.outputAudioMixerGroup = m_SFX;

@@ -30,6 +30,9 @@ public class DialogueManager : MonoBehaviour
 	private float m_textSpeed;
 	private bool m_isTyping = false;
 
+    private float m_autoSpeed;
+    private bool m_isAutoEnabled = false;
+
 	#region getters
 		
 	public static DialogueManager GetInstance() { return m_instance; }
@@ -40,6 +43,7 @@ public class DialogueManager : MonoBehaviour
 	#region setters
 
 	public void SetDialogueSpeed(float speed) { m_textSpeed = speed; }
+    public void SetAutoSpeed(float speed) { m_autoSpeed = speed; }
 
 	#endregion
 
@@ -102,11 +106,39 @@ public class DialogueManager : MonoBehaviour
 		m_dialogue.text = "";
 	}
 
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <returns></returns>
-	IEnumerator TypewriteText()
+    /// <summary>
+    /// 
+    /// </summary>
+    public void ToggleAuto()
+    {
+        m_isAutoEnabled = !m_isAutoEnabled;
+        m_sceneManager.SetIsInputAllowed(!m_isAutoEnabled);
+
+        if (m_sceneManager.GetCurrentNode() is DialogueNode &&
+            m_isAutoEnabled && m_isTyping == false)
+            StartCoroutine(WaitForAuto());
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator WaitForAuto()
+    {
+        // determine wait time
+        float waitTime = m_dialogue.text.Length * ((1.1f - m_autoSpeed) * 0.1f);
+        yield return new WaitForSeconds(waitTime); // wait
+
+        // if auto is still enabled at the end of wait, proceed
+        if (m_isAutoEnabled)
+            m_sceneManager.NextNode();
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator TypewriteText()
 	{
 		m_dialogue.text = "";
 		m_isTyping = true;
@@ -118,6 +150,9 @@ public class DialogueManager : MonoBehaviour
 		}
 		
 		m_isTyping = false;
+
+        if (m_isAutoEnabled)
+            StartCoroutine(WaitForAuto());
 	}
 
 	/// <summary>

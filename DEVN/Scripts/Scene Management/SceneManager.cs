@@ -133,16 +133,16 @@ public class SceneManager : MonoBehaviour
         if (m_currentNode is BackgroundNode)
             BackgroundManager.GetInstance().SetBackground();
 
-		if (m_currentNode is BGMNode)
+		else if (m_currentNode is BGMNode)
 			AudioManager.GetInstance().SetBGM();
 
-        if (m_currentNode is CharacterNode)
+        else if (m_currentNode is CharacterNode)
             CharacterManager.GetInstance().UpdateCharacter((m_currentNode as CharacterNode).GetToggleSelection() == 0);
 
-        if (m_currentNode is DialogueNode)
+        else if (m_currentNode is DialogueNode)
 			DialogueManager.GetInstance().SetDialogue();
 
-        if (m_currentNode is DialogueBoxNode)
+        else if (m_currentNode is DialogueBoxNode)
         {
             if ((m_currentNode as DialogueBoxNode).GetToggleSelection() == 0)
 				DialogueManager.GetInstance().ToggleDialogueBox(true);
@@ -152,10 +152,10 @@ public class SceneManager : MonoBehaviour
 			NextNode();
         }
 
-		if (m_currentNode is SFXNode)
+		else if (m_currentNode is SFXNode)
 			StartCoroutine(AudioManager.GetInstance().PlaySFX());
 
-		if (m_currentNode is EndNode)
+		else if (m_currentNode is EndNode)
 			Transition();
     }
 }

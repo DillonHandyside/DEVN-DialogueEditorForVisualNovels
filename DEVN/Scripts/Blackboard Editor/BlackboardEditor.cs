@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEditorInternal;
 using DEVN;
 
 #if UNITY_EDITOR
@@ -90,7 +91,9 @@ public class BlackboardEditor : EditorWindow
         if (GUI.Button(removeRect, "-"))
         {
             if (m_currentBlackboard != null)
-                m_blackboards.Remove(m_currentBlackboard); // perform removal
+                if (EditorUtility.DisplayDialog("Wait!", 
+                    "Are you sure you want to delete this blackboard?", "Yes", "No"))
+                    m_blackboards.Remove(m_currentBlackboard); // perform removal
 
             // ensure no index out-of-range errors when deleting end blackboard
             m_currentSelection = Mathf.Clamp(m_currentSelection, 0, m_blackboards.Count - 1);
