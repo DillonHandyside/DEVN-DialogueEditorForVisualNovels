@@ -71,11 +71,23 @@ public class SceneManager : MonoBehaviour
 	{
 		m_currentScene = scene;
 
-		m_sceneNodes = m_currentScene.GetNodes();
+		m_sceneNodes = m_currentScene.GetNodes(0);
 		m_currentNode = m_sceneNodes[0]; // start node
 
 		NextNode();
 	}
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="pageNumber"></param>
+    public void NewPage(int pageNumber)
+    {
+        m_sceneNodes = m_currentScene.GetNodes(pageNumber);
+        m_currentNode = m_sceneNodes[0]; // start node
+
+        NextNode();
+    }
 
 	/// <summary>
 	/// 
@@ -133,30 +145,33 @@ public class SceneManager : MonoBehaviour
         if (m_currentNode is BackgroundNode)
             BackgroundManager.GetInstance().SetBackground();
 
-		else if (m_currentNode is BGMNode)
-			AudioManager.GetInstance().SetBGM();
+        else if (m_currentNode is BGMNode)
+            AudioManager.GetInstance().SetBGM();
 
         else if (m_currentNode is CharacterNode)
             CharacterManager.GetInstance().UpdateCharacter((m_currentNode as CharacterNode).GetToggleSelection() == 0);
 
         else if (m_currentNode is DialogueNode)
-			DialogueManager.GetInstance().SetDialogue();
+            DialogueManager.GetInstance().SetDialogue();
 
         else if (m_currentNode is DialogueBoxNode)
         {
             if ((m_currentNode as DialogueBoxNode).GetToggleSelection() == 0)
-				DialogueManager.GetInstance().ToggleDialogueBox(true);
+                DialogueManager.GetInstance().ToggleDialogueBox(true);
             else
-				DialogueManager.GetInstance().ToggleDialogueBox(false);
+                DialogueManager.GetInstance().ToggleDialogueBox(false);
 
-			NextNode();
+            NextNode();
         }
 
-		else if (m_currentNode is SFXNode)
-			StartCoroutine(AudioManager.GetInstance().PlaySFX());
+        else if (m_currentNode is SFXNode)
+            StartCoroutine(AudioManager.GetInstance().PlaySFX());
 
-		else if (m_currentNode is EndNode)
-			Transition();
+        else if (m_currentNode is PageNode)
+            NewPage((m_currentNode as PageNode).GetPageNumber());
+
+        else if (m_currentNode is EndNode)
+            Transition();
     }
 }
 

@@ -12,7 +12,6 @@ namespace DEVN
 public abstract class BaseNode : ScriptableObject
 {
 	// node saving/loading properties
-    [HideInInspector]
     [SerializeField] private int m_nodeID;
     public int GetNodeID() { return m_nodeID; }
 
@@ -36,8 +35,11 @@ public abstract class BaseNode : ScriptableObject
 	/// <param name="position">the x-y co-ordinates to place the node</param>
 	public virtual void Init(Vector2 position)
     {
+        Scene scene = NodeEditor.GetScene();
+
         // assign node ID and increment
-        m_nodeID = NodeEditor.GetNodeManager().m_currentID++;
+        m_nodeID = scene.GetCurrentNodeID();
+        scene.SetCurrentNodeID(m_nodeID + 1);
 
         // initialise node window
         m_rectangle = new Rect(position.x, position.y, 50, 100);
@@ -57,12 +59,15 @@ public abstract class BaseNode : ScriptableObject
     /// <param name="node">the node to make a copy of</param>
     /// <param name="position">the x-y co-ordinates to place the node</param>
     public virtual void Copy(BaseNode node, Vector2 position)
-	{
-		// assign node ID and increment
-		m_nodeID = NodeEditor.GetNodeManager().m_currentID++;
+    {
+        Scene scene = NodeEditor.GetScene();
 
-		// initialise node window
-		m_rectangle = new Rect(position.x, position.y, 50, 100);
+        // assign node ID and increment
+        m_nodeID = scene.GetCurrentNodeID();
+        scene.SetCurrentNodeID(m_nodeID + 1);
+
+        // initialise node window
+        m_rectangle = new Rect(position.x, position.y, 50, 100);
 
         m_title = node.m_title; // set title
 
@@ -96,7 +101,7 @@ public abstract class BaseNode : ScriptableObject
         DrawBeziers();
 
         // draw the node window
-        int windowID = NodeEditor.GetNodeManager().m_nodes.IndexOf(this);
+        int windowID = NodeEditor.GetNodeManager().GetNodes().IndexOf(this);
         m_rectangle = GUI.Window(windowID, m_rectangle, DrawNodeWindow, m_title);
     }
 

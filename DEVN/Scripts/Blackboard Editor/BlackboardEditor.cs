@@ -139,8 +139,8 @@ public class BlackboardEditor : EditorWindow
     /// </summary>
     private void DrawScrollView()
     {
-        Rect scrollViewPosition = new Rect(0.0f, 52.0f, Screen.width, Screen.height - 74.0f);
-        Rect scrollViewRect = new Rect(0.0f, 52.0f, Screen.width - 16.0f, m_scrollViewHeight);
+        Rect scrollViewPosition = new Rect(0, 52, Screen.width, Screen.height - 74);
+        Rect scrollViewRect = new Rect(0, 52, Screen.width - 16, m_scrollViewHeight);
 
         GUI.Box(scrollViewPosition, "");
 

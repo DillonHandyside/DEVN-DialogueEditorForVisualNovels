@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 namespace DEVN
 {
@@ -12,37 +13,36 @@ namespace DEVN
 [System.Serializable]
 public class Scene : ScriptableObject
 {
-    [HideInInspector]
-    [SerializeField] private int m_currentID;
-
-    [HideInInspector]
-    [SerializeField] private List<BaseNode> m_nodes = new List<BaseNode>();
+    [SerializeField] private int m_currentPage = 0;
+        
+    [SerializeField] private List<Page> m_pages = new List<Page>();
 
 	#region getters
 
-	public int GetCurrentNodeID() { return m_currentID; }
-	public List<BaseNode> GetNodes() { return m_nodes; }
+	public int GetCurrentNodeID() { return m_pages[m_currentPage].GetCurrentNodeID(); }
+    public int GetCurrentPage() { return m_currentPage; }
+    public List<Page> GetPages() { return m_pages; }
+    public List<BaseNode> GetNodes(int pageNumber) { return m_pages[pageNumber].GetNodes(); }
 
 	#endregion
 
 	#region setters
 
-	public void SetCurrentNodeID(int currentID) { m_currentID = currentID; }
+	public void SetCurrentNodeID(int currentID) { m_pages[m_currentPage].SetCurrentNodeID(currentID); }
+    public void SetCurrentPage(int currentPage) { m_currentPage = currentPage; }
 
 	#endregion
 
 #if UNITY_EDITOR
-
+        
 	/// <summary>
 	/// saves all of the given nodes to the member variable m_nodes
 	/// </summary>
 	/// <param name="nodes">the collection of nodes to save</param>
 	public void SaveNodes(List<BaseNode> nodes)
     {
-        m_nodes.Clear();
-
-        for (int i = 0; i < nodes.Count; i++)
-            m_nodes.Add(nodes[i]);
+        m_pages[m_currentPage].SaveNodes(nodes);
+        EditorUtility.SetDirty(m_pages[m_currentPage]);
     }
 
     /// <summary>
@@ -51,21 +51,28 @@ public class Scene : ScriptableObject
     /// <returns>a collection of all nodes in this object</returns>
     public List<BaseNode> LoadNodes()
     {
-        List<BaseNode> nodes = new List<BaseNode>();
+        if (m_pages.Count == 0)
+            NewPage();
 
-        // initialise start node if necessary
-        if (m_nodes.Count == 0)
-        {
-            BaseNode startNode = NodeEditor.GetNodeManager().AddNode(typeof(StartNode));
-            startNode.m_rectangle.position = new Vector2(10, 10);
-            nodes.Add(startNode);
-        }
+        return m_pages[m_currentPage].LoadNodes();
+        
+    }
 
-        // load all nodes
-        for (int i = 0; i < m_nodes.Count; i++)
-            nodes.Add(m_nodes[i]);
+    /// <summary>
+    /// 
+    /// </summary>
+    public void NewPage()
+    {
+        Page newPage = CreateInstance<Page>(); // create page
 
-        return nodes;
+        // add page to scene
+        string path = AssetDatabase.GetAssetPath(this);
+        AssetDatabase.AddObjectToAsset(newPage, path);
+        AssetDatabase.SaveAssets();
+
+        m_pages.Add(newPage); // add to list of pages
+        SetCurrentPage(m_pages.Count - 1);
+        newPage.Init(); // initialise page
     }
 
 #endif

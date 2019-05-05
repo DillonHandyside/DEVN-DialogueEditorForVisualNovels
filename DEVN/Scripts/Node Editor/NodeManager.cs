@@ -10,11 +10,23 @@ namespace DEVN
 public class NodeManager
 {
     // collection of all nodes in graph
-    public List<BaseNode> m_nodes;
-    public int m_currentID = 0;
+    [SerializeField] private List<BaseNode> m_nodes;
 
     // clipboard used for copy and paste
-    public BaseNode m_clipboard;
+    [SerializeField] private BaseNode m_clipboard;
+
+    #region getters
+
+    public List<BaseNode> GetNodes() { return m_nodes; }
+    public BaseNode GetClipboard() { return m_clipboard; }
+
+    #endregion
+
+    #region setters
+
+    public void SetNodes(List<BaseNode> nodes) { m_nodes = nodes; }
+
+    #endregion
 
     public NodeManager()
     {
@@ -54,14 +66,13 @@ public class NodeManager
     public BaseNode AddNode(System.Type type)
     {
         GUI.changed = true;
-        BaseNode node;
 
-        node = ScriptableObject.CreateInstance(type) as BaseNode;
+        BaseNode node = ScriptableObject.CreateInstance(type) as BaseNode;
         node.Init(NodeEditor.GetMousePosition());
 
         string path = AssetDatabase.GetAssetPath(NodeEditor.GetScene());
         AssetDatabase.AddObjectToAsset(node, path);
-		node.hideFlags = HideFlags.HideInHierarchy;
+		//node.hideFlags = HideFlags.HideInHierarchy;
 		AssetDatabase.SaveAssets();
         m_nodes.Add(node);
 

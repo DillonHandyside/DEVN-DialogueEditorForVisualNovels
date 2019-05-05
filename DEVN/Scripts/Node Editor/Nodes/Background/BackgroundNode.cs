@@ -119,7 +119,7 @@ public class BackgroundNode : BaseNode
         // fade time
         GUI.Label(fieldRect, "Fade Time");
         fieldRect.y += fieldHeight;
-        m_fadeTime = EditorGUI.Slider(fieldRect, m_fadeTime, 0.0f, 3.0f);
+        m_fadeTime = EditorGUI.Slider(fieldRect, m_fadeTime, 0.01f, 3);
 
         base.DrawNodeWindow(id);
     }

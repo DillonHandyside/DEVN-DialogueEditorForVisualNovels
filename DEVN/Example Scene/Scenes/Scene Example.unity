@@ -700,7 +700,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff717f8b708e03e449999fed417ac01c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_startScene: {fileID: 11400000, guid: ea34fd9934976c94aa088a03689c3eb9, type: 2}
+  m_startScene: {fileID: 11400000, guid: 4b674f76782220b4ea81a62f132e78d4, type: 2}
   m_currentScene: {fileID: 0}
 --- !u!4 &1546404508
 Transform:

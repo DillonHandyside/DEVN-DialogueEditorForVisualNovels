@@ -20,8 +20,8 @@ public class EndNode : BaseNode
     {
         base.Init(position);
         
-        m_rectangle.width = 200;
-        m_rectangle.height = 60;
+        m_rectangle.width = 100;
+        m_rectangle.height = 58;
 
         m_title = "End";
     }
