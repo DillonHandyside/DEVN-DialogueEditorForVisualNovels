@@ -35,34 +35,8 @@ public class Page : ScriptableObject
     public void Init()
     {
         BaseNode startNode = NodeEditor.GetNodeManager().AddNode(typeof(StartNode));
-        startNode.m_rectangle.position = new Vector2(10, 24);
+        startNode.m_rectangle.position = new Vector2(4, 24);
         m_nodes.Add(startNode); // add a StartNode to page
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="nodes"></param>
-    public void SaveNodes(List<BaseNode> nodes)
-    {
-        m_nodes.Clear();
-
-        for (int i = 0; i < nodes.Count; i++)
-            m_nodes.Add(nodes[i]);
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
-    public List<BaseNode> LoadNodes()
-    {
-        List<BaseNode> nodes = new List<BaseNode>();
-
-        for (int i = 0; i < m_nodes.Count; i++)
-            nodes.Add(m_nodes[i]);
-
-        return nodes;
     }
 
 #endif

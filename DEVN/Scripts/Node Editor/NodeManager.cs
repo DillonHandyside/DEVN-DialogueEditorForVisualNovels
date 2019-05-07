@@ -24,13 +24,14 @@ public class NodeManager
 
     #region setters
 
-    public void SetNodes(List<BaseNode> nodes) { m_nodes = nodes; }
+    //public void SetNodes(List<BaseNode> nodes) { m_nodes = nodes; }
 
     #endregion
-
-    public NodeManager()
+            
+    public void UpdateNodes()
     {
-        m_nodes = new List<BaseNode>();
+        Scene currentScene = NodeEditor.GetScene();
+        m_nodes = currentScene.GetNodes(currentScene.GetCurrentPageID());
     }
 
     /// <summary>
@@ -65,16 +66,26 @@ public class NodeManager
     /// <returns></returns>
     public BaseNode AddNode(System.Type type)
     {
-        GUI.changed = true;
+        Scene currentScene = NodeEditor.GetScene();
 
         BaseNode node = ScriptableObject.CreateInstance(type) as BaseNode;
         node.Init(NodeEditor.GetMousePosition());
 
-        string path = AssetDatabase.GetAssetPath(NodeEditor.GetScene());
+        if (type != typeof(StartNode))
+        {
+            Page currentPage = currentScene.GetCurrentPage();
+            Undo.RecordObject(currentPage, "New Node");
+            m_nodes.Add(node);
+
+            Undo.RegisterCreatedObjectUndo(node, "New Node");
+        }
+        
+        //node.hideFlags = HideFlags.HideInHierarchy;
+        string path = AssetDatabase.GetAssetPath(currentScene);
         AssetDatabase.AddObjectToAsset(node, path);
-		//node.hideFlags = HideFlags.HideInHierarchy;
-		AssetDatabase.SaveAssets();
-        m_nodes.Add(node);
+        AssetDatabase.SaveAssets();
+
+        GUI.changed = true;
 
         return node;
     }
@@ -136,8 +147,14 @@ public class NodeManager
 			NodeEditor.GetConnectionManager().RemoveConnection(node, i);
         }
 
+        // record changes to the page
+        Page currentPage = NodeEditor.GetScene().GetCurrentPage();
+        Undo.RecordObject(currentPage, "Remove Node");
         m_nodes.Remove(node); // perform removal
-        Object.DestroyImmediate(node, true);
+
+        // destroy object and record
+        Undo.DestroyObjectImmediate(node);
+        AssetDatabase.SaveAssets();
     }
 }
 

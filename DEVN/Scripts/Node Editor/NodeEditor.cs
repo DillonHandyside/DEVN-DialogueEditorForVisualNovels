@@ -92,20 +92,13 @@ public class NodeEditor : EditorWindow
         // event processing
         ProcessEvents(Event.current);
 
+        m_nodeManager.UpdateNodes();
+
         if (GUI.changed)
         {
-            Save();
+            EditorUtility.SetDirty(m_scene);
             Repaint();
         }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    private void Save()
-    {
-        m_scene.SaveNodes(m_nodeManager.GetNodes());
-        EditorUtility.SetDirty(m_scene);
     }
 
     /// <summary>
@@ -122,7 +115,8 @@ public class NodeEditor : EditorWindow
             m_scene = Selection.activeObject as Scene;
 
             // load the nodes
-            m_nodeManager.SetNodes(m_scene.LoadNodes());
+            m_scene.Init();
+            m_nodeManager.UpdateNodes();
         }
         else if (Selection.activeObject != m_scene)
             m_scene = null;
@@ -168,7 +162,7 @@ public class NodeEditor : EditorWindow
         genericMenu.AddItem(new GUIContent("New Page"), false, NewPage);
 
         if (m_scene.GetPages().Count > 1)
-            genericMenu.AddItem(new GUIContent("Remove Page"), false, RemovePage);
+            genericMenu.AddItem(new GUIContent("Remove Page"), false, m_scene.RemovePage);
         else
             genericMenu.AddDisabledItem(new GUIContent("Remove Page"));
 
@@ -192,16 +186,6 @@ public class NodeEditor : EditorWindow
     {
         m_scene.NewPage();
         Load(true);
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    private void RemovePage()
-    {
-        if (EditorUtility.DisplayDialog("Wait!", 
-            "Are you sure you want to delete this page?", "Yes", "No"))
-            m_scene.GetPages().RemoveAt(m_scene.GetCurrentPage());
     }
 
     /// <summary>
@@ -276,10 +260,10 @@ public class NodeEditor : EditorWindow
         for (int i = 0; i < pages.Length; i++)
             pages[i] = "Page " + (i + 1);
 
-        int prevPage = m_scene.GetCurrentPage();
+        int prevPage = m_scene.GetCurrentPageID();
         m_scene.SetCurrentPage(GUILayout.Toolbar(prevPage, pages));
 
-        if (m_scene.GetCurrentPage() != prevPage)
+        if (m_scene.GetCurrentPageID() != prevPage)
             Load(true);
     }
 

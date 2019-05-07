@@ -11,11 +11,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f97195559373da409a1adde84887dff, type: 3}
   m_Name: New Scene
   m_EditorClassIdentifier: 
-  m_currentPage: 0
+  m_currentPage: 1
   m_pages:
-  - {fileID: 114876707374917898}
-  - {fileID: 114041107342285266}
---- !u!114 &114041107342285266
+  - {fileID: 114511034991291268}
+--- !u!114 &114511034991291268
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -26,289 +25,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44c786e63f8b54f4eaf62140c9011b53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_currentID: 4
+  m_currentID: 1
   m_nodes:
-  - {fileID: 114701582266594024}
-  - {fileID: 114510827467493176}
-  - {fileID: 114232776339421906}
-  - {fileID: 114861986103535946}
---- !u!114 &114232776339421906
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b23ffe4043565e46a04a1affa3e64e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_nodeID: 2
-  m_rectangle:
-    serializedVersion: 2
-    x: 599
-    y: 28
-    width: 100
-    height: 58
-  m_title: End
-  m_inputs: 01000000
-  m_inputPoint:
-    serializedVersion: 2
-    x: 589
-    y: 47
-    width: 10
-    height: 20
-  m_outputs: 
-  m_outputPoints: []
-  m_nextScene: {fileID: 0}
---- !u!114 &114287190237393698
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b19fd96f384d73488a80aba14d3f33d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_nodeID: 5
-  m_rectangle:
-    serializedVersion: 2
-    x: 823
-    y: 24
-    width: 364
-    height: 186
-  m_title: Dialogue
-  m_inputs: 04000000
-  m_inputPoint:
-    serializedVersion: 2
-    x: 813
-    y: 107
-    width: 10
-    height: 20
-  m_outputs: 07000000
-  m_outputPoints:
-  - serializedVersion: 2
-    x: 1187
-    y: 107
-    width: 10
-    height: 20
-  m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
-  m_sprite: {fileID: 21300000, guid: 763fbdcecf049eb4cb6fe84dbc51e2a2, type: 3}
-  m_characterAudio: {fileID: 0}
-  m_dialogueAudio: {fileID: 0}
-  m_dialogue: Hmph.
---- !u!114 &114289551873723730
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 268926b0572e1734695332a363e32b77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_nodeID: 8
-  m_rectangle:
-    serializedVersion: 2
-    x: 343
-    y: 231
-    width: 170
-    height: 108
-  m_title: Background
-  m_inputs: 06000000
-  m_inputPoint:
-    serializedVersion: 2
-    x: 333
-    y: 275
-    width: 10
-    height: 20
-  m_outputs: 0a000000
-  m_outputPoints:
-  - serializedVersion: 2
-    x: 513
-    y: 275
-    width: 10
-    height: 20
-  m_toggleSelection: 1
-  m_background: {fileID: 0}
-  m_fadeColour: {r: 0, g: 0, b: 0, a: 1}
-  m_fadeTime: 0.5
-  m_nodeHeight: 108
---- !u!114 &114290421548643846
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f5d16997c22cc241bd5f4c6cf433796, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_nodeID: 7
-  m_rectangle:
-    serializedVersion: 2
-    x: -15
-    y: 111
-    width: 128
-    height: 42
-  m_title: Dialogue Box
-  m_inputs: 05000000
-  m_inputPoint:
-    serializedVersion: 2
-    x: -25
-    y: 122
-    width: 10
-    height: 20
-  m_outputs: 06000000
-  m_outputPoints:
-  - serializedVersion: 2
-    x: 113
-    y: 122
-    width: 10
-    height: 20
-  m_toggleSelection: 1
---- !u!114 &114302893113978602
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ca2f00872b8cba4bb418c41c75b53e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_nodeID: 1
-  m_rectangle:
-    serializedVersion: 2
-    x: 129
-    y: 25
-    width: 192
-    height: 116
-  m_title: BGM
-  m_inputs: 00000000
-  m_inputPoint:
-    serializedVersion: 2
-    x: 119
-    y: 73
-    width: 10
-    height: 20
-  m_outputs: 02000000
-  m_outputPoints:
-  - serializedVersion: 2
-    x: 321
-    y: 73
-    width: 10
-    height: 20
-  m_bgmAudio: {fileID: 8300000, guid: 012ff084d6c02be49bc9a1735f56a55b, type: 3}
-  m_ambientAudio:
-  - {fileID: 0}
---- !u!114 &114342320094638838
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b23ffe4043565e46a04a1affa3e64e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_nodeID: 10
-  m_rectangle:
-    serializedVersion: 2
-    x: 617
-    y: 241
-    width: 100
-    height: 58
-  m_title: End
-  m_inputs: 08000000
-  m_inputPoint:
-    serializedVersion: 2
-    x: 607
-    y: 260
-    width: 10
-    height: 20
-  m_outputs: 
-  m_outputPoints: []
-  m_nextScene: {fileID: 0}
---- !u!114 &114461419975415508
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f5d16997c22cc241bd5f4c6cf433796, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_nodeID: 4
-  m_rectangle:
-    serializedVersion: 2
-    x: 667
-    y: 188
-    width: 128
-    height: 42
-  m_title: Dialogue Box
-  m_inputs: 03000000
-  m_inputPoint:
-    serializedVersion: 2
-    x: 657
-    y: 199
-    width: 10
-    height: 20
-  m_outputs: 05000000
-  m_outputPoints:
-  - serializedVersion: 2
-    x: 795
-    y: 199
-    width: 10
-    height: 20
-  m_toggleSelection: 0
---- !u!114 &114510827467493176
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 268926b0572e1734695332a363e32b77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_nodeID: 1
-  m_rectangle:
-    serializedVersion: 2
-    x: 384
-    y: 27
-    width: 170
-    height: 198
-  m_title: Background
-  m_inputs: 03000000
-  m_inputPoint:
-    serializedVersion: 2
-    x: 374
-    y: 116
-    width: 10
-    height: 20
-  m_outputs: 02000000
-  m_outputPoints:
-  - serializedVersion: 2
-    x: 554
-    y: 116
-    width: 10
-    height: 20
-  m_toggleSelection: 0
-  m_background: {fileID: 21300000, guid: fc237fcff127d37498dc1a52f4173acd, type: 3}
-  m_fadeColour: {r: 0, g: 0, b: 0, a: 1}
-  m_fadeTime: 0.5
-  m_nodeHeight: 108
---- !u!114 &114657249210425920
+  - {fileID: 114972177940562104}
+--- !u!114 &114651074709334642
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -322,7 +42,7 @@ MonoBehaviour:
   m_nodeID: 0
   m_rectangle:
     serializedVersion: 2
-    x: 10
+    x: 4
     y: 24
     width: 100
     height: 50
@@ -334,53 +54,14 @@ MonoBehaviour:
     y: 0
     width: 10
     height: 20
-  m_outputs: 01000000
+  m_outputs: ffffffff
   m_outputPoints:
   - serializedVersion: 2
-    x: 110
+    x: 104
     y: 39
     width: 10
     height: 20
---- !u!114 &114673600595034540
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4736a76f54eabd498ec4ac540793476, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_nodeID: 3
-  m_rectangle:
-    serializedVersion: 2
-    x: 533
-    y: 25
-    width: 272
-    height: 154
-  m_title: Character
-  m_inputs: 02000000
-  m_inputPoint:
-    serializedVersion: 2
-    x: 523
-    y: 92
-    width: 10
-    height: 20
-  m_outputs: 04000000
-  m_outputPoints:
-  - serializedVersion: 2
-    x: 805
-    y: 92
-    width: 10
-    height: 20
-  m_toggleSelection: 0
-  m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
-  m_sprite: {fileID: 21300000, guid: bf709ebdf31e80943b36077534b20628, type: 3}
-  m_xPosition: 50
-  m_fadeTime: 0.5
-  m_isInverted: 0
---- !u!114 &114701582266594024
+--- !u!114 &114972177940562104
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -394,7 +75,7 @@ MonoBehaviour:
   m_nodeID: 0
   m_rectangle:
     serializedVersion: 2
-    x: 10
+    x: 4
     y: 24
     width: 100
     height: 50
@@ -406,146 +87,10 @@ MonoBehaviour:
     y: 0
     width: 10
     height: 20
-  m_outputs: 03000000
+  m_outputs: ffffffff
   m_outputPoints:
   - serializedVersion: 2
-    x: 110
+    x: 104
     y: 39
     width: 10
     height: 20
---- !u!114 &114793145563677764
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4736a76f54eabd498ec4ac540793476, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_nodeID: 6
-  m_rectangle:
-    serializedVersion: 2
-    x: 54
-    y: 158
-    width: 272
-    height: 154
-  m_title: Character
-  m_inputs: 07000000
-  m_inputPoint:
-    serializedVersion: 2
-    x: 44
-    y: 225
-    width: 10
-    height: 20
-  m_outputs: 08000000
-  m_outputPoints:
-  - serializedVersion: 2
-    x: 326
-    y: 225
-    width: 10
-    height: 20
-  m_toggleSelection: 1
-  m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
-  m_sprite: {fileID: 0}
-  m_xPosition: 50
-  m_fadeTime: 0.5
-  m_isInverted: 0
---- !u!114 &114861986103535946
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ca2f00872b8cba4bb418c41c75b53e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_nodeID: 3
-  m_rectangle:
-    serializedVersion: 2
-    x: 148
-    y: 28
-    width: 192
-    height: 116
-  m_title: BGM
-  m_inputs: 00000000
-  m_inputPoint:
-    serializedVersion: 2
-    x: 138
-    y: 76
-    width: 10
-    height: 20
-  m_outputs: 01000000
-  m_outputPoints:
-  - serializedVersion: 2
-    x: 340
-    y: 76
-    width: 10
-    height: 20
-  m_bgmAudio: {fileID: 8300000, guid: 012ff084d6c02be49bc9a1735f56a55b, type: 3}
-  m_ambientAudio:
-  - {fileID: 0}
---- !u!114 &114876707374917898
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44c786e63f8b54f4eaf62140c9011b53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_currentID: 11
-  m_nodes:
-  - {fileID: 114657249210425920}
-  - {fileID: 114302893113978602}
-  - {fileID: 114999128058066640}
-  - {fileID: 114673600595034540}
-  - {fileID: 114461419975415508}
-  - {fileID: 114287190237393698}
-  - {fileID: 114793145563677764}
-  - {fileID: 114290421548643846}
-  - {fileID: 114289551873723730}
-  - {fileID: 114342320094638838}
---- !u!114 &114999128058066640
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 268926b0572e1734695332a363e32b77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_nodeID: 2
-  m_rectangle:
-    serializedVersion: 2
-    x: 342
-    y: 24
-    width: 170
-    height: 198
-  m_title: Background
-  m_inputs: 01000000
-  m_inputPoint:
-    serializedVersion: 2
-    x: 332
-    y: 113
-    width: 10
-    height: 20
-  m_outputs: 03000000
-  m_outputPoints:
-  - serializedVersion: 2
-    x: 512
-    y: 113
-    width: 10
-    height: 20
-  m_toggleSelection: 0
-  m_background: {fileID: 21300000, guid: ed8352e7f0abd5c4083bee666684c10f, type: 3}
-  m_fadeColour: {r: 0, g: 0, b: 0, a: 1}
-  m_fadeTime: 0.5
-  m_nodeHeight: 108

@@ -20,7 +20,8 @@ public class Scene : ScriptableObject
 	#region getters
 
 	public int GetCurrentNodeID() { return m_pages[m_currentPage].GetCurrentNodeID(); }
-    public int GetCurrentPage() { return m_currentPage; }
+    public int GetCurrentPageID() { return m_currentPage; }
+    public Page GetCurrentPage() { return m_pages[m_currentPage]; }
     public List<Page> GetPages() { return m_pages; }
     public List<BaseNode> GetNodes(int pageNumber) { return m_pages[pageNumber].GetNodes(); }
 
@@ -34,30 +35,16 @@ public class Scene : ScriptableObject
 	#endregion
 
 #if UNITY_EDITOR
-        
-	/// <summary>
-	/// saves all of the given nodes to the member variable m_nodes
-	/// </summary>
-	/// <param name="nodes">the collection of nodes to save</param>
-	public void SaveNodes(List<BaseNode> nodes)
-    {
-        m_pages[m_currentPage].SaveNodes(nodes);
-        EditorUtility.SetDirty(m_pages[m_currentPage]);
-    }
-
+   
     /// <summary>
-    /// loads all of the nodes in this Scene object
+    /// 
     /// </summary>
-    /// <returns>a collection of all nodes in this object</returns>
-    public List<BaseNode> LoadNodes()
+    public void Init()
     {
         if (m_pages.Count == 0)
             NewPage();
-
-        return m_pages[m_currentPage].LoadNodes();
-        
     }
-
+        
     /// <summary>
     /// 
     /// </summary>
@@ -71,8 +58,35 @@ public class Scene : ScriptableObject
         AssetDatabase.SaveAssets();
 
         m_pages.Add(newPage); // add to list of pages
-        SetCurrentPage(m_pages.Count - 1);
+        m_currentPage = m_pages.Count - 1;
         newPage.Init(); // initialise page
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void RemovePage()
+    {
+        if (!EditorUtility.DisplayDialog("Wait!",
+            "Are you sure you want to delete this page?", "Yes", "No"))
+            return;
+
+        Page currentPage = m_pages[m_currentPage];
+        List<BaseNode> nodes = currentPage.GetNodes();
+        int nodeCount = nodes.Count;
+
+        Undo.RecordObject(currentPage, "Remove Page");
+        for (int i = 0; i < nodeCount; i++)
+            NodeEditor.GetNodeManager().RemoveNode(nodes[0]);
+        
+        Undo.RecordObject(this, "Remove Page");
+        m_pages.Remove(currentPage);
+
+        Undo.DestroyObjectImmediate(currentPage);
+        AssetDatabase.SaveAssets();
+
+        // perform clamp to ensure no index out of range errors
+        m_currentPage = Mathf.Clamp(m_currentPage, 0, m_pages.Count - 1);
     }
 
 #endif
