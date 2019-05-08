@@ -141,12 +141,17 @@ public class NodeEditor : EditorWindow
 		genericMenu.AddItem(new GUIContent("New Node/Background/CG"), false, () => m_nodeManager.AddNode(typeof(CGNode)));
 
 		// character relevant nodes
+		genericMenu.AddItem(new GUIContent("New Node/Character/Invert"), false, () => m_nodeManager.AddNode(typeof(CharacterInvertNode)));
+		genericMenu.AddItem(new GUIContent("New Node/Character/Scale"), false, () => m_nodeManager.AddNode(typeof(CharacterScaleNode)));
+		genericMenu.AddItem(new GUIContent("New Node/Character/Translate"), false, () => m_nodeManager.AddNode(typeof(CharacterTranslateNode)));
+		genericMenu.AddSeparator("New Node/Character/");
 		genericMenu.AddItem(new GUIContent("New Node/Character/Character"), false, () => m_nodeManager.AddNode(typeof(CharacterNode)));
 
-        // dialogue relevant nodes
-        genericMenu.AddItem(new GUIContent("New Node/Dialogue/Branch"), false, () => m_nodeManager.AddNode(typeof(BranchNode)));
+		// dialogue relevant nodes
+		genericMenu.AddItem(new GUIContent("New Node/Dialogue/Branch"), false, () => m_nodeManager.AddNode(typeof(BranchNode)));
         genericMenu.AddItem(new GUIContent("New Node/Dialogue/Dialogue"), false, () => m_nodeManager.AddNode(typeof(DialogueNode)));
-        genericMenu.AddItem(new GUIContent("New Node/Dialogue/Dialogue Box"), false, () => m_nodeManager.AddNode(typeof(DialogueBoxNode)));
+		genericMenu.AddSeparator("New Node/Dialogue/");
+		genericMenu.AddItem(new GUIContent("New Node/Dialogue/Dialogue Box"), false, () => m_nodeManager.AddNode(typeof(DialogueBoxNode)));
 
         // utility relevant nodes
         genericMenu.AddItem(new GUIContent("New Node/Utility/Delay"), false, () => m_nodeManager.AddNode(typeof(DelayNode)));
@@ -159,7 +164,7 @@ public class NodeEditor : EditorWindow
         // end node
         genericMenu.AddItem(new GUIContent("New Node/End"), false, () => m_nodeManager.AddNode(typeof(EndNode)));
         genericMenu.AddSeparator("");
-        genericMenu.AddItem(new GUIContent("New Page"), false, NewPage);
+        genericMenu.AddItem(new GUIContent("New Page"), false, m_scene.NewPage);
 
         if (m_scene.GetPages().Count > 1)
             genericMenu.AddItem(new GUIContent("Remove Page"), false, m_scene.RemovePage);
@@ -182,15 +187,6 @@ public class NodeEditor : EditorWindow
     /// <summary>
     /// 
     /// </summary>
-    private void NewPage()
-    {
-        m_scene.NewPage();
-        Load(true);
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
     /// <param name="e"></param>
     void ProcessEvents(Event e)
     {
@@ -200,20 +196,22 @@ public class NodeEditor : EditorWindow
         {
             case EventType.MouseDown:
 
-                //
+                // clear connection selection on left click
                 if (e.button == (int)MouseButton.LeftClick)
                     m_connectionManager.ClearConnectionSelection();
 
-                //
+                // process right-click context menu
                 if (e.button == (int)MouseButton.RightClick)
                     ProcessContextMenu();
+
                 break;
 
             case EventType.MouseDrag:
 
-                //
+                // drag all nodes and grid elements upon scroll wheel click
                 if (e.button == (int)MouseButton.ScrollWheel)
                     DragAll(e.delta);
+
                 break;
         }
     }

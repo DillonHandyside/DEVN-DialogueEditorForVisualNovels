@@ -67,28 +67,29 @@ public class ConditionNode : BaseNode
     {
         Rect fieldRect = new Rect(5, 20, m_rectangle.width * 0.5f - 6, 16);
 
-        DrawBlackboardPopup(ref fieldRect, ref m_currentBlackboardA, ref m_blackboardSelectionA);
+		if (DrawBlackboardPopup(ref fieldRect, ref m_currentBlackboardA, ref m_blackboardSelectionA))
+		{
+			if (DrawVariablePopup(ref fieldRect, ref m_currentBlackboardA, ref m_currentKeyA, ref m_keySelectionA))
+			{
+				m_rectangle.height = m_nodeHeight + 64;
+				DrawConditionPopup(ref fieldRect);
+				DrawSourcePopup(ref fieldRect);
 
-        if (DrawVariablePopup(ref fieldRect, ref m_currentBlackboardA, ref m_currentKeyA, ref m_keySelectionA))
-        {
-            m_rectangle.height = m_nodeHeight + 64;
-            DrawConditionPopup(ref fieldRect);
-            DrawSourcePopup(ref fieldRect);
+				if (m_sourceSelection == 0)
+				{
+					m_rectangle.height = m_nodeHeight + 80;
 
-            if (m_sourceSelection == 0)
-            {
-                m_rectangle.height = m_nodeHeight + 80;
+					DrawContent(fieldRect);
+				}
+				else
+				{
+					m_rectangle.height = m_nodeHeight + 96;
 
-                DrawContent(fieldRect);
-            }
-            else
-            {
-                m_rectangle.height = m_nodeHeight + 96;
-
-                DrawBlackboardPopup(ref fieldRect, ref m_currentBlackboardB, ref m_blackboardSelectionB);
-                DrawVariablePopup(ref fieldRect, ref m_currentBlackboardB, ref m_currentKeyB, ref m_keySelectionB);
-            }
-        }
+					DrawBlackboardPopup(ref fieldRect, ref m_currentBlackboardB, ref m_blackboardSelectionB);
+					DrawVariablePopup(ref fieldRect, ref m_currentBlackboardB, ref m_currentKeyB, ref m_keySelectionB);
+				}
+			}
+		}
 
         base.DrawNodeWindow(id);
     }
@@ -119,7 +120,7 @@ public class ConditionNode : BaseNode
         // no blackboards available
         if (blackboards.Count == 0)
         {
-            m_rectangle.height = m_nodeHeight - 32;
+            m_rectangle.height = m_nodeHeight;
             return false;
         }
 
@@ -157,7 +158,7 @@ public class ConditionNode : BaseNode
         // no variables available in this blackboard
         if (keys.Count == 0)
         {
-            m_rectangle.height = m_nodeHeight;
+            //m_rectangle.height = m_nodeHeight;
             return false;
         }
 

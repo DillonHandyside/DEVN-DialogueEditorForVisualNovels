@@ -16,14 +16,10 @@ public class BackgroundNode : BaseNode
 		
     [SerializeField] private Sprite m_background; // background sprite
 
-	// background colour during fade-in/fade-out
+	// background fade variables
 	[SerializeField] private Color m_fadeColour = Color.black;
-
-    // background fade-in/fade-out time
     [SerializeField] private float m_fadeTime = 0.5f;
-
-	// node height used for resizing node
-	[SerializeField] private float m_nodeHeight = 0;
+	[SerializeField] private bool m_waitForFinish = true;
 
 	#region getters
 
@@ -31,8 +27,9 @@ public class BackgroundNode : BaseNode
 	public Sprite GetBackground() { return m_background; }
 	public Color GetFadeColour() { return m_fadeColour; }
 	public float GetFadeTime() { return m_fadeTime; }
+	public bool GetWaitForFinish() { return m_waitForFinish; }
 
-		#endregion
+	#endregion
 
 #if UNITY_EDITOR
 
@@ -48,8 +45,6 @@ public class BackgroundNode : BaseNode
 
         m_rectangle.width = 170;
         m_rectangle.height = 108;
-
-		m_nodeHeight = m_rectangle.height;
 
         AddOutputPoint(); // linear
     }
@@ -75,8 +70,7 @@ public class BackgroundNode : BaseNode
 		// copy fade attributes
 		m_fadeColour = backgroundNode.m_fadeColour;
 		m_fadeTime = backgroundNode.m_fadeTime;
-
-		m_nodeHeight = backgroundNode.m_nodeHeight;
+		m_waitForFinish = backgroundNode.m_waitForFinish;
 	}
 
 	/// <summary>
@@ -85,8 +79,6 @@ public class BackgroundNode : BaseNode
 	/// <param name="id">the ID of the node window</param>
 	protected override void DrawNodeWindow(int id)
 	{
-		m_rectangle.height = m_nodeHeight;
-
 		float width = m_rectangle.width - 10.0f;
         float fieldHeight = 16;
 
@@ -101,9 +93,6 @@ public class BackgroundNode : BaseNode
 		{
 			Rect spriteRect = fieldRect;
 			spriteRect.height = 90;
-
-			// adjust node window height
-			m_rectangle.height = m_nodeHeight + spriteRect.height;
 
 			// draw background object field
 			m_background = EditorGUI.ObjectField(spriteRect, m_background, typeof(Sprite), false) as Sprite;
@@ -120,6 +109,21 @@ public class BackgroundNode : BaseNode
         GUI.Label(fieldRect, "Fade Time");
         fieldRect.y += fieldHeight;
         m_fadeTime = EditorGUI.Slider(fieldRect, m_fadeTime, 0.01f, 3);
+		fieldRect.y += fieldHeight;
+
+		// if "Enter" is selected, show "wait for finish" toggle
+		if (m_toggleSelection == 0)
+		{
+			// draw "wait for finish" label and toggle
+			GUI.Label(fieldRect, "Wait For Finish");
+			fieldRect.x = m_rectangle.width - 20;
+			fieldRect.width = fieldHeight;
+			m_waitForFinish = EditorGUI.Toggle(fieldRect, m_waitForFinish);
+			fieldRect.y += fieldHeight;
+		}
+
+		// adjust node height
+		m_rectangle.height = fieldRect.y + 4;
 
         base.DrawNodeWindow(id);
     }

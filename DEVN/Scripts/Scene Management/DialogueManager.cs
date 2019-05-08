@@ -73,7 +73,9 @@ public class DialogueManager : MonoBehaviour
 		Character character = m_currentNode.GetCharacter();
 		
 		m_speaker.text = character.m_name; // update speaker text field
-		characterManager.ChangeSprite();
+		if (m_currentNode.GetSprite() != null)
+			characterManager.ChangeSprite();
+
 		characterManager.HighlightSpeakingCharacter(character);
 		StartCoroutine(m_typewriteEvent = TypewriteText());
 	}

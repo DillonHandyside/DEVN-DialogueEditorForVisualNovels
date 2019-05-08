@@ -71,8 +71,9 @@ public class CharacterManager : MonoBehaviour
 		GameObject character = Instantiate(m_characterPrefab);
 		character.transform.SetParent(m_inactiveCharacterPanel.transform, false);
 
-            if (characterNode.GetIsInverted())
-                character.transform.localScale = new Vector3(-1, 1, 1);
+		// handle inverting
+        if (characterNode.GetIsInverted())
+            character.transform.localScale = new Vector3(-1, 1, 1);
 
         // set sprite
         Image characterImage = character.GetComponent<Image>();
@@ -85,16 +86,14 @@ public class CharacterManager : MonoBehaviour
 		float xScalar = (characterNode.GetXPosition() * 2 - 100.0f) * 0.01f; // between -1 and 1
 		Vector2 position = new Vector2(screenExtent * xScalar, characterTransform.anchoredPosition.y);
 		characterTransform.anchoredPosition = position;
-
-
-		// perform fade-in
-		StartCoroutine(FadeIn(character, characterNode.GetFadeTime()));
-
-		//
+			
 		CharacterInfo characterInfo = character.GetComponent<CharacterInfo>();
 		characterInfo.SetCharacter(characterNode.GetCharacter());
 
 		m_characters.Add(character);
+
+		// perform fade-in
+		StartCoroutine(FadeIn(character, characterNode.GetFadeTime()));
 	}
 
     /// <summary>
@@ -174,6 +173,11 @@ public class CharacterManager : MonoBehaviour
 	/// <returns></returns>
 	IEnumerator FadeIn(GameObject character, float fadeInTime = 0.5f)
 	{
+		CharacterNode dialogueNode = m_sceneManager.GetCurrentNode() as CharacterNode;
+
+		if (!dialogueNode.GetWaitForFinish())
+			m_sceneManager.NextNode();
+
 		float elapsedTime = 0.0f;
 
 		while (elapsedTime < fadeInTime)
@@ -188,7 +192,8 @@ public class CharacterManager : MonoBehaviour
 			yield return null;
 		}
 
-		m_sceneManager.NextNode(); // jump straight to next node
+		if (dialogueNode.GetWaitForFinish())
+			m_sceneManager.NextNode(); // jump straight to next node
 	}
 
 	/// <summary>
@@ -199,6 +204,11 @@ public class CharacterManager : MonoBehaviour
 	/// <returns></returns>
 	IEnumerator FadeOut(GameObject character, float fadeOutTime = 0.5f)
 	{
+		CharacterNode dialogueNode = m_sceneManager.GetCurrentNode() as CharacterNode;
+
+		if (!dialogueNode.GetWaitForFinish())
+			m_sceneManager.NextNode();
+
 		float elapsedTime = 0.0f;
 
 		while (elapsedTime < fadeOutTime)
@@ -216,7 +226,8 @@ public class CharacterManager : MonoBehaviour
 		m_characters.Remove(character);
 		Destroy(character);
 
-		m_sceneManager.NextNode();
+		if (dialogueNode.GetWaitForFinish())
+			m_sceneManager.NextNode();
 	}
 }
 

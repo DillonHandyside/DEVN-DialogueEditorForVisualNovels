@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEditor;
 
 namespace DEVN
@@ -20,11 +21,12 @@ public class CharacterNode : BaseNode
 
 	// the desired sprite on entry/exit
 	[SerializeField] private Sprite m_sprite;
-
-	
+	[SerializeField] private int m_spriteSelection = 0;
+		
 	[SerializeField] private float m_xPosition = 50.0f; // character alignment
 	[SerializeField] private float m_fadeTime = 0.5f; // fade time
 	[SerializeField] private bool m_isInverted = false; // inversion
+	[SerializeField] private bool m_waitForFinish = true;
 
 	#region getters
 
@@ -34,8 +36,9 @@ public class CharacterNode : BaseNode
 	public float GetXPosition() { return m_xPosition; }
 	public float GetFadeTime() { return m_fadeTime; }
 	public bool GetIsInverted() { return m_isInverted; }
+	public bool GetWaitForFinish() { return m_waitForFinish; }
 
-		#endregion
+	#endregion
 
 #if UNITY_EDITOR
 
@@ -48,9 +51,6 @@ public class CharacterNode : BaseNode
         base.Init(position);
 
         m_title = "Character";
-
-        m_rectangle.width = 272;
-        m_rectangle.height = 154;
 
         AddOutputPoint(); // linear
     }
@@ -72,7 +72,7 @@ public class CharacterNode : BaseNode
 
 		// copy character object and default sprite
 		m_character = characterNode.m_character;
-		m_sprite = characterNode.m_sprite;
+		m_spriteSelection = characterNode.m_spriteSelection;
 
 		// copy position, fade time and invert status
 		m_xPosition = characterNode.m_xPosition;
@@ -87,16 +87,11 @@ public class CharacterNode : BaseNode
 	/// <param name="id">the ID of the node window</param>
 	protected override void DrawNodeWindow(int id)
     {
-		float spriteWidth = m_rectangle.width / 3;
-		float spriteHeight = m_rectangle.height - 24;
-		float fieldWidth = m_rectangle.width - spriteWidth - 16;
+		float fieldWidth = 160;
 		float fieldHeight = 16;
-
-        Rect spriteRect = new Rect(5, 20, spriteWidth, spriteHeight);
-        Rect fieldRect = new Rect(spriteWidth + 10, 20, fieldWidth, fieldHeight);
-
-		// sprite
-		m_sprite = EditorGUI.ObjectField(spriteRect, m_sprite, typeof(Sprite), false) as Sprite;
+		float windowWidth = fieldWidth;
+			
+        Rect fieldRect = new Rect(5, 20, fieldWidth, fieldHeight);
 
 		// enter/exit toggle
 		m_toggleSelection = EditorGUI.Popup(fieldRect, m_toggleSelection, m_toggle);
@@ -108,23 +103,67 @@ public class CharacterNode : BaseNode
 		m_character = EditorGUI.ObjectField(fieldRect, m_character, typeof(Character), false) as Character;
         fieldRect.y += fieldHeight;
 
-		// alignment
-        GUI.Label(fieldRect, "X Position (%)");
-        fieldRect.y += fieldHeight;
-        m_xPosition = EditorGUI.Slider(fieldRect, m_xPosition, 0.0f, 100.0f);
-        fieldRect.y += fieldHeight;
+		if (m_character != null)
+		{
+			// draw sprite label
+			GUI.Label(fieldRect, "Sprite");
+			fieldRect.y += fieldHeight;
 
-        // fade time
-        GUI.Label(fieldRect, "Fade Time");
-		fieldRect.y += fieldHeight;
-		m_fadeTime = EditorGUI.Slider(fieldRect, m_fadeTime, 0.0f, 3.0f);
-		fieldRect.y += fieldHeight + 2;
+			// get sprites and sprite names
+			List<Sprite> sprites = m_character.m_sprites;
+			string[] spriteNames = new string[sprites.Count];
+			for (int i = 0; i < sprites.Count; i++)
+				spriteNames[i] = sprites[i].name;
 
-		// inverted?
-		GUI.Label(fieldRect, "Invert");
-		fieldRect.x = m_rectangle.width - 20;
-		fieldRect.width = fieldHeight;
-		m_isInverted = EditorGUI.Toggle(fieldRect, m_isInverted);
+			// draw drop-down sprite selection menu
+			m_spriteSelection = EditorGUI.Popup(fieldRect, m_spriteSelection, spriteNames);
+			fieldRect.y += fieldHeight + 2;
+
+			if (m_character.m_sprites.Count != 0)
+			{
+				// determine sprite width and height
+				m_sprite = sprites[m_spriteSelection];
+				float aspectRatio = m_sprite.rect.width / m_sprite.rect.height;
+				float spriteHeight = m_rectangle.height - 24;
+				float spriteWidth = spriteHeight * aspectRatio;
+				windowWidth += spriteWidth + 4;
+
+				// draw sprite
+				Rect spriteRect = new Rect(fieldWidth + 10, 20, spriteWidth, spriteHeight);
+				GUI.Box(spriteRect, m_sprite.texture);
+
+				// alignment
+				GUI.Label(fieldRect, "X Position (%)");
+				fieldRect.y += fieldHeight;
+				m_xPosition = EditorGUI.Slider(fieldRect, m_xPosition, 0.0f, 100.0f);
+				fieldRect.y += fieldHeight;
+
+				// fade time
+				GUI.Label(fieldRect, "Fade Time");
+				fieldRect.y += fieldHeight;
+				m_fadeTime = EditorGUI.Slider(fieldRect, m_fadeTime, 0.0f, 3.0f);
+				fieldRect.y += fieldHeight + 2;
+
+				Rect toggleRect = new Rect(fieldWidth - 10, fieldRect.y, fieldHeight, fieldHeight);
+
+				if (m_toggleSelection == 0)
+				{
+					// inverted?
+					GUI.Label(fieldRect, "Invert");
+					m_isInverted = EditorGUI.Toggle(toggleRect, m_isInverted);
+					fieldRect.y += fieldHeight;
+					toggleRect.y += fieldHeight;
+				}
+
+				// wait for finish?
+				GUI.Label(fieldRect, "Wait For Finish");
+				m_waitForFinish = EditorGUI.Toggle(toggleRect, m_waitForFinish);
+				fieldRect.y += fieldHeight;
+			}
+		}
+
+		m_rectangle.width = windowWidth + 12;
+		m_rectangle.height = fieldRect.y + 4;
 
 		base.DrawNodeWindow(id);
     }

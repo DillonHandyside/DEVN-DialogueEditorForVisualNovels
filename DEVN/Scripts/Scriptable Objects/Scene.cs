@@ -52,11 +52,17 @@ public class Scene : ScriptableObject
     {
         Page newPage = CreateInstance<Page>(); // create page
 
+		Undo.RegisterCreatedObjectUndo(newPage, "New Page");
+
         // add page to scene
         string path = AssetDatabase.GetAssetPath(this);
         AssetDatabase.AddObjectToAsset(newPage, path);
+
+		// hide page asset from unity project window
+		newPage.hideFlags = HideFlags.HideInHierarchy;
         AssetDatabase.SaveAssets();
 
+		Undo.RecordObject(this, "New Node");
         m_pages.Add(newPage); // add to list of pages
         m_currentPage = m_pages.Count - 1;
         newPage.Init(); // initialise page
@@ -67,6 +73,7 @@ public class Scene : ScriptableObject
     /// </summary>
     public void RemovePage()
     {
+		// print warning box to prevent accidental page deletion
         if (!EditorUtility.DisplayDialog("Wait!",
             "Are you sure you want to delete this page?", "Yes", "No"))
             return;
@@ -75,18 +82,21 @@ public class Scene : ScriptableObject
         List<BaseNode> nodes = currentPage.GetNodes();
         int nodeCount = nodes.Count;
 
-        Undo.RecordObject(currentPage, "Remove Page");
-        for (int i = 0; i < nodeCount; i++)
-            NodeEditor.GetNodeManager().RemoveNode(nodes[0]);
+		// remove all of the nodes in the page
+		Undo.RegisterFullObjectHierarchyUndo(currentPage, "Remove Page");
+        for (int i = nodeCount - 1; i >= 0; i--)
+            NodeEditor.GetNodeManager().RemoveNode(nodes[i], true);
         
+		// record scene and remove page from scene
         Undo.RecordObject(this, "Remove Page");
         m_pages.Remove(currentPage);
 
-        Undo.DestroyObjectImmediate(currentPage);
-        AssetDatabase.SaveAssets();
-
         // perform clamp to ensure no index out of range errors
         m_currentPage = Mathf.Clamp(m_currentPage, 0, m_pages.Count - 1);
+
+		// destroy page and record
+        Undo.DestroyObjectImmediate(currentPage);
+        AssetDatabase.SaveAssets();
     }
 
 #endif

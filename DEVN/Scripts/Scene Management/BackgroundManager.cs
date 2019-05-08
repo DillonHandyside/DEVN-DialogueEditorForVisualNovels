@@ -75,7 +75,12 @@ public class BackgroundManager : MonoBehaviour
 	{
 		float elapsedTime = 0.0f;
 
-		image.sprite = (m_sceneManager.GetCurrentNode() as BackgroundNode).GetBackground();
+		BackgroundNode backgroundNode = m_sceneManager.GetCurrentNode() as BackgroundNode;
+		image.sprite = backgroundNode.GetBackground();
+
+		// instantly proceed to next node if "wait for finish" is false
+		if (!backgroundNode.GetWaitForFinish())
+			m_sceneManager.NextNode();
 
 		while (elapsedTime < fadeInTime)
 		{
@@ -89,7 +94,9 @@ public class BackgroundManager : MonoBehaviour
 			yield return null;
 		}
 
-		m_sceneManager.NextNode(); // jump to next node
+		// proceed to next node if "wait for finish" is true
+		if (backgroundNode.GetWaitForFinish())
+			m_sceneManager.NextNode();
 	}
 
 	/// <summary>

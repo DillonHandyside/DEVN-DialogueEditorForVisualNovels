@@ -80,9 +80,12 @@ public class NodeManager
             Undo.RegisterCreatedObjectUndo(node, "New Node");
         }
         
-        //node.hideFlags = HideFlags.HideInHierarchy;
+		// add node to scene
         string path = AssetDatabase.GetAssetPath(currentScene);
         AssetDatabase.AddObjectToAsset(node, path);
+
+		// hide node asset from unity project window
+        node.hideFlags = HideFlags.HideInHierarchy;
         AssetDatabase.SaveAssets();
 
         GUI.changed = true;
@@ -119,13 +122,13 @@ public class NodeManager
     /// handles node removal
     /// </summary>
     /// <param name="node">the desired node to remove</param>
-    public void RemoveNode(BaseNode node)
+    public void RemoveNode(BaseNode node, bool allowStartNodeRemoval = false)
     {
-        if (node is StartNode)
-            return; // disallow removal of starting node
+        if (node is StartNode && !allowStartNodeRemoval)
+			return; // disallow removal of starting node
 
-        // iterate through all connected input nodes
-        for (int i = 0; i < node.m_inputs.Count; i++)
+		// iterate through all connected input nodes
+		for (int i = 0; i < node.m_inputs.Count; i++)
         {
             BaseNode connectedNode = NodeEditor.GetNodeManager().GetNode(node.m_inputs[i]);
 
@@ -152,7 +155,7 @@ public class NodeManager
         Undo.RecordObject(currentPage, "Remove Node");
         m_nodes.Remove(node); // perform removal
 
-        // destroy object and record
+        // destroy node and record
         Undo.DestroyObjectImmediate(node);
         AssetDatabase.SaveAssets();
     }
