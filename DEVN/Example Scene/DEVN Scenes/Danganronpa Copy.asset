@@ -27,7 +27,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44c786e63f8b54f4eaf62140c9011b53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_currentID: 14
+  m_currentID: 19
   m_nodes:
   - {fileID: 114346135593987734}
   - {fileID: 114391490956471960}
@@ -36,7 +36,9 @@ MonoBehaviour:
   - {fileID: 114459733680792728}
   - {fileID: 114046649806629518}
   - {fileID: 114813317827120494}
-  - {fileID: 114769237168730452}
+  - {fileID: 114625751081210820}
+  - {fileID: 114207058700303968}
+  - {fileID: 114613263690805394}
 --- !u!114 &114046649806629518
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -56,7 +58,7 @@ MonoBehaviour:
     width: 340
     height: 188
   m_title: Dialogue
-  m_inputs: 07000000
+  m_inputs: 0700000012000000
   m_inputPoint:
     serializedVersion: 2
     x: 996
@@ -112,6 +114,43 @@ MonoBehaviour:
   m_fadeColour: {r: 0, g: 0, b: 0, a: 1}
   m_fadeTime: 3
   m_waitForFinish: 1
+--- !u!114 &114207058700303968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8c5ffff9b605bb4a80f1823d92da3b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 17
+  m_rectangle:
+    serializedVersion: 2
+    x: 620
+    y: 106
+    width: 190
+    height: 136
+  m_title: Character Scale
+  m_inputs: 07000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 610
+    y: 164
+    width: 10
+    height: 20
+  m_outputs: 12000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 810
+    y: 164
+    width: 10
+    height: 20
+  m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
+  m_scale: {x: 1, y: 1}
+  m_isLerp: 1
+  m_lerpTime: 0.25
 --- !u!114 &114242389614854414
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -242,7 +281,7 @@ MonoBehaviour:
     y: -13
     width: 10
     height: 20
-  m_outputs: 05000000
+  m_outputs: 10000000
   m_outputPoints:
   - serializedVersion: 2
     x: 206
@@ -335,14 +374,14 @@ MonoBehaviour:
     width: 340
     height: 188
   m_title: Dialogue
-  m_inputs: 0d000000
+  m_inputs: 05000000
   m_inputPoint:
     serializedVersion: 2
     x: 619
     y: -8
     width: 10
     height: 20
-  m_outputs: 08000000
+  m_outputs: 11000000
   m_outputPoints:
   - serializedVersion: 2
     x: 969
@@ -423,6 +462,80 @@ MonoBehaviour:
   m_fadeTime: 0.5
   m_isInverted: 0
   m_waitForFinish: 0
+--- !u!114 &114613263690805394
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8c5ffff9b605bb4a80f1823d92da3b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 18
+  m_rectangle:
+    serializedVersion: 2
+    x: 854
+    y: 106
+    width: 190
+    height: 136
+  m_title: Character Scale
+  m_inputs: 11000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 844
+    y: 164
+    width: 10
+    height: 20
+  m_outputs: 08000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 1044
+    y: 164
+    width: 10
+    height: 20
+  m_character: {fileID: 11400000, guid: 27cb0059065ca8f4fba49daf38b28a98, type: 2}
+  m_scale: {x: 1.1, y: 1.1}
+  m_isLerp: 1
+  m_lerpTime: 0.25
+--- !u!114 &114625751081210820
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8c5ffff9b605bb4a80f1823d92da3b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 16
+  m_rectangle:
+    serializedVersion: 2
+    x: 123
+    y: 115
+    width: 190
+    height: 136
+  m_title: Character Scale
+  m_inputs: 01000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 113
+    y: 173
+    width: 10
+    height: 20
+  m_outputs: 05000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 313
+    y: 173
+    width: 10
+    height: 20
+  m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
+  m_scale: {x: 1.1, y: 1.1}
+  m_isLerp: 1
+  m_lerpTime: 0.25
 --- !u!114 &114664136525520524
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -543,14 +656,14 @@ MonoBehaviour:
     width: 352
     height: 188
   m_title: Dialogue
-  m_inputs: 01000000
+  m_inputs: 0100000010000000
   m_inputPoint:
     serializedVersion: 2
     x: 235
     y: -12
     width: 10
     height: 20
-  m_outputs: 0d000000
+  m_outputs: 07000000
   m_outputPoints:
   - serializedVersion: 2
     x: 597
@@ -594,40 +707,6 @@ MonoBehaviour:
     y: 39
     width: 10
     height: 20
---- !u!114 &114769237168730452
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 825c8fab0bb95be488e7a484f2ad7e35, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_nodeID: 13
-  m_rectangle:
-    serializedVersion: 2
-    x: 532
-    y: 149
-    width: 190
-    height: 56
-  m_title: Character Invert
-  m_inputs: 05000000
-  m_inputPoint:
-    serializedVersion: 2
-    x: 522
-    y: 167
-    width: 10
-    height: 20
-  m_outputs: 07000000
-  m_outputPoints:
-  - serializedVersion: 2
-    x: 722
-    y: 167
-    width: 10
-    height: 20
-  m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
 --- !u!114 &114775475696932438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -786,5 +865,5 @@ MonoBehaviour:
   m_spriteSelection: 0
   m_xPosition: 35
   m_fadeTime: 0.5
-  m_isInverted: 1
+  m_isInverted: 0
   m_waitForFinish: 1
