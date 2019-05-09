@@ -37,7 +37,7 @@ public class Scene : ScriptableObject
 #if UNITY_EDITOR
    
     /// <summary>
-    /// 
+    /// initialisation function which creates the first page if necessary
     /// </summary>
     public void Init()
     {
@@ -46,7 +46,8 @@ public class Scene : ScriptableObject
     }
         
     /// <summary>
-    /// 
+    /// page creation function which creates a page asset, adds it to the
+	/// scene asset and records said creation for undo functionality
     /// </summary>
     public void NewPage()
     {
@@ -69,7 +70,8 @@ public class Scene : ScriptableObject
     }
 
     /// <summary>
-    /// 
+    /// page deletion function which deletes a page asset and it's nodes,
+	/// and records said deletion for undo functionality
     /// </summary>
     public void RemovePage()
     {

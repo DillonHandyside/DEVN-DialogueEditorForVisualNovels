@@ -148,8 +148,11 @@ public class SceneManager : MonoBehaviour
         else if (m_currentNode is BGMNode)
             AudioManager.GetInstance().SetBGM();
 
-        else if (m_currentNode is CharacterNode)
-            CharacterManager.GetInstance().UpdateCharacter((m_currentNode as CharacterNode).GetToggleSelection() == 0);
+        else if (m_currentNode is CharacterNode || m_currentNode is CharacterInvertNode ||
+				 m_currentNode is CharacterScaleNode || m_currentNode is CharacterTranslateNode)
+            CharacterManager.GetInstance().EvaluateCharacterNode(m_currentNode);
+
+		
 
         else if (m_currentNode is DialogueNode)
             DialogueManager.GetInstance().SetDialogue();

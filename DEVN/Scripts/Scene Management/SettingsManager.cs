@@ -30,6 +30,8 @@ public class SettingsManager : MonoBehaviour
 	[SerializeField] private float m_ambienceVolume = 1;
 	[Range(0.0001f, 1)]
 	[SerializeField] private float m_sfxVolume = 1;
+	[Range(0.0001f, 1)]
+	[SerializeField] private float m_voiceVolume = 1;
 
 	#region getters
 
@@ -46,6 +48,7 @@ public class SettingsManager : MonoBehaviour
 	public void SetBGMVolume(float bgmVolume) { m_bgmVolume = bgmVolume; }
 	public void SetAmbienceVolume(float ambienceVolume) { m_ambienceVolume = ambienceVolume; }
 	public void SetSFXVolume(float sfxVolume) { m_sfxVolume = sfxVolume; }
+	public void SetVoiceVolume(float voiceVolume) { m_voiceVolume = voiceVolume; }
 
 	#endregion
 
@@ -72,6 +75,7 @@ public class SettingsManager : MonoBehaviour
 		audioMixer.SetFloat("volumeBGM", Mathf.Log10(m_bgmVolume) * 20); // BGM
 		audioMixer.SetFloat("volumeAmbience", Mathf.Log10(m_ambienceVolume) * 20); // ambience
 		audioMixer.SetFloat("volumeSFX", Mathf.Log10(m_sfxVolume) * 20); // SFX
+		audioMixer.SetFloat("volumeVoice", Mathf.Log10(m_voiceVolume) * 20); // voice
 	}
 }
 

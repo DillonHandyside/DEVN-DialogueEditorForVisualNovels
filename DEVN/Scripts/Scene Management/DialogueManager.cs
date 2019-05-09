@@ -65,18 +65,40 @@ public class DialogueManager : MonoBehaviour
 	{
 		// allow input during dialogue, to allow skip & continue
 		m_sceneManager.SetIsInputAllowed(true);
-
-		// convert current node to dialogue node
+			
 		m_currentNode = m_sceneManager.GetCurrentNode() as DialogueNode;
-
-		CharacterManager characterManager = CharacterManager.GetInstance();
+			
+		// attempt to get this dialogue node's character, log an error if there is none
 		Character character = m_currentNode.GetCharacter();
-		
-		m_speaker.text = character.m_name; // update speaker text field
-		if (m_currentNode.GetSprite() != null)
-			characterManager.ChangeSprite();
+		Debug.Assert(character != null, "DEVN: Dialogue requires a speaking character!");
 
-		characterManager.HighlightSpeakingCharacter(character);
+		// update speaker text field
+		m_speaker.text = character.m_name; 
+		
+		CharacterManager characterManager = CharacterManager.GetInstance();
+		Debug.Assert(characterManager != null, "DEVN: A CharacterManager must exist!");
+		
+		Sprite currentSprite = m_currentNode.GetSprite();
+		GameObject characterObject = characterManager.TryGetCharacter(character);
+
+		if (currentSprite != null)
+		{
+			if (characterObject != null)
+				characterManager.SetSprite(characterObject, currentSprite);
+			else
+				Debug.LogWarning("DEVN: Do not attempt to change the sprite of a character that is not in the scene.");
+		}
+		else if (characterObject != null)
+			currentSprite = characterObject.GetComponent<Image>().sprite;
+		else
+			currentSprite = null;
+		
+		if (characterObject)
+			characterManager.HighlightSpeakingCharacter(character);
+
+		LogManager.GetInstance().LogDialogue(currentSprite, character.m_name, m_currentNode.GetDialogue());
+		
+
 		StartCoroutine(m_typewriteEvent = TypewriteText());
 	}
 

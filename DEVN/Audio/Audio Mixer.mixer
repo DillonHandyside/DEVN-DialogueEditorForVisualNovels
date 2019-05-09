@@ -23,12 +23,15 @@ AudioMixerController:
     name: volumeMaster
   - guid: 5b7b0e922cbe5c64fba6f3530f6ebb32
     name: volumeSFX
+  - guid: 153fa5af0abd9aa4092c2fa3bfb85f41
+    name: volumeVoice
   m_AudioMixerGroupViews:
   - guids:
     - 65a6089f2f954d04d889f428fab62a69
     - 9c098c4019a9722459f128e685dda465
     - 4218e7795a9c12e4c8f4088b538614a6
     - 10f9b334191634041991c80d93e284d0
+    - db6ad85d7925c6944bc5fbddb836daf2
     name: View
   m_CurrentViewIndex: 0
   m_TargetSnapshot: {fileID: 24500006}
@@ -44,6 +47,7 @@ AudioMixerGroupController:
   - {fileID: 243715680195742400}
   - {fileID: 243096002112351254}
   - {fileID: 243406611579446684}
+  - {fileID: 243521302659069512}
   m_Volume: 39834e7a90295bf4586d1f5a74f536e8
   m_Pitch: 264fa71b481e8f84b875a9dfbcc104d0
   m_Effects:
@@ -112,6 +116,23 @@ AudioMixerGroupController:
   m_Mute: 0
   m_Solo: 0
   m_BypassEffects: 0
+--- !u!243 &243521302659069512
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Voice
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: db6ad85d7925c6944bc5fbddb836daf2
+  m_Children: []
+  m_Volume: 153fa5af0abd9aa4092c2fa3bfb85f41
+  m_Pitch: 5ec7096a5dbe65549854f559a21659e6
+  m_Effects:
+  - {fileID: 244119144794851848}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
 --- !u!243 &243715680195742400
 AudioMixerGroupController:
   m_ObjectHideFlags: 0
@@ -129,6 +150,19 @@ AudioMixerGroupController:
   m_Mute: 0
   m_Solo: 0
   m_BypassEffects: 0
+--- !u!244 &244119144794851848
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  m_EffectID: 2e304902f0ed44946a4f2d9f56b93e64
+  m_EffectName: Attenuation
+  m_MixLevel: fb3d86cd8b85e424aa7e8ed77874afd3
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
 --- !u!244 &244191099358072148
 AudioMixerEffectController:
   m_ObjectHideFlags: 3

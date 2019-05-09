@@ -14,6 +14,8 @@ public class CharacterManager : MonoBehaviour
 	// scene manager ref
 	private SceneManager m_sceneManager;
 
+	private CharacterTransformer m_characterTransformer;
+
 	public GameObject m_inactiveCharacterPanel;
 	public GameObject m_activeCharacterPanel;
 
@@ -36,22 +38,30 @@ public class CharacterManager : MonoBehaviour
 		// cache scene manager reference
 		m_sceneManager = GetComponent<SceneManager>();
 
+		m_characterTransformer = new CharacterTransformer();
+
 		m_characters = new List<GameObject>();
 	}
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="isEnter"></param>
-    public void UpdateCharacter(bool isEnter)
-    {
-        CharacterNode currentNode = m_sceneManager.GetCurrentNode() as CharacterNode;
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="node"></param>
+	public void EvaluateCharacterNode(BaseNode node)
+	{
+		if (node is CharacterNode)
+		{
+			CharacterNode characterNode = node as CharacterNode;
 
-        if (isEnter)
-            EnterCharacter(currentNode);
-        else
-            ExitCharacter(currentNode);
-    }
+			if (characterNode.GetToggleSelection() == 0)
+				EnterCharacter(characterNode);
+			else
+				ExitCharacter(characterNode);
+		}
+		else
+			m_characterTransformer.EvaluateTransformNode(node);
+		
+	}
 
     /// <summary>
     /// 
@@ -60,9 +70,9 @@ public class CharacterManager : MonoBehaviour
 	public void EnterCharacter(CharacterNode characterNode)
 	{
 		// check to see if the character already exists in the scene
-		if (FindCharacter(characterNode.GetCharacter()) != null)
+		if (TryGetCharacter(characterNode.GetCharacter()) != null)
 		{
-			Debug.LogWarning("Don't attempt to enter two of the same characters!");
+			Debug.LogWarning("DEVN: Do not attempt to enter two of the same characters.");
 			m_sceneManager.NextNode();
 			return;
 		}
@@ -71,22 +81,15 @@ public class CharacterManager : MonoBehaviour
 		GameObject character = Instantiate(m_characterPrefab);
 		character.transform.SetParent(m_inactiveCharacterPanel.transform, false);
 
-		// handle inverting
-        if (characterNode.GetIsInverted())
-            character.transform.localScale = new Vector3(-1, 1, 1);
+		// invert if necessary
+		if (characterNode.GetIsInverted())
+			m_characterTransformer.InvertCharacter(character);
 
-        // set sprite
-        Image characterImage = character.GetComponent<Image>();
-		characterImage.sprite = characterNode.GetSprite();
-		characterImage.preserveAspect = true;
-		
-		// adjust position
-		RectTransform characterTransform = character.GetComponent<RectTransform>();
-		float screenExtent = m_inactiveCharacterPanel.GetComponent<RectTransform>().rect.width * 0.5f;
-		float xScalar = (characterNode.GetXPosition() * 2 - 100.0f) * 0.01f; // between -1 and 1
-		Vector2 position = new Vector2(screenExtent * xScalar, characterTransform.anchoredPosition.y);
-		characterTransform.anchoredPosition = position;
-			
+		SetSprite(character, characterNode.GetSprite()); // set sprite
+
+		Vector2 position = new Vector2(characterNode.GetXPosition(), 0);
+		m_characterTransformer.SetCharacterPosition(character, position); // set position
+
 		CharacterInfo characterInfo = character.GetComponent<CharacterInfo>();
 		characterInfo.SetCharacter(characterNode.GetCharacter());
 
@@ -102,7 +105,7 @@ public class CharacterManager : MonoBehaviour
     /// <param name="characterNode"></param>
 	public void ExitCharacter(CharacterNode characterNode)
 	{
-		GameObject character = FindCharacter(characterNode.GetCharacter());
+		GameObject character = TryGetCharacter(characterNode.GetCharacter());
 
 		if (character != null)
 		{
@@ -111,38 +114,8 @@ public class CharacterManager : MonoBehaviour
 			return; // exit succeeded
 		}
 
-		Debug.LogWarning("Don't attempt to exit a character which doesn't exist!");
+		Debug.LogWarning("DEVN: Do not attempt to exit a character that is not in the scene.");
 		m_sceneManager.NextNode();
-	}
-
-	/// <summary>
-	/// 
-	/// </summary>
-	public void ChangeSprite()
-	{
-		DialogueNode currentNode = m_sceneManager.GetCurrentNode() as DialogueNode;
-		Character character = currentNode.GetCharacter();
-		GameObject characterObject = FindCharacter(character);
-
-		characterObject.GetComponent<Image>().sprite = currentNode.GetSprite();
-	}
-
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="speakingCharacter"></param>
-	public void HighlightSpeakingCharacter(Character speakingCharacter)
-	{
-		for (int i = 0; i < m_characters.Count; i++)
-		{
-			GameObject character = m_characters[i];
-			character.transform.SetParent(m_inactiveCharacterPanel.transform);
-			character.GetComponent<Image>().color = new Color(0.75f, 0.75f, 0.75f);
-		}
-		
-		GameObject characterToHighlight = FindCharacter(speakingCharacter);
-		characterToHighlight.transform.SetParent(m_activeCharacterPanel.transform);
-		characterToHighlight.GetComponent<Image>().color = new Color(1, 1, 1);
 	}
 
 	/// <summary>
@@ -150,7 +123,7 @@ public class CharacterManager : MonoBehaviour
 	/// </summary>
 	/// <param name="character"></param>
 	/// <returns></returns>
-	public GameObject FindCharacter(Character character)
+	public GameObject TryGetCharacter(Character character)
 	{
 		// iterate over all characters in scene
 		for (int i = 0; i < m_characters.Count; i++)
@@ -168,6 +141,34 @@ public class CharacterManager : MonoBehaviour
 	/// <summary>
 	/// 
 	/// </summary>
+	public void SetSprite(GameObject character, Sprite sprite)
+	{
+		Image characterImage = character.GetComponent<Image>();
+		characterImage.sprite = sprite;
+		characterImage.preserveAspect = true;
+	}
+		
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="speakingCharacter"></param>
+	public void HighlightSpeakingCharacter(Character speakingCharacter)
+	{
+		for (int i = 0; i < m_characters.Count; i++)
+		{
+			GameObject character = m_characters[i];
+			character.transform.SetParent(m_inactiveCharacterPanel.transform);
+			character.GetComponent<Image>().color = new Color(0.75f, 0.75f, 0.75f);
+		}
+
+		GameObject characterToHighlight = TryGetCharacter(speakingCharacter);
+		characterToHighlight.transform.SetParent(m_activeCharacterPanel.transform);
+		characterToHighlight.GetComponent<Image>().color = new Color(1, 1, 1);
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
 	/// <param name="image"></param>
 	/// <param name="fadeInTime"></param>
 	/// <returns></returns>
@@ -175,6 +176,7 @@ public class CharacterManager : MonoBehaviour
 	{
 		CharacterNode dialogueNode = m_sceneManager.GetCurrentNode() as CharacterNode;
 
+		// if not "wait for finish", jump straight to next node
 		if (!dialogueNode.GetWaitForFinish())
 			m_sceneManager.NextNode();
 
@@ -182,18 +184,17 @@ public class CharacterManager : MonoBehaviour
 
 		while (elapsedTime < fadeInTime)
 		{
+			// adjust character transparency
 			float percentage = elapsedTime / fadeInTime;
-
 			character.GetComponent<Image>().color = new Color(1, 1, 1, percentage);
-
-			// increment time
-			elapsedTime += Time.deltaTime;
-
+				
+			elapsedTime += Time.deltaTime; // increment time
 			yield return null;
 		}
 
+		// if "wait for finish", go to next node after fade
 		if (dialogueNode.GetWaitForFinish())
-			m_sceneManager.NextNode(); // jump straight to next node
+			m_sceneManager.NextNode(); 
 	}
 
 	/// <summary>
@@ -206,6 +207,7 @@ public class CharacterManager : MonoBehaviour
 	{
 		CharacterNode dialogueNode = m_sceneManager.GetCurrentNode() as CharacterNode;
 
+		// if not "wait for finish", jump straight to next node
 		if (!dialogueNode.GetWaitForFinish())
 			m_sceneManager.NextNode();
 
@@ -213,19 +215,18 @@ public class CharacterManager : MonoBehaviour
 
 		while (elapsedTime < fadeOutTime)
 		{
+			// adjust character transparency
 			float percentage = 1 - (elapsedTime / fadeOutTime);
-
 			character.GetComponent<Image>().color = new Color(1, 1, 1, percentage);
-
-			// increment time
-			elapsedTime += Time.deltaTime;
-
+				
+			elapsedTime += Time.deltaTime; // increment time
 			yield return null;
 		}
 
 		m_characters.Remove(character);
 		Destroy(character);
 
+		// if "wait for finish", go to next node after fade
 		if (dialogueNode.GetWaitForFinish())
 			m_sceneManager.NextNode();
 	}

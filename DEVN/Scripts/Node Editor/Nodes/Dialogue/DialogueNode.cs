@@ -23,17 +23,18 @@ public class DialogueNode : BaseNode
     // audio variables
     private AudioClip m_characterAudio;
 	[SerializeField] private int m_audioSelection;
-	//[SerializeField] private AudioClip m_dialogueAudio;
 
     // dialogue
     [SerializeField] private string m_dialogue;
+
+	private Rect m_fieldRect;
+	private float m_spriteWidth;
 
 	#region getters
 
 	public Character GetCharacter() { return m_character; }
 	public Sprite GetSprite() { return m_sprite; }
 	public AudioClip GetCharacterAudio() { return m_characterAudio; }
-	//public AudioClip GetDialogueAudio() { return m_dialogueAudio; }
 	public string GetDialogue() { return m_dialogue; }
 
 		#endregion
@@ -50,6 +51,8 @@ public class DialogueNode : BaseNode
 
         m_title = "Dialogue";
 
+		m_rectangle.width = 340;
+
         AddOutputPoint(); // linear
     }
 
@@ -65,13 +68,10 @@ public class DialogueNode : BaseNode
 
 		DialogueNode dialogueNode = node as DialogueNode;
 
-		// copy character object and sprite
+		// copy character object
 		m_character = dialogueNode.m_character;
-		m_spriteSelection = dialogueNode.m_spriteSelection;
-
-		// copy audio clips
-		m_audioSelection = dialogueNode.m_audioSelection;
-		//m_dialogueAudio = dialogueNode.m_dialogueAudio;
+		m_spriteSelection = dialogueNode.m_spriteSelection; // copy sprite
+		m_audioSelection = dialogueNode.m_audioSelection; // copy audio
 
 		// copy dialogue
 		m_dialogue = dialogueNode.m_dialogue;
@@ -83,86 +83,126 @@ public class DialogueNode : BaseNode
 	/// </summary>
 	/// <param name="id">the ID of the node window</param>
 	protected override void DrawNodeWindow(int id)
-    {
-        float fieldWidth = 280;
-        float fieldHeight = 16;
-		float windowWidth = fieldWidth;
-			
-		Rect fieldRect = new Rect(5, 20, fieldWidth, fieldHeight);
+	{ 
+		m_fieldRect = new Rect(5, 20, m_rectangle.width - m_spriteWidth - 14, 16);
+		m_spriteWidth = 0;
 
-        // character
-        GUI.Label(fieldRect, "Character");
-		fieldRect.y += fieldHeight;
-        m_character = EditorGUI.ObjectField(fieldRect, m_character, typeof(Character), false) as Character;
-		fieldRect.y += fieldHeight;
+		// character
+		DrawCharacterObjectField();
 
+		// if a character is selected, draw all the other node stuffs
 		if (m_character != null)
 		{
-			// draw sprite label
-			GUI.Label(fieldRect, "Sprite Change");
-			fieldRect.y += fieldHeight;
+			// sprite
+			DrawSpritePopup();
 
-			// get sprites and sprite names
-			List<Sprite> sprites = m_character.m_sprites;
-			string[] spriteNames = new string[sprites.Count + 1];
-			spriteNames[0] = "None";
-			for (int i = 0; i < sprites.Count; i++)
-				spriteNames[i + 1] = sprites[i].name;
-
-			// draw drop-down sprite selection menu
-			m_spriteSelection = EditorGUI.Popup(fieldRect, m_spriteSelection, spriteNames);
-			fieldRect.y += fieldHeight + 2;
-
-			if (m_spriteSelection != 0)
-			{
-				// determine sprite width and height
-				m_sprite = sprites[m_spriteSelection - 1];
-				float aspectRatio = m_sprite.rect.width / m_sprite.rect.height;
-				float spriteHeight = m_rectangle.height - 24;
-				float spriteWidth = spriteHeight * aspectRatio;
-				windowWidth += spriteWidth + 4;
-
-				// draw sprite
-				Rect spriteRect = new Rect(fieldWidth + 10, 20, spriteWidth, spriteHeight);
-				GUI.Box(spriteRect, m_sprite.texture);
-			}
-
-			// character audio
-			GUI.Label(fieldRect, "Character Audio");
-			fieldRect.y += fieldHeight;
-
-			List<AudioClip> characterAudio = m_character.m_audioClips;
-			string[] audioNames = new string[characterAudio.Count + 1];
-			audioNames[0] = "None";
-			for (int i = 0; i < characterAudio.Count; i++)
-				audioNames[i + 1] = characterAudio[i].name;
-
-			m_audioSelection = EditorGUI.Popup(fieldRect, m_audioSelection, audioNames);
-			fieldRect.y += fieldHeight + 2;
-
-			if (m_audioSelection > 1)
-				m_characterAudio = characterAudio[m_audioSelection - 1];
-
-			// dialogue audio
-			//GUI.Label(fieldRect, "Dialogue Audio");
-			//fieldRect.y += fieldHeight;
-			//m_dialogueAudio = EditorGUI.ObjectField(fieldRect, m_dialogueAudio, typeof(AudioClip), false) as AudioClip;
-			//fieldRect.y += fieldHeight;
+			// audio
+			DrawAudioPopup();
 
 			// dialogue
-			GUI.Label(fieldRect, "Dialogue");
-			fieldRect.y += fieldHeight;
-			fieldRect.height = 48;
-			m_dialogue = EditorGUI.TextArea(fieldRect, m_dialogue);
-			fieldRect.y += fieldHeight * 3;
+			DrawDialogueTextArea();
 		}
-
-		m_rectangle.width = windowWidth + 12;
-		m_rectangle.height = fieldRect.y + 4;
+		
+		// resize window height
+		m_rectangle.height = m_fieldRect.y + 4;
 
         base.DrawNodeWindow(id);
     }
 
+	/// <summary>
+	/// 
+	/// </summary>
+	private void DrawCharacterObjectField()
+	{
+		// draw label
+		GUI.Label(m_fieldRect, "Character");
+		m_fieldRect.y += m_fieldRect.height;
+
+		// draw object field
+		m_character = EditorGUI.ObjectField(m_fieldRect, m_character, typeof(Character), false) as Character;
+		m_fieldRect.y += m_fieldRect.height;
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	private void DrawSpritePopup()
+	{
+		// draw sprite label
+		GUI.Label(m_fieldRect, "Sprite Change");
+		m_fieldRect.y += m_fieldRect.height;
+
+		// get sprites and sprite names
+		List<Sprite> sprites = m_character.m_sprites;
+		string[] spriteNames = new string[sprites.Count + 1];
+		spriteNames[0] = "None";
+		for (int i = 0; i < sprites.Count; i++)
+			spriteNames[i + 1] = sprites[i].name;
+
+		// draw drop-down sprite selection menu
+		m_spriteSelection = EditorGUI.Popup(m_fieldRect, m_spriteSelection, spriteNames);
+		m_fieldRect.y += m_fieldRect.height + 2;
+			
+		if (m_spriteSelection == 0)
+			m_sprite = null; // sprite selection is "None"
+		else 
+		{
+			// determine sprite width and height
+			m_sprite = sprites[m_spriteSelection - 1];
+			float aspectRatio = m_sprite.rect.width / m_sprite.rect.height;
+			float spriteHeight = /*m_rectangle.height - 24*/ m_fieldRect.height * 7;
+			m_spriteWidth = spriteHeight * aspectRatio;
+
+			// draw sprite
+			Rect spriteRect = new Rect(m_fieldRect.width + 8, 20, m_spriteWidth, spriteHeight);
+			GUI.Box(spriteRect, m_sprite.texture);
+		}
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	private void DrawAudioPopup()
+	{
+		// character audio
+		GUI.Label(m_fieldRect, "Character Audio");
+		m_fieldRect.y += m_fieldRect.height;
+
+		// get audio clips and audio clip names
+		List<AudioClip> characterAudio = m_character.m_audioClips;
+		string[] audioNames = new string[characterAudio.Count + 1];
+		audioNames[0] = "None";
+		for (int i = 0; i < characterAudio.Count; i++)
+			audioNames[i + 1] = characterAudio[i].name;
+
+		// draw drop-down audio selection menu
+		m_audioSelection = EditorGUI.Popup(m_fieldRect, m_audioSelection, audioNames);
+		m_fieldRect.y += m_fieldRect.height + 2;
+			
+		if (m_audioSelection == 0)
+			m_characterAudio = null; // audio selection is "None"
+		else 
+			m_characterAudio = characterAudio[m_audioSelection - 1];
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	private void DrawDialogueTextArea()
+	{
+		// draw label
+		GUI.Label(m_fieldRect, "Dialogue");
+		m_fieldRect.y += m_fieldRect.height;
+
+		// adjust rectangle to window width and 3x the height
+		m_fieldRect.width = m_rectangle.width - 10;
+		m_fieldRect.height = m_fieldRect.height * 3;
+
+		// draw text area
+		m_dialogue = EditorGUI.TextArea(m_fieldRect, m_dialogue);
+		m_fieldRect.y += m_fieldRect.height;
+	}
+	
 #endif
 }
 
