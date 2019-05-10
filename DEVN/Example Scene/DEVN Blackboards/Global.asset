@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f38020c6220c6084bbf403ed9c585838, type: 3}
+  m_Name: Global
+  m_EditorClassIdentifier: 
+  m_blackboardName: 
+  m_booleans:
+  - m_key: Boolean 0
+    m_value:
+      m_boolean: 0
+      m_float: 0
+      m_string: 
+    m_valueType: 0
+  - m_key: Boolean 1
+    m_value:
+      m_boolean: 0
+      m_float: 0
+      m_string: 
+    m_valueType: 0
+  - m_key: Boolean 2
+    m_value:
+      m_boolean: 0
+      m_float: 0
+      m_string: 
+    m_valueType: 0
+  - m_key: Boolean 3
+    m_value:
+      m_boolean: 0
+      m_float: 0
+      m_string: 
+    m_valueType: 0
+  - m_key: Boolean 4
+    m_value:
+      m_boolean: 0
+      m_float: 0
+      m_string: 
+    m_valueType: 0
+  - m_key: Boolean 5
+    m_value:
+      m_boolean: 0
+      m_float: 0
+      m_string: 
+    m_valueType: 0
+  - m_key: Boolean 6
+    m_value:
+      m_boolean: 0
+      m_float: 0
+      m_string: 
+    m_valueType: 0
+  m_floats:
+  - m_key: Float 0
+    m_value:
+      m_boolean: 0
+      m_float: 0
+      m_string: 
+    m_valueType: 1
+  m_strings:
+  - m_key: String 1
+    m_value:
+      m_boolean: 0
+      m_float: 0
+      m_string: 
+    m_valueType: 2
+  - m_key: String 0
+    m_value:
+      m_boolean: 0
+      m_float: 0
+      m_string: 
+    m_valueType: 2

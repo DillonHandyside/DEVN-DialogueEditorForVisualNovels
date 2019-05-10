@@ -11,7 +11,6 @@ public class ModifyNode : BaseNode
 {
     // blackboard selection variables
     private Blackboard m_currentBlackboard;
-    public int m_blackboardSelection = 0;
 
     // variable selection
     private string m_currentKey;
@@ -38,7 +37,7 @@ public class ModifyNode : BaseNode
         
         m_title = "Modify";
 
-        m_rectangle.width = 200;
+        m_rectangle.width = 180;
         m_rectangle.height = 90;
 
         m_nodeHeight = m_rectangle.height;
@@ -57,10 +56,16 @@ public class ModifyNode : BaseNode
         if (DrawBlackboardPopup(ref fieldRect))
         {
             if (DrawVariablePopup(ref fieldRect))
-                DrawContent(fieldRect);
+				DrawContent(fieldRect);
         }
 
-        base.DrawNodeWindow(id);
+		if (Event.current.type == EventType.Repaint)
+		{
+			Rect lastRect = GUILayoutUtility.GetLastRect();
+			m_rectangle.height = lastRect.y + lastRect.height + 4;
+		}
+
+		base.DrawNodeWindow(id);
     }
 
     /// <summary>
@@ -70,30 +75,15 @@ public class ModifyNode : BaseNode
     /// <returns></returns>
     private bool DrawBlackboardPopup(ref Rect fieldRect)
     {
-        List<Blackboard> blackboards = GameData.GetInstance().GetDefaultBlackboards();
-
-        // compile string of blackboard names for popup
-        string[] blackboardNames = new string[blackboards.Count];
-        for (int i = 0; i < blackboards.Count; i++)
-            blackboardNames[i] = blackboards[i].m_blackboardName;
-
         // draw "Blackboard" title and corresponding popup
-        GUI.Label(fieldRect, "Blackboard");
-        fieldRect.y += 16;
-        m_blackboardSelection = EditorGUI.Popup(fieldRect, m_blackboardSelection, blackboardNames);
-        fieldRect.y += 16;
-        
-        // no blackboards available
-        if (blackboards.Count == 0)
-        {
-            m_rectangle.height = m_nodeHeight - 32;
-            return false;
-        }
+		EditorGUILayout.LabelField("Blackboard");
+		m_currentBlackboard = EditorGUILayout.ObjectField(m_currentBlackboard, typeof(Blackboard), false) as Blackboard;
 
-        // ensure no index overflow when blackboards are removed
-        m_blackboardSelection = Mathf.Clamp(m_blackboardSelection, 0, blackboards.Count - 1);
-        m_currentBlackboard = blackboards[m_blackboardSelection]; // update current blackboard
-        return true;
+		// no blackboards available
+		if (m_currentBlackboard == null)
+			return false;
+		
+		return true;
     }
 
     /// <summary>
@@ -111,17 +101,12 @@ public class ModifyNode : BaseNode
             variableNames[i] = keys[i];
 
         // draw "Variable" title and corresponding popup
-        GUI.Label(fieldRect, "Variable");
-        fieldRect.y += 16;
-        m_variableSelection = EditorGUI.Popup(fieldRect, m_variableSelection, variableNames);
-        fieldRect.y += 16;
+        EditorGUILayout.LabelField("Variable");
+        m_variableSelection = EditorGUILayout.Popup(m_variableSelection, variableNames);
             
         // no variables available in this blackboard
         if (keys.Count == 0)
-        {
-            m_rectangle.height = m_nodeHeight;
             return false;
-        }
 
         // ensure no index overflow when variables are removed
         m_variableSelection = Mathf.Clamp(m_variableSelection, 0, keys.Count - 1);
@@ -136,50 +121,46 @@ public class ModifyNode : BaseNode
     private void DrawContent(Rect fieldRect)
     {
         ValueType valueType = m_currentBlackboard.GetValueType(m_currentKey);
+		EditorGUIUtility.labelWidth = 48;
 
         switch (valueType)
         {
             case ValueType.Boolean:
-                DrawBoolean(fieldRect);
+                DrawBoolean();
                 break;
 
             case ValueType.Float:
-                DrawFloat(fieldRect);
+                DrawFloat();
                 break;
 
             case ValueType.String:
-                DrawString(fieldRect);
+                DrawString();
                 break;
-        }
-    }
+		}
+	}
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="fieldRect"></param>
-    private void DrawBoolean(Rect fieldRect)
+    private void DrawBoolean()
     {
-        m_rectangle.height = m_nodeHeight + 32; // adjust rectangle height
-        GUI.Label(fieldRect, "Action");
-        fieldRect.y += 16;
+        EditorGUILayout.LabelField("Action");
 
         // display bool actions in drop-down (Set & Toggle)
         string[] boolAction = { "Set", "Toggle" };
-        m_booleanSelection = EditorGUI.Popup(fieldRect, m_booleanSelection, boolAction);
-        fieldRect.y += 18;
+        m_booleanSelection = EditorGUILayout.Popup(m_booleanSelection, boolAction);
 
         // only display toggle if boolAction is "Set"
         if (m_booleanSelection == 0)
         {
-            m_rectangle.height = m_nodeHeight + 50; // adjust rectangle height
-
             // print label and adjust positional values
-            GUI.Label(fieldRect, "Value:");
-            fieldRect.x = m_rectangle.width - 20;
-            fieldRect.width = 16;
+            EditorGUILayout.LabelField("Value:");
 
-            // display toggle
-            m_booleanValue = EditorGUI.Toggle(fieldRect, m_booleanValue);
+			// display toggle
+			Rect toggleRect = GUILayoutUtility.GetLastRect();
+			toggleRect.x = m_rectangle.width - 20;
+            m_booleanValue = EditorGUI.Toggle(toggleRect, m_booleanValue);
         }
     }
 
@@ -187,42 +168,26 @@ public class ModifyNode : BaseNode
     /// 
     /// </summary>
     /// <param name="fieldRect"></param>
-    private void DrawFloat(Rect fieldRect)
+    private void DrawFloat()
     {
-        m_rectangle.height = m_nodeHeight + 50; // adjust rectangle height
-        GUI.Label(fieldRect, "Action");
-        fieldRect.y += 16;
+        EditorGUILayout.LabelField("Action");
 
         // display float action in drop-down (set & increment)
         string[] floatAction = { "Set", "Increment" };
-        m_floatSelection = EditorGUI.Popup(fieldRect, m_floatSelection, floatAction);
-        fieldRect.y += 18;
-
-        // print label and adjust positional values
-        GUI.Label(fieldRect, "Value:");
-        fieldRect.x = m_rectangle.width * 0.5f;
-        fieldRect.width = m_rectangle.width * 0.5f - 6;
+        m_floatSelection = EditorGUILayout.Popup(m_floatSelection, floatAction);
 
         // display input field
-        m_floatValue = EditorGUI.FloatField(fieldRect, m_floatValue);
+        m_floatValue = EditorGUILayout.FloatField("Value: ", m_floatValue);
     }
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="fieldRect"></param>
-    private void DrawString(Rect fieldRect)
+    private void DrawString()
     {
-        m_rectangle.height = m_nodeHeight + 16; // adjust rectangle height
-        fieldRect.y += 2;
-
-        // print label and adjust positional values
-        GUI.Label(fieldRect, "Set To Value:");
-        fieldRect.x = m_rectangle.width * 0.5f;
-        fieldRect.width = m_rectangle.width * 0.5f - 6;
-
         // display input field
-        m_stringValue = EditorGUI.TextField(fieldRect, m_stringValue);
+        m_stringValue = EditorGUILayout.TextField("Set To: ", m_stringValue);
     }
 
 #endif

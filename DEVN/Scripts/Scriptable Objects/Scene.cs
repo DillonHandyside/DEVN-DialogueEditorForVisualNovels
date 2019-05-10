@@ -13,8 +13,10 @@ namespace DEVN
 [System.Serializable]
 public class Scene : ScriptableObject
 {
+	[HideInInspector]
     [SerializeField] private int m_currentPage = 0;
         
+	[HideInInspector]
     [SerializeField] private List<Page> m_pages = new List<Page>();
 
 	#region getters

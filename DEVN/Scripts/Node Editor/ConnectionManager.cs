@@ -38,6 +38,9 @@ public class ConnectionManager
     /// </summary>
     public void CreateConnection()
     {
+		if (m_selectedLeftNode.m_outputs[m_selectedOutput] != -1)
+			RemoveConnection(m_selectedLeftNode, m_selectedOutput);
+
         m_selectedLeftNode.m_outputs[m_selectedOutput] = m_selectedRightNode.GetNodeID();
         m_selectedRightNode.m_inputs.Add(m_selectedLeftNode.GetNodeID());
     }

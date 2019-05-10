@@ -18,17 +18,16 @@ public class BlackboardEditor : EditorWindow
     private List<Blackboard> m_blackboards;
 
     // selection variables
-    private Blackboard m_currentBlackboard;
+    private Blackboard m_blackboard;
     private int m_currentSelection = 0;
 
     // scroll view variables
     private Vector2 m_scrollPosition = Vector2.zero;
     private float m_scrollViewHeight = 32.0f;
-
-    // key-value field variables
-    private string m_booleanKey = "";
-    private string m_floatKey = "";
-    private string m_stringKey = "";
+	
+	private ReorderableList m_booleanList;
+	private ReorderableList m_floatList;
+	private ReorderableList m_stringList;
 
     [MenuItem("Window/DEVN/Blackboards")]
     public static void Init()
@@ -45,8 +44,11 @@ public class BlackboardEditor : EditorWindow
         // retrieve saved list of blackboards from GameData
         m_blackboards = GameData.GetInstance().GetDefaultBlackboards();
 
-        // load logo
-        string path = "Assets/DEVN/Textures/logoDEVN.png";
+		if (m_blackboard != null)
+			InitialiseReorderableLists();
+
+		// load logo
+		string path = "Assets/DEVN/Textures/logoDEVN.png";
         m_logoDEVN = EditorGUIUtility.Load(path) as Texture2D;
     }
 
@@ -56,245 +58,144 @@ public class BlackboardEditor : EditorWindow
     /// </summary>
     void OnGUI()
     {
-        DrawAddAndRemove();
+		Blackboard previousBlackboard = m_blackboard;
+
+		EditorGUILayout.Space();
+		m_blackboard = EditorGUILayout.ObjectField("Current Blackboard", m_blackboard, 
+					   typeof(Blackboard), false) as Blackboard;
+		EditorGUILayout.Separator();
 
         // only draw blackboard contents/elements if a blackboard is selected
-        if (m_currentBlackboard != null)
-        {
-            DrawNameField();
-            DrawScrollView();
-        }
+        if (m_blackboard != null)
+		{
+			if (previousBlackboard != m_blackboard)
+				InitialiseReorderableLists();
+
+			DrawScrollView();
+		}
 
         DrawLogo(); // draw DEVN water-mark
+		EditorUtility.SetDirty(m_blackboard);
 		GameData.GetInstance().SetDefaultBlackboards(m_blackboards);
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    private void DrawAddAndRemove()
+	private void InitialiseReorderableLists()
+	{
+		m_booleanList = new ReorderableList(m_blackboard.m_booleans, typeof(KeyValue), true, true, true, true);
+		m_floatList = new ReorderableList(m_blackboard.m_floats, typeof(KeyValue), true, true, true, true);
+		m_stringList = new ReorderableList(m_blackboard.m_strings, typeof(KeyValue), true, true, true, true);
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	private void DrawScrollView()
     {
-        // define positional variables
-        Rect popupRect = new Rect(5.0f, 5.0f, Screen.width - 10.0f, 16.0f);
-        Rect removeRect = new Rect(Screen.width - 29.0f, 24.0f, 24.0f, 24.0f);
-        Rect addRect = new Rect(Screen.width - 56.0f, 24.0f, 24.0f, 24.0f);
+		m_scrollPosition = EditorGUILayout.BeginScrollView(m_scrollPosition);
 
-        // compile string of blackboard names for popup
-        string[] blackboards = new string[m_blackboards.Count];
-        for (int i = 0; i < m_blackboards.Count; i++)
-            blackboards[i] = m_blackboards[i].m_blackboardName;
+        if (m_blackboard != null)
+		{
+			DrawReorderableList(m_booleanList, ValueType.Boolean);
+			DrawReorderableList(m_floatList, ValueType.Float);
+			DrawReorderableList(m_stringList, ValueType.String);
+		}
 
-        // draw popup (drop-down menu)
-        m_currentSelection = EditorGUI.Popup(popupRect, m_currentSelection, blackboards);
-
-        // draw "remove" button
-        if (GUI.Button(removeRect, "-"))
-        {
-            if (m_currentBlackboard != null)
-                if (EditorUtility.DisplayDialog("Wait!", 
-                    "Are you sure you want to delete this blackboard?", "Yes", "No"))
-                    m_blackboards.Remove(m_currentBlackboard); // perform removal
-
-            // ensure no index out-of-range errors when deleting end blackboard
-            m_currentSelection = Mathf.Clamp(m_currentSelection, 0, m_blackboards.Count - 1);
-        }
-
-        // draw "add" button
-        if (GUI.Button(addRect, "+"))
-        {
-            Blackboard blackboard = CreateInstance<Blackboard>();
-
-            // create scriptable object in the format of "New Blackboard (1, 2, etc.)"
-            if (m_blackboards.Count == 0)
-                blackboard.m_blackboardName = "New Blackboard";
-            else
-                blackboard.m_blackboardName = "New Blackboard " + m_blackboards.Count;
-
-            m_blackboards.Add(blackboard);
-            m_currentSelection = m_blackboards.IndexOf(blackboard);
-            ClearKeyFields();
-        }
-
-        // update the current blackboard selection
-        if (m_blackboards.Count > 0)
-            m_currentBlackboard = m_blackboards[m_currentSelection];
-        else
-            m_currentBlackboard = null; // no blackboards, no selection
+		// end scroll view
+		EditorGUILayout.EndScrollView();
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    private void DrawNameField()
-    {
-        Rect textRect = new Rect(5.0f, 28.0f, 48.0f, 16.0f);
-        Rect fieldRect = new Rect(48.0f, 28.0f, Screen.width - 108.0f, 16.0f);
+	private void DrawReorderableList(ReorderableList reorderableList, ValueType valueType)
+	{
+		reorderableList.drawHeaderCallback = rect =>
+		{
+			EditorGUI.LabelField(rect, valueType.ToString() + "s", EditorStyles.boldLabel);
+		};
 
-        GUI.Label(textRect, "Name");
-        m_currentBlackboard.m_blackboardName = EditorGUI.TextField(fieldRect, m_currentBlackboard.m_blackboardName);
-    }
+		List<string> keys = m_blackboard.GetAllOfValueType(valueType);
 
-    /// <summary>
-    /// 
-    /// </summary>
-    private void DrawScrollView()
-    {
-        Rect scrollViewPosition = new Rect(0, 52, Screen.width, Screen.height - 74);
-        Rect scrollViewRect = new Rect(0, 52, Screen.width - 16, m_scrollViewHeight);
+		reorderableList.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
+		{
+			string key = keys[index];
+			Rect firstHalf = rect;
+			firstHalf.width = firstHalf.width * 0.5f - 2;
+			Rect secondHalf = firstHalf;
+			secondHalf.x += secondHalf.width + 4;
 
-        GUI.Box(scrollViewPosition, "");
+			m_blackboard.SetKey(key, EditorGUI.TextField(firstHalf, key), valueType);
 
-        // begin scroll view
-        m_scrollPosition = GUI.BeginScrollView(scrollViewPosition, m_scrollPosition, scrollViewRect, false, true);
+			switch (valueType)
+			{
+				case ValueType.Boolean:
+					secondHalf.x = rect.width + 8;
+					secondHalf.width = 16;
+					m_blackboard.SetValue(key, EditorGUI.Toggle(secondHalf, m_blackboard.GetValue(key).m_boolean));
+					break;
 
-        if (m_currentBlackboard != null)
-        {
-            // content 
-            float yPos = 56;
-            DrawBlackboardContent(ValueType.Boolean, ref yPos);
-            DrawBlackboardContent(ValueType.Float, ref yPos);
-            DrawBlackboardContent(ValueType.String, ref yPos);
-            m_scrollViewHeight = yPos;
-        }
+				case ValueType.Float:
+					m_blackboard.SetValue(key, EditorGUI.FloatField(secondHalf, m_blackboard.GetValue(key).m_float));
+					break;
 
-        // end scroll view
-        GUI.EndScrollView();
-    }
+				case ValueType.String:
+					m_blackboard.SetValue(key, EditorGUI.TextField(secondHalf, m_blackboard.GetValue(key).m_string));
+					break;
+			}
+		};
 
-    /// <summary>
-    /// 
-    /// </summary>
-    private void DrawBlackboardContent(ValueType valueType, ref float yPos)
-    {
-        float width = Screen.width - 16;
+		reorderableList.onAddCallback = (ReorderableList list) =>
+		{
+			string defaultKey = "";
 
-        // draw content heading
-        GUI.Label(new Rect(5, yPos, width, 16), valueType.ToString());
-        yPos += 16;
+			switch (valueType)
+			{
+				case ValueType.Boolean:
+					defaultKey = "Boolean " + m_blackboard.m_booleans.Count;
+					break;
 
-        // get all keys (variables) in blackboard
-        List<string> keys = m_currentBlackboard.GetAllOfValueType(valueType);
+				case ValueType.Float:
+					defaultKey = "Float " + m_blackboard.m_floats.Count;
+					break;
 
-        for (int i = 0; i < keys.Count; i++)
-        {
-            string key = keys[i];
-            Value value = m_currentBlackboard.GetValue(key);
+				case ValueType.String:
+					defaultKey = "String " + m_blackboard.m_strings.Count;
+					break;
+			}
 
-            Rect textRect = new Rect(5.0f, yPos, Screen.width - 106, 16);
-            Rect fieldRect = new Rect(Screen.width - 102, yPos, 86, 16);
+			m_blackboard.AddKey(defaultKey, valueType);
+		};
 
-            if (i > 0)
-            {
-                Handles.color = Color.grey;
-                Handles.DrawLine(new Vector3(5, yPos), new Vector3(Screen.width - 20, yPos));
-                Handles.color = Color.white;
-            }
+		reorderableList.onRemoveCallback = (ReorderableList list) =>
+		{
+			if (EditorUtility.DisplayDialog("Wait!", 
+				"Are you sure you want to delete this variable?", "Yes", "No"))
+			{
+				switch (valueType)
+				{
+					case ValueType.Boolean:
+						m_blackboard.RemoveKey(m_blackboard.m_booleans[reorderableList.index].m_key);
+						break;
 
-            GUI.Label(textRect, key);
+					case ValueType.Float:
+						m_blackboard.RemoveKey(m_blackboard.m_floats[reorderableList.index].m_key);
+						break;
 
-            switch (valueType)
-            {
-                case ValueType.Boolean:
-                    textRect.width += 70;
-                    fieldRect.x += 70;
-                    fieldRect.width -= 70;
-                    m_currentBlackboard.SetValue(key, EditorGUI.Toggle(fieldRect, value.m_boolean));
-                    break;
+					case ValueType.String:
+						m_blackboard.RemoveKey(m_blackboard.m_strings[reorderableList.index].m_key);
+						break;
+				}
+			}
+		};
 
-                case ValueType.Float:
-                    m_currentBlackboard.SetValue(key, EditorGUI.FloatField(fieldRect, value.m_float));
-                    break;
+		// 
+		GUIStyle scrollViewStyle = new GUIStyle(GUI.skin.scrollView);
+		scrollViewStyle.margin = new RectOffset(8, 8, 8, 8);
 
-                case ValueType.String:
-                    m_currentBlackboard.SetValue(key, EditorGUI.TextField(fieldRect, value.m_string));
-                    break;
-            }
-
-            yPos += 17;
-        }
-
-        yPos += 2;
-
-        string keyToAdd;
-        switch (valueType)
-        {
-            default:
-                m_booleanKey = EditorGUI.TextField(new Rect(5, yPos + 4, Screen.width - 78, 16), m_booleanKey);
-                keyToAdd = m_booleanKey;
-                break;
-
-            case ValueType.Float:
-                m_floatKey = EditorGUI.TextField(new Rect(5, yPos + 4, Screen.width - 78, 16), m_floatKey);
-                keyToAdd = m_floatKey;
-                break;
-
-            case ValueType.String:
-                m_stringKey = EditorGUI.TextField(new Rect(5, yPos + 4, Screen.width - 78, 16), m_stringKey);
-                keyToAdd = m_stringKey;
-                break;
-        }
-
-        keys.Clear();
-        keys = m_currentBlackboard.GetKeys();
-
-        // "remove" button
-        if (GUI.Button(new Rect(Screen.width - 42, yPos, 24, 24), "-"))
-        {
-            if (keys.Contains(keyToAdd))
-            {
-                m_currentBlackboard.RemoveKey(keyToAdd);
-                ClearKeyField(valueType);
-            }
-        }
-
-        // "add" button
-        if (GUI.Button(new Rect(Screen.width - 70, yPos, 24, 24), "+"))
-        {
-            if (!keys.Contains(keyToAdd) && keyToAdd.Length > 0)
-            {
-                m_currentBlackboard.AddKey(keyToAdd, valueType);
-                ClearKeyField(valueType);
-            }
-        }
-
-        yPos += 32.0f;
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="valueType"></param>
-    private void ClearKeyField(ValueType valueType)
-    {
-        GUI.FocusControl(null);
-
-        switch (valueType)
-        {
-            case ValueType.Boolean:
-                m_booleanKey = "";
-                break;
-
-            case ValueType.Float:
-                m_floatKey = "";
-                break;
-
-            case ValueType.String:
-                m_stringKey = "";
-                break;
-        }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    private void ClearKeyFields()
-    {
-        GUI.FocusControl(null);
-
-        m_booleanKey = "";
-        m_floatKey = "";
-        m_stringKey = "";
-    }
+		//
+		EditorGUILayout.BeginVertical(scrollViewStyle);
+		reorderableList.DoLayoutList();
+		EditorGUILayout.EndVertical();
+		
+		EditorUtility.SetDirty(m_blackboard);
+	}
 
     /// <summary>
     /// draws the DEVN water-mark logo. For fanciness

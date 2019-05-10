@@ -1,0 +1,755 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f97195559373da409a1adde84887dff, type: 3}
+  m_Name: Example Scene
+  m_EditorClassIdentifier: 
+  m_currentPage: 1
+  m_pages:
+  - {fileID: 114769186061097480}
+  - {fileID: 114060781223807674}
+--- !u!114 &114015401117613160
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bf1f0fa704193a4d9f493dbabc686e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 0
+  m_rectangle:
+    serializedVersion: 2
+    x: -2864
+    y: 22
+    width: 100
+    height: 50
+  m_title: Start
+  m_inputs: 
+  m_inputPoint:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 10
+    height: 20
+  m_outputs: 07000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: -2764
+    y: 37
+    width: 10
+    height: 20
+--- !u!114 &114017086133164082
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b19fd96f384d73488a80aba14d3f33d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 1
+  m_rectangle:
+    serializedVersion: 2
+    x: -2541
+    y: 24
+    width: 340
+    height: 188
+  m_title: Dialogue
+  m_inputs: 07000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: -2551
+    y: 108
+    width: 10
+    height: 20
+  m_outputs: 02000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: -2201
+    y: 108
+    width: 10
+    height: 20
+  m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
+  m_spriteSelection: 0
+  m_audioSelection: 0
+  m_dialogue: Are you saying you don't like squid?
+--- !u!114 &114049378096227056
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 268926b0572e1734695332a363e32b77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 1
+  m_rectangle:
+    serializedVersion: 2
+    x: 174
+    y: 28
+    width: 170
+    height: 212
+  m_title: Background
+  m_inputs: 00000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 164
+    y: 124
+    width: 10
+    height: 20
+  m_outputs: 02000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 344
+    y: 124
+    width: 10
+    height: 20
+  m_toggleSelection: 0
+  m_background: {fileID: 21300000, guid: ed8352e7f0abd5c4083bee666684c10f, type: 3}
+  m_fadeColour: {r: 0, g: 0, b: 0, a: 1}
+  m_fadeTime: 0.5
+  m_waitForFinish: 1
+--- !u!114 &114058341430590860
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b19fd96f384d73488a80aba14d3f33d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 2
+  m_rectangle:
+    serializedVersion: 2
+    x: -2172
+    y: 23
+    width: 340
+    height: 188
+  m_title: Dialogue
+  m_inputs: 01000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: -2182
+    y: 107
+    width: 10
+    height: 20
+  m_outputs: 08000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: -1832
+    y: 107
+    width: 10
+    height: 20
+  m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
+  m_spriteSelection: 2
+  m_audioSelection: 0
+  m_dialogue: You, of all people?
+--- !u!114 &114060781223807674
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44c786e63f8b54f4eaf62140c9011b53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_currentID: 29
+  m_nodes:
+  - {fileID: 114015401117613160}
+  - {fileID: 114017086133164082}
+  - {fileID: 114058341430590860}
+  - {fileID: 114730454898181214}
+  - {fileID: 114880236471838620}
+  - {fileID: 114230659663618174}
+  - {fileID: 114594499327592628}
+  - {fileID: 114561821909405414}
+  - {fileID: 114472856345769678}
+  - {fileID: 114829307296821846}
+  - {fileID: 114162725223890054}
+  - {fileID: 114663475304009314}
+  - {fileID: 114252309205581986}
+  - {fileID: 114244808652521774}
+--- !u!114 &114162725223890054
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b19fd96f384d73488a80aba14d3f33d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 10
+  m_rectangle:
+    serializedVersion: 2
+    x: -47
+    y: 26
+    width: 340
+    height: 188
+  m_title: Dialogue
+  m_inputs: 060000000d000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: -57
+    y: 110
+    width: 10
+    height: 20
+  m_outputs: 0b000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 293
+    y: 110
+    width: 10
+    height: 20
+  m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
+  m_spriteSelection: 1
+  m_audioSelection: 0
+  m_dialogue: Because!
+--- !u!114 &114230659663618174
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b19fd96f384d73488a80aba14d3f33d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 5
+  m_rectangle:
+    serializedVersion: 2
+    x: -1225
+    y: 31
+    width: 340
+    height: 188
+  m_title: Dialogue
+  m_inputs: 04000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: -1235
+    y: 115
+    width: 10
+    height: 20
+  m_outputs: 09000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: -885
+    y: 115
+    width: 10
+    height: 20
+  m_character: {fileID: 11400000, guid: e6d4a9e17170db84b8db609e2cc88472, type: 2}
+  m_spriteSelection: 0
+  m_audioSelection: 0
+  m_dialogue: Eh? I didn't say I don't like it.
+--- !u!114 &114244808652521774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8c5ffff9b605bb4a80f1823d92da3b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 13
+  m_rectangle:
+    serializedVersion: 2
+    x: -266
+    y: 29
+    width: 190
+    height: 136
+  m_title: Character Scale
+  m_inputs: 0c000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: -276
+    y: 87
+    width: 10
+    height: 20
+  m_outputs: 0a000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: -76
+    y: 87
+    width: 10
+    height: 20
+  m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
+  m_scale: {x: 1.1, y: 1.1}
+  m_isLerp: 1
+  m_lerpTime: 0.1
+--- !u!114 &114252309205581986
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8c5ffff9b605bb4a80f1823d92da3b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 12
+  m_rectangle:
+    serializedVersion: 2
+    x: -478
+    y: 31
+    width: 190
+    height: 136
+  m_title: Character Scale
+  m_inputs: 06000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: -488
+    y: 89
+    width: 10
+    height: 20
+  m_outputs: 0d000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: -288
+    y: 89
+    width: 10
+    height: 20
+  m_character: {fileID: 11400000, guid: e6d4a9e17170db84b8db609e2cc88472, type: 2}
+  m_scale: {x: 1, y: 1}
+  m_isLerp: 1
+  m_lerpTime: 0.1
+--- !u!114 &114443260548937314
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a09d2a8121535245b15ad72ab2ac3e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 4
+  m_rectangle:
+    serializedVersion: 2
+    x: 905
+    y: 33
+    width: 100
+    height: 58
+  m_title: Page
+  m_inputs: 03000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 895
+    y: 52
+    width: 10
+    height: 20
+  m_outputs: 
+  m_outputPoints: []
+  m_pageNumber: 1
+--- !u!114 &114472856345769678
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8c5ffff9b605bb4a80f1823d92da3b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 8
+  m_rectangle:
+    serializedVersion: 2
+    x: -1949
+    y: 221
+    width: 190
+    height: 136
+  m_title: Character Scale
+  m_inputs: 02000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: -1959
+    y: 279
+    width: 10
+    height: 20
+  m_outputs: 03000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: -1759
+    y: 279
+    width: 10
+    height: 20
+  m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
+  m_scale: {x: 1, y: 1}
+  m_isLerp: 1
+  m_lerpTime: 0.25
+--- !u!114 &114561821909405414
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8c5ffff9b605bb4a80f1823d92da3b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 7
+  m_rectangle:
+    serializedVersion: 2
+    x: -2746
+    y: 25
+    width: 190
+    height: 136
+  m_title: Character Scale
+  m_inputs: 00000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: -2756
+    y: 83
+    width: 10
+    height: 20
+  m_outputs: 01000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: -2556
+    y: 83
+    width: 10
+    height: 20
+  m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
+  m_scale: {x: 1.1, y: 1.1}
+  m_isLerp: 1
+  m_lerpTime: 0.25
+--- !u!114 &114594499327592628
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b19fd96f384d73488a80aba14d3f33d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 6
+  m_rectangle:
+    serializedVersion: 2
+    x: -848
+    y: 32
+    width: 340
+    height: 188
+  m_title: Dialogue
+  m_inputs: 09000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: -858
+    y: 116
+    width: 10
+    height: 20
+  m_outputs: 0c000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: -508
+    y: 116
+    width: 10
+    height: 20
+  m_character: {fileID: 11400000, guid: e6d4a9e17170db84b8db609e2cc88472, type: 2}
+  m_spriteSelection: 0
+  m_audioSelection: 0
+  m_dialogue: Besides, what do you mean by 'you of all people'?
+--- !u!114 &114663475304009314
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b19fd96f384d73488a80aba14d3f33d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 11
+  m_rectangle:
+    serializedVersion: 2
+    x: 327
+    y: 26
+    width: 340
+    height: 188
+  m_title: Dialogue
+  m_inputs: 0a000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 317
+    y: 110
+    width: 10
+    height: 20
+  m_outputs: ffffffff
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 667
+    y: 110
+    width: 10
+    height: 20
+  m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
+  m_spriteSelection: 0
+  m_audioSelection: 0
+  m_dialogue: It's right in your name!
+--- !u!114 &114701884743067078
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bf1f0fa704193a4d9f493dbabc686e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 0
+  m_rectangle:
+    serializedVersion: 2
+    x: 4
+    y: 24
+    width: 100
+    height: 50
+  m_title: Start
+  m_inputs: 
+  m_inputPoint:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 10
+    height: 20
+  m_outputs: 01000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 104
+    y: 39
+    width: 10
+    height: 20
+--- !u!114 &114730454898181214
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4736a76f54eabd498ec4ac540793476, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 3
+  m_rectangle:
+    serializedVersion: 2
+    x: -1777
+    y: 28
+    width: 296.90265
+    height: 204
+  m_title: Character
+  m_inputs: 08000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: -1787
+    y: 120
+    width: 10
+    height: 20
+  m_outputs: 04000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: -1480.0974
+    y: 120
+    width: 10
+    height: 20
+  m_toggleSelection: 0
+  m_character: {fileID: 11400000, guid: e6d4a9e17170db84b8db609e2cc88472, type: 2}
+  m_sprite: {fileID: 21300000, guid: 06672bfb3eb028c41bb0e4125b33f2b0, type: 3}
+  m_spriteSelection: 0
+  m_xPosition: 75
+  m_fadeTime: 0.5
+  m_isInverted: 0
+  m_waitForFinish: 1
+--- !u!114 &114769186061097480
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44c786e63f8b54f4eaf62140c9011b53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_currentID: 5
+  m_nodes:
+  - {fileID: 114701884743067078}
+  - {fileID: 114049378096227056}
+  - {fileID: 114942006522109840}
+  - {fileID: 114884931878139492}
+  - {fileID: 114443260548937314}
+--- !u!114 &114829307296821846
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40703a6190b528640938b42580668814, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 9
+  m_rectangle:
+    serializedVersion: 2
+    x: -989
+    y: 247
+    width: 190
+    height: 136
+  m_title: Character Translate
+  m_inputs: 05000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: -999
+    y: 305
+    width: 10
+    height: 20
+  m_outputs: 06000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: -799
+    y: 305
+    width: 10
+    height: 20
+  m_character: {fileID: 11400000, guid: e6d4a9e17170db84b8db609e2cc88472, type: 2}
+  m_translation: {x: 65, y: 0}
+  m_isLerp: 1
+  m_lerpTime: 0.5
+--- !u!114 &114880236471838620
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8c5ffff9b605bb4a80f1823d92da3b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 4
+  m_rectangle:
+    serializedVersion: 2
+    x: -1444
+    y: 28
+    width: 190
+    height: 136
+  m_title: Character Scale
+  m_inputs: 03000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: -1454
+    y: 86
+    width: 10
+    height: 20
+  m_outputs: 05000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: -1254
+    y: 86
+    width: 10
+    height: 20
+  m_character: {fileID: 11400000, guid: e6d4a9e17170db84b8db609e2cc88472, type: 2}
+  m_scale: {x: 1.1, y: 1.1}
+  m_isLerp: 1
+  m_lerpTime: 0.25
+--- !u!114 &114884931878139492
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f5d16997c22cc241bd5f4c6cf433796, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 3
+  m_rectangle:
+    serializedVersion: 2
+    x: 736
+    y: 31
+    width: 128
+    height: 42
+  m_title: Dialogue Box
+  m_inputs: 02000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 726
+    y: 42
+    width: 10
+    height: 20
+  m_outputs: 04000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 864
+    y: 42
+    width: 10
+    height: 20
+  m_toggleSelection: 0
+--- !u!114 &114942006522109840
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4736a76f54eabd498ec4ac540793476, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 2
+  m_rectangle:
+    serializedVersion: 2
+    x: 386
+    y: 28
+    width: 295.55057
+    height: 204
+  m_title: Character
+  m_inputs: 01000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 376
+    y: 120
+    width: 10
+    height: 20
+  m_outputs: 03000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 681.55054
+    y: 120
+    width: 10
+    height: 20
+  m_toggleSelection: 0
+  m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
+  m_sprite: {fileID: 21300000, guid: bf709ebdf31e80943b36077534b20628, type: 3}
+  m_spriteSelection: 0
+  m_xPosition: 38
+  m_fadeTime: 0.5
+  m_isInverted: 0
+  m_waitForFinish: 1
