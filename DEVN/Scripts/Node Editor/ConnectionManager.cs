@@ -38,6 +38,9 @@ public class ConnectionManager
     /// </summary>
     public void CreateConnection()
     {
+        Undo.RecordObject(m_selectedLeftNode, "Create Connection");
+        Undo.RecordObject(m_selectedRightNode, "Create Connection");
+        
 		if (m_selectedLeftNode.m_outputs[m_selectedOutput] != -1)
 			RemoveConnection(m_selectedLeftNode, m_selectedOutput);
 
@@ -51,7 +54,12 @@ public class ConnectionManager
     public void RemoveConnection(BaseNode inputNode, int outputIndex)
     {
 		NodeManager nodeManager = NodeEditor.GetNodeManager();
-		nodeManager.GetNode(inputNode.m_outputs[outputIndex]).m_inputs.Remove(inputNode.GetNodeID());
+        BaseNode connectedNode = nodeManager.GetNode(inputNode.m_outputs[outputIndex]);
+            
+        Undo.RecordObject(inputNode, "Remove Connection");
+        Undo.RecordObject(connectedNode, "Remove Connection");
+
+        connectedNode.m_inputs.Remove(inputNode.GetNodeID());
         inputNode.m_outputs[outputIndex] = -1;
     }
 

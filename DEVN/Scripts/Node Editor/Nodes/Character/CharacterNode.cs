@@ -25,8 +25,8 @@ public class CharacterNode : BaseNode
 		
 	[SerializeField] private float m_xPosition = 50.0f; // character alignment
 	[SerializeField] private float m_fadeTime = 0.5f; // fade time
-	[SerializeField] private bool m_isInverted = false; // inversion
-	[SerializeField] private bool m_waitForFinish = true;
+	[SerializeField] private bool m_isInverted = false; // y scale invert?
+	[SerializeField] private bool m_waitForFinish = true; // wait before next node?
 
 	#region getters
 

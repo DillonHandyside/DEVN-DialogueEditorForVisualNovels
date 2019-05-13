@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 namespace DEVN
 {
@@ -30,8 +31,7 @@ public class BranchNode : BaseNode
 
         m_title = "Branch";
 
-        m_rectangle.width = 200;
-        m_rectangle.height = 50;
+        m_rectangle.width = 340;
 			
 		m_branches = new List<string>(); // initialise list of branches
 
@@ -64,17 +64,33 @@ public class BranchNode : BaseNode
 	/// <param name="id">the ID of the node window</param>
 	protected override void DrawNodeWindow(int id)
     {
-        // draw all text areas
+        // draw all text fields
         for (int i = 0; i < m_branches.Count; i++)
-			m_branches[i] = GUI.TextArea(new Rect(5, 20 + i * 40, 190, 35), m_branches[i]);
+        {
+            EditorGUILayout.LabelField("Branch " + (i + 1));
+		    m_branches[i] = EditorGUILayout.TextField(m_branches[i]);
+        }
         
+        // determine button position
+        Rect buttonRect = new Rect(m_rectangle.width - 48, 0, 21, 16);
+        buttonRect.y = GUILayoutUtility.GetLastRect().y + buttonRect.height + 4;
+
         // draw the remove button
-        if (GUI.Button(new Rect(135, 18 + m_branches.Count * 40, 28, 28), "-"))
-            RemoveBranch();
+        if (GUI.Button(buttonRect, "+"))
+            AddBranch();
+
+        buttonRect.x += 22;
 
         // draw the add button
-        if (GUI.Button(new Rect(165, 18 + m_branches.Count * 40, 28, 28), "+"))
-            AddBranch();
+        if (GUI.Button(buttonRect, "-"))
+            RemoveBranch();
+
+        // resize node height
+        if (Event.current.type == EventType.Repaint)
+        {
+            Rect lastRect = GUILayoutUtility.GetLastRect();
+            m_rectangle.height = lastRect.y + lastRect.height + 24;
+        }
 
         base.DrawNodeWindow(id);
     }
@@ -88,8 +104,6 @@ public class BranchNode : BaseNode
 		// add new text area and output point 
 		m_branches.Add("");
         AddOutputPoint();
-		
-        m_rectangle.height += 40; // resize the node
 	}
 
     /// <summary>
@@ -114,8 +128,6 @@ public class BranchNode : BaseNode
 		// remove the output/output point
 		m_outputPoints.RemoveAt(removalIndex);
         m_outputs.RemoveAt(removalIndex);
-        
-        m_rectangle.height -= 40; // resize the node
     }
 
 #endif

@@ -13,8 +13,59 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_currentPage: 0
   m_pages:
-  - {fileID: 114962218483264124}
---- !u!114 &114168175205879592
+  - {fileID: 114875364284700284}
+--- !u!114 &114090464456507812
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7b4a33b3ced25b47935eaa0b4b68ebf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 9
+  m_rectangle:
+    serializedVersion: 2
+    x: 101
+    y: 147
+    width: 256
+    height: 166
+  m_title: Condition
+  m_inputs: 08000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 91
+    y: 220
+    width: 10
+    height: 20
+  m_outputs: 0300000004000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 357
+    y: 192.33333
+    width: 10
+    height: 20
+  - serializedVersion: 2
+    x: 357
+    y: 247.66666
+    width: 10
+    height: 20
+  m_valueType: 1
+  m_blackboardA: {fileID: 11400000, guid: 5815394381be2d141acd13f9a03e227f, type: 2}
+  m_blackboardB: {fileID: 11400000, guid: 5815394381be2d141acd13f9a03e227f, type: 2}
+  m_currentKeyA: Float 0
+  m_currentKeyB: Float 2
+  m_keySelectionA: 3
+  m_keySelectionB: 2
+  m_sourceSelection: 1
+  m_booleanSelection: 0
+  m_floatSelection: 0
+  m_booleanValue: 1
+  m_floatValue: 0
+  m_stringValue: Test
+--- !u!114 &114117448993653742
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -29,7 +80,7 @@ MonoBehaviour:
   m_rectangle:
     serializedVersion: 2
     x: 4
-    y: 24
+    y: 4
     width: 100
     height: 50
   m_title: Start
@@ -40,14 +91,55 @@ MonoBehaviour:
     y: 0
     width: 10
     height: 20
-  m_outputs: ffffffff
+  m_outputs: 08000000
   m_outputPoints:
   - serializedVersion: 2
     x: 104
-    y: 39
+    y: 19
     width: 10
     height: 20
---- !u!114 &114529347632671682
+--- !u!114 &114389557633313390
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4736a76f54eabd498ec4ac540793476, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 6
+  m_rectangle:
+    serializedVersion: 2
+    x: 639
+    y: 118
+    width: 295.55057
+    height: 204
+  m_title: Character
+  m_inputs: 0300000004000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 629
+    y: 210
+    width: 10
+    height: 20
+  m_outputs: ffffffff
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 934.55054
+    y: 210
+    width: 10
+    height: 20
+  m_toggleSelection: 0
+  m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
+  m_sprite: {fileID: 21300000, guid: bf709ebdf31e80943b36077534b20628, type: 3}
+  m_spriteSelection: 0
+  m_xPosition: 69
+  m_fadeTime: 0.5
+  m_isInverted: 0
+  m_waitForFinish: 1
+--- !u!114 &114571280406173018
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -58,35 +150,76 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66309afc4e2c5f843a4891b3c9f4b89a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_nodeID: 6
+  m_nodeID: 8
   m_rectangle:
     serializedVersion: 2
-    x: 433
-    y: 104
+    x: 130
+    y: 6
     width: 180
     height: 148
   m_title: Modify
-  m_inputs: 
+  m_inputs: 00000000
   m_inputPoint:
     serializedVersion: 2
-    x: 423
-    y: 168
+    x: 120
+    y: 70
     width: 10
     height: 20
-  m_outputs: ffffffff
+  m_outputs: 09000000
   m_outputPoints:
   - serializedVersion: 2
-    x: 613
-    y: 168
+    x: 310
+    y: 70
     width: 10
     height: 20
-  m_variableSelection: 0
+  m_valueType: 1
+  m_blackboard: {fileID: 11400000, guid: 5815394381be2d141acd13f9a03e227f, type: 2}
+  m_currentKey: Float 2
+  m_variableSelection: 5
   m_booleanValue: 1
   m_booleanSelection: 0
-  m_floatValue: 0
+  m_floatValue: 6
   m_floatSelection: 1
-  m_stringValue: 
---- !u!114 &114962218483264124
+  m_stringValue: test
+--- !u!114 &114672067789844646
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 268926b0572e1734695332a363e32b77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 4
+  m_rectangle:
+    serializedVersion: 2
+    x: 425
+    y: 220
+    width: 170
+    height: 212
+  m_title: Background
+  m_inputs: 09000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 415
+    y: 316
+    width: 10
+    height: 20
+  m_outputs: 06000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 595
+    y: 316
+    width: 10
+    height: 20
+  m_toggleSelection: 0
+  m_background: {fileID: 21300000, guid: ed8352e7f0abd5c4083bee666684c10f, type: 3}
+  m_fadeColour: {r: 0, g: 0, b: 0, a: 1}
+  m_fadeTime: 0.5
+  m_waitForFinish: 1
+--- !u!114 &114875364284700284
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97,7 +230,49 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44c786e63f8b54f4eaf62140c9011b53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_currentID: 7
+  m_currentID: 50
   m_nodes:
-  - {fileID: 114168175205879592}
-  - {fileID: 114529347632671682}
+  - {fileID: 114117448993653742}
+  - {fileID: 114917664678085618}
+  - {fileID: 114672067789844646}
+  - {fileID: 114389557633313390}
+  - {fileID: 114571280406173018}
+  - {fileID: 114090464456507812}
+--- !u!114 &114917664678085618
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 268926b0572e1734695332a363e32b77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 3
+  m_rectangle:
+    serializedVersion: 2
+    x: 425
+    y: 3
+    width: 170
+    height: 212
+  m_title: Background
+  m_inputs: 09000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 415
+    y: 99
+    width: 10
+    height: 20
+  m_outputs: 06000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 595
+    y: 99
+    width: 10
+    height: 20
+  m_toggleSelection: 0
+  m_background: {fileID: 21300000, guid: 604c068796a98034f856b79ba6a5199b, type: 3}
+  m_fadeColour: {r: 0, g: 0, b: 0, a: 1}
+  m_fadeTime: 0.5
+  m_waitForFinish: 1

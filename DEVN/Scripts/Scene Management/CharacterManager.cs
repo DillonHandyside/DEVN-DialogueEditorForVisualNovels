@@ -16,15 +16,18 @@ public class CharacterManager : MonoBehaviour
 
 	private CharacterTransformer m_characterTransformer;
 
-	public GameObject m_inactiveCharacterPanel;
-	public GameObject m_activeCharacterPanel;
-
-	public GameObject m_characterPrefab;
+    [Header("Character Prefab")]
+	[SerializeField] private GameObject m_characterPrefab;
 	private List<GameObject> m_characters;
+
+    [Header("Canvas Panels")]
+	[SerializeField] private GameObject m_backgroundPanel;
+	[SerializeField] private GameObject m_foregroundPanel;
 
 	#region getters
 
 	public static CharacterManager GetInstance() { return m_instance; }
+    public GameObject GetBackgroundPanel() { return m_backgroundPanel; }
 
 	#endregion
 
@@ -79,11 +82,11 @@ public class CharacterManager : MonoBehaviour
 
 		// create new character and parent it to canvas
 		GameObject character = Instantiate(m_characterPrefab);
-		character.transform.SetParent(m_inactiveCharacterPanel.transform, false);
+		character.transform.SetParent(m_backgroundPanel.transform, false);
 
 		// invert if necessary
 		if (characterNode.GetIsInverted())
-			m_characterTransformer.InvertCharacter(character);
+			m_characterTransformer.SetCharacterScale(character, new Vector2(1, -1));
 
 		SetSprite(character, characterNode.GetSprite()); // set sprite
 
@@ -157,12 +160,12 @@ public class CharacterManager : MonoBehaviour
 		for (int i = 0; i < m_characters.Count; i++)
 		{
 			GameObject character = m_characters[i];
-			character.transform.SetParent(m_inactiveCharacterPanel.transform);
+			character.transform.SetParent(m_backgroundPanel.transform);
 			character.GetComponent<Image>().color = new Color(0.75f, 0.75f, 0.75f);
 		}
 
 		GameObject characterToHighlight = TryGetCharacter(speakingCharacter);
-		characterToHighlight.transform.SetParent(m_activeCharacterPanel.transform);
+		characterToHighlight.transform.SetParent(m_foregroundPanel.transform);
 		characterToHighlight.GetComponent<Image>().color = new Color(1, 1, 1);
 	}
 

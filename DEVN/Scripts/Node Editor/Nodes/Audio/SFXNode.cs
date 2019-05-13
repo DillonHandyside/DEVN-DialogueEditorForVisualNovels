@@ -11,9 +11,11 @@ namespace DEVN
 [System.Serializable]
 public class SFXNode : BaseNode
 {
-	[SerializeField] private AudioClip m_sfxAudio;
-	[SerializeField] private bool m_waitForFinish = false;
+	[SerializeField] private AudioClip m_sfxAudio; // the sound effect
 
+    // wait for sfx to finish before proceeding to next node?
+	[SerializeField] private bool m_waitForFinish = false;
+        
 	#region getters
 
 	public AudioClip GetSFX() { return m_sfxAudio; }
@@ -59,22 +61,15 @@ public class SFXNode : BaseNode
 	/// <param name="id">the ID of the node window</param>
     protected override void DrawNodeWindow(int id)
 	{
-		float width = m_rectangle.width - 10;
-		float fieldHeight = 16;
-
-		Rect fieldRect = new Rect(5, 20, width, fieldHeight);
-
 		// draw SFX audio label and object field
-		GUI.Label(fieldRect, "SFX Node");
-		fieldRect.y += fieldHeight;
-		m_sfxAudio = EditorGUI.ObjectField(fieldRect, m_sfxAudio, typeof(AudioClip), false) as AudioClip;
-		fieldRect.y += fieldHeight + 2;
+		EditorGUILayout.LabelField("SFX Node");
+		m_sfxAudio = EditorGUILayout.ObjectField(m_sfxAudio, typeof(AudioClip), false) as AudioClip;
 
 		// draw "wait for finish" label and boolean toggle
-		GUI.Label(fieldRect, "Wait For Finish");
-		fieldRect.x = m_rectangle.width - 20;
-		fieldRect.width = fieldHeight;
-		m_waitForFinish = EditorGUI.Toggle(fieldRect, m_waitForFinish);
+		EditorGUILayout.LabelField("Wait For Finish");
+        Rect toggleRect = GUILayoutUtility.GetLastRect();
+		toggleRect.x = m_rectangle.width - 18;
+		m_waitForFinish = EditorGUI.Toggle(toggleRect, m_waitForFinish);
 
 		base.DrawNodeWindow(id);
 	}

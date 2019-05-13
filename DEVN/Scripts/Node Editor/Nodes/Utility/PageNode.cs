@@ -57,14 +57,8 @@ public class PageNode : BaseNode
     /// <param name="id">the node window ID</param>
     protected override void DrawNodeWindow(int id)
 	{
-        float fieldWidth = m_rectangle.width - 10;
-        float fieldHeight = 16;
-
-        Rect fieldRect = new Rect(5, 20, fieldWidth, fieldHeight);
-
         // draw "Jump To:" label
-        GUI.Label(fieldRect, "Jump To:");
-        fieldRect.y += fieldHeight;
+        EditorGUILayout.LabelField("Jump To:");
 
         // get a string list of all pages
         string[] pages = new string[NodeEditor.GetScene().GetPages().Count];
@@ -72,7 +66,7 @@ public class PageNode : BaseNode
             pages[i] = "Page " + (i + 1);
 
         // draw page list popup
-        m_pageNumber = EditorGUI.Popup(fieldRect, m_pageNumber, pages);
+        m_pageNumber = EditorGUILayout.Popup(m_pageNumber, pages);
 
         // perform clamp to prevent any index out of range errors
         m_pageNumber = Mathf.Clamp(m_pageNumber, 0, pages.Length - 1);

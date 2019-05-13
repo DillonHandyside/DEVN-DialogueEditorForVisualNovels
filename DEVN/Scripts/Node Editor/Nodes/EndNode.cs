@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-
 namespace DEVN
 {
 
@@ -16,6 +15,10 @@ public class EndNode : BaseNode
 
 #if UNITY_EDITOR
 
+    /// <summary>
+    /// overridden constructor
+    /// </summary>
+    /// <param name="position">position of creation</param>
 	public override void Init(Vector2 position)
     {
         base.Init(position);
@@ -26,6 +29,11 @@ public class EndNode : BaseNode
         m_title = "End";
     }
 
+    /// <summary>
+    /// overridden copy constructor, copies "Next Scene" reference
+    /// </summary>
+    /// <param name="node">node to copy</param>
+    /// <param name="position">position to copy to</param>
     public override void Copy(BaseNode node, Vector2 position)
     {
         base.Copy(node, position);
@@ -34,17 +42,16 @@ public class EndNode : BaseNode
         m_nextScene = (node as EndNode).GetNextScene();
     }
 
+    /// <summary>
+    /// overridden draw function, prints a label and object field for
+    /// the next scene
+    /// </summary>
+    /// <param name="id">the node window ID</param>
     protected override void DrawNodeWindow(int id)
     {
-        float fieldWidth = m_rectangle.width - 10;
-        float fieldHeight = 16;
-
-		Rect fieldRect = new Rect(5, 20, fieldWidth, fieldHeight);
-
 		// draw label and object field for "next scene"
-		GUI.Label(fieldRect, "Next Scene");
-		fieldRect.y += 16;
-        m_nextScene = EditorGUI.ObjectField(fieldRect, m_nextScene, typeof(Scene), false) as Scene;
+		EditorGUILayout.LabelField("Next Scene");
+        m_nextScene = EditorGUILayout.ObjectField(m_nextScene, typeof(Scene), false) as Scene;
 
         base.DrawNodeWindow(id);
 	}

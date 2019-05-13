@@ -35,7 +35,6 @@ public class Page : ScriptableObject
     public void Init()
     {
         BaseNode startNode = NodeEditor.GetNodeManager().AddNode(typeof(StartNode));
-        startNode.m_rectangle.position = new Vector2(4, 24);
         m_nodes.Add(startNode); // add a StartNode to page
     }
 

@@ -4,6 +4,13 @@ using UnityEngine;
 namespace DEVN
 {
 
+#region required components
+[RequireComponent(typeof(LogManager))]
+[RequireComponent(typeof(DialogueManager))]
+[RequireComponent(typeof(CharacterManager))]
+[RequireComponent(typeof(BackgroundManager))]
+[RequireComponent(typeof(AudioManager))]
+#endregion
 public class SceneManager : MonoBehaviour
 {
 	// singleton
@@ -12,8 +19,10 @@ public class SceneManager : MonoBehaviour
 	[SerializeField] private Scene m_startScene;
 	[HideInInspector]
     [SerializeField] private Scene m_currentScene;
-    private List<BaseNode> m_sceneNodes;
     private BaseNode m_currentNode;
+    private List<BaseNode> m_sceneNodes;
+
+    private List<Blackboard> m_blackboards;
 	
 	private bool m_isInputAllowed = false;
 
@@ -21,6 +30,7 @@ public class SceneManager : MonoBehaviour
 
 	public static SceneManager GetInstance() { return m_instance; }
 	public BaseNode GetCurrentNode() { return m_currentNode; }
+    public List<Blackboard> GetBlackboards() { return m_blackboards; }
 
 	#endregion
 
@@ -36,6 +46,16 @@ public class SceneManager : MonoBehaviour
 	void Start ()
     {
 		m_instance = this; // initialise singleton
+
+        Blackboard[] blackboards = Resources.FindObjectsOfTypeAll<Blackboard>();
+
+        m_blackboards = new List<Blackboard>();
+        for (int i = 0; i < blackboards.Length; i++)
+        {
+            Blackboard blackboard = ScriptableObject.CreateInstance<Blackboard>();
+            blackboard.Copy(blackboards[i]);
+            m_blackboards.Add(blackboard);
+        }
 
 		NewScene(m_startScene);
 	}
@@ -108,12 +128,22 @@ public class SceneManager : MonoBehaviour
     /// </summary>
     public void NextNode()
     {
-		// only one node to proceed to
+		// linear node, output index is 0
 		if (m_currentNode.m_outputs.Count == 1)
 			m_currentNode = GetNode(m_currentNode.m_outputs[0]);
 
-        // other node types here
+        // condition node, output index is either 0 for true, 1 for false
+        else if (m_currentNode is ConditionNode)
+        {
+            VariableManager variableManager = VariableManager.GetInstance();
+            int outputIndex = variableManager.EvaluateCondition(m_currentNode);
 
+            if (outputIndex == 1)
+                m_currentNode = GetNode(m_currentNode.m_outputs[0]); // true
+            else
+                m_currentNode = GetNode(m_currentNode.m_outputs[1]); // false
+        }
+        
         UpdateScene();
     }
 
@@ -122,7 +152,12 @@ public class SceneManager : MonoBehaviour
 	/// </summary>
 	private void Transition()
 	{
-		if (m_currentNode is EndNode)
+        if (m_currentNode is PageNode)
+        {
+            PageNode pageNode = m_currentNode as PageNode;
+            NewPage((pageNode).GetPageNumber());
+        }
+		else if (m_currentNode is EndNode)
 		{
 			EndNode endNode = m_currentNode as EndNode;
 
@@ -133,7 +168,7 @@ public class SceneManager : MonoBehaviour
 			else
 				NewScene(endNode.GetNextScene());
 		}
-	}
+    }
 
 	/// <summary>
 	/// 
@@ -142,21 +177,30 @@ public class SceneManager : MonoBehaviour
 	{
 		SetIsInputAllowed(false);
 
+        // background node
         if (m_currentNode is BackgroundNode)
             BackgroundManager.GetInstance().SetBackground();
 
+        // audio nodes
         else if (m_currentNode is BGMNode)
             AudioManager.GetInstance().SetBGM();
-
-        else if (m_currentNode is CharacterNode || m_currentNode is CharacterInvertNode ||
-				 m_currentNode is CharacterScaleNode || m_currentNode is CharacterTranslateNode)
+        else if (m_currentNode is SFXNode)
+            StartCoroutine(AudioManager.GetInstance().PlaySFX());
+        
+        // character nodes
+        else if (m_currentNode is CharacterNode || m_currentNode is CharacterScaleNode || 
+                 m_currentNode is CharacterTranslateNode)
             CharacterManager.GetInstance().EvaluateCharacterNode(m_currentNode);
 
-		
+        // variable nodes
+        else if (m_currentNode is ConditionNode)
+            NextNode();
+        else if (m_currentNode is ModifyNode)
+            VariableManager.GetInstance().PerformModify(m_currentNode);
 
+        // dialogue nodes
         else if (m_currentNode is DialogueNode)
             DialogueManager.GetInstance().SetDialogue();
-
         else if (m_currentNode is DialogueBoxNode)
         {
             if ((m_currentNode as DialogueBoxNode).GetToggleSelection() == 0)
@@ -167,13 +211,8 @@ public class SceneManager : MonoBehaviour
             NextNode();
         }
 
-        else if (m_currentNode is SFXNode)
-            StartCoroutine(AudioManager.GetInstance().PlaySFX());
-
-        else if (m_currentNode is PageNode)
-            NewPage((m_currentNode as PageNode).GetPageNumber());
-
-        else if (m_currentNode is EndNode)
+        // transition nodes
+        else if (m_currentNode is PageNode || m_currentNode is EndNode)
             Transition();
     }
 }

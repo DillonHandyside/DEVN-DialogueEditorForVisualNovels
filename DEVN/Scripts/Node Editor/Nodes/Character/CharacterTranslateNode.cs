@@ -5,7 +5,8 @@ namespace DEVN
 {
 
 /// <summary>
-/// 
+/// node used for translating a particular character, either instantly
+/// or lerped over time
 /// </summary>
 [System.Serializable]
 public class CharacterTranslateNode : BaseNode
@@ -32,9 +33,9 @@ public class CharacterTranslateNode : BaseNode
 #if UNITY_EDITOR
 
 	/// <summary>
-	/// 
+	/// overridden constructor
 	/// </summary>
-	/// <param name="position"></param>
+	/// <param name="position">position of creation</param>
 	public override void Init(Vector2 position)
     {
         base.Init(position);
@@ -47,16 +48,17 @@ public class CharacterTranslateNode : BaseNode
     }
 
 	/// <summary>
-	/// 
+	/// overridden copy constructor
 	/// </summary>
-	/// <param name="node"></param>
-	/// <param name="position"></param>
+	/// <param name="node">node to copy</param>
+	/// <param name="position">position to copy to</param>
     public override void Copy(BaseNode node, Vector2 position)
     {
         base.Copy(node, position);
 
 		CharacterTranslateNode characterMoveNode = node as CharacterTranslateNode;
 
+        // copy relevant variables, character, translation, lerp etc.
 		m_character = characterMoveNode.m_character;
 		m_translation = characterMoveNode.m_translation;
 		m_isLerp = characterMoveNode.m_isLerp;
@@ -64,48 +66,40 @@ public class CharacterTranslateNode : BaseNode
     }
 
 	/// <summary>
-	/// 
+	/// overridden draw function, draws character object field, vector2
+    /// translation field, lerp toggle/slider. Resizes window if necessary
 	/// </summary>
-	/// <param name="id"></param>
+	/// <param name="id">the node window ID</param>
     protected override void DrawNodeWindow(int id)
 	{
-		float fieldWidth = m_rectangle.width - 10;
-		float fieldHeight = 16;
-
-		Rect fieldRect = new Rect(5, 20, fieldWidth, fieldHeight);
-
 		// draw character label and object field
-		GUI.Label(fieldRect, "Character");
-		fieldRect.y += fieldHeight;
-		m_character = EditorGUI.ObjectField(fieldRect, m_character, typeof(Character), false) as Character;
-		fieldRect.y += fieldHeight;
+		EditorGUILayout.LabelField("Character");
+		m_character = EditorGUILayout.ObjectField(m_character, typeof(Character), false) as Character;
 
-		//
-		m_translation = EditorGUI.Vector2Field(fieldRect, "Translation", m_translation);
-		fieldRect.y += fieldHeight * 2;
+		// draw vector2 translate field
+		m_translation = EditorGUILayout.Vector2Field("Translation", m_translation);
 
 		// draw lerp toggle
-		GUI.Label(fieldRect, "Lerp");
-		fieldRect.x = m_rectangle.width - 20;
-		fieldRect.width = fieldHeight;
-		m_isLerp = EditorGUI.Toggle(fieldRect, m_isLerp);
-		fieldRect.x = 5;
-		fieldRect.width = fieldWidth;
-		fieldRect.y += fieldHeight;
+		EditorGUILayout.LabelField("Lerp");
+        Rect toggleRect = GUILayoutUtility.GetLastRect();
+        toggleRect.x = m_rectangle.width - 18;
+		m_isLerp = EditorGUILayout.Toggle(m_isLerp);
 
 		// if lerp is toggled, draw lerp time slider
 		if (m_isLerp)
 		{
-			GUI.Label(fieldRect, "Lerp Time");
-			fieldRect.y += fieldHeight;
-			m_lerpTime = EditorGUI.Slider(fieldRect, m_lerpTime, 0, 3);
-			fieldRect.y += fieldHeight;
+			EditorGUILayout.LabelField("Lerp Time");
+			m_lerpTime = EditorGUILayout.Slider(m_lerpTime, 0, 3);
 		}
 
-		// resize node
-		m_rectangle.height = fieldRect.y + 4;
+        // resize node
+        if (Event.current.type == EventType.Repaint)
+        {
+            Rect lastRect = GUILayoutUtility.GetLastRect();
+            m_rectangle.height = lastRect.y + lastRect.height + 4;
+        }
 
-		base.DrawNodeWindow(id);
+        base.DrawNodeWindow(id);
 	}
 
 #endif

@@ -18,10 +18,13 @@ public class AudioManager : MonoBehaviour
 	private SceneManager m_sceneManager;
 
 	// reference to mixer & relevant mixer groups
+    [Header("Audio Mixer")]
 	[SerializeField] private AudioMixer m_audioMixer;
+    [Header("Mixer Groups")]
 	[SerializeField] private AudioMixerGroup m_BGM;
 	[SerializeField] private AudioMixerGroup m_ambience;
 	[SerializeField] private AudioMixerGroup m_SFX;
+    [SerializeField] private AudioMixerGroup m_voice;
 
 	// reference to the current audio in the scene
 	[HideInInspector]

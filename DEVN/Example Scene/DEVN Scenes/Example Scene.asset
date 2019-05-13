@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f97195559373da409a1adde84887dff, type: 3}
   m_Name: Example Scene
   m_EditorClassIdentifier: 
-  m_currentPage: 1
+  m_currentPage: 0
   m_pages:
   - {fileID: 114769186061097480}
   - {fileID: 114060781223807674}
@@ -99,23 +99,23 @@ MonoBehaviour:
   m_nodeID: 1
   m_rectangle:
     serializedVersion: 2
-    x: 174
-    y: 28
+    x: 153
+    y: 7
     width: 170
     height: 212
   m_title: Background
   m_inputs: 00000000
   m_inputPoint:
     serializedVersion: 2
-    x: 164
-    y: 124
+    x: 143
+    y: 103
     width: 10
     height: 20
   m_outputs: 02000000
   m_outputPoints:
   - serializedVersion: 2
-    x: 344
-    y: 124
+    x: 323
+    y: 103
     width: 10
     height: 20
   m_toggleSelection: 0
@@ -349,16 +349,16 @@ MonoBehaviour:
   m_nodeID: 4
   m_rectangle:
     serializedVersion: 2
-    x: 905
-    y: 33
+    x: 863
+    y: 7
     width: 100
     height: 58
   m_title: Page
   m_inputs: 03000000
   m_inputPoint:
     serializedVersion: 2
-    x: 895
-    y: 52
+    x: 853
+    y: 26
     width: 10
     height: 20
   m_outputs: 
@@ -489,23 +489,23 @@ MonoBehaviour:
   m_nodeID: 11
   m_rectangle:
     serializedVersion: 2
-    x: 327
-    y: 26
+    x: 328
+    y: 27
     width: 340
     height: 188
   m_title: Dialogue
   m_inputs: 0a000000
   m_inputPoint:
     serializedVersion: 2
-    x: 317
-    y: 110
+    x: 318
+    y: 111
     width: 10
     height: 20
   m_outputs: ffffffff
   m_outputPoints:
   - serializedVersion: 2
-    x: 667
-    y: 110
+    x: 668
+    y: 111
     width: 10
     height: 20
   m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
@@ -526,8 +526,8 @@ MonoBehaviour:
   m_nodeID: 0
   m_rectangle:
     serializedVersion: 2
-    x: 4
-    y: 24
+    x: 14
+    y: 11
     width: 100
     height: 50
   m_title: Start
@@ -541,8 +541,8 @@ MonoBehaviour:
   m_outputs: 01000000
   m_outputPoints:
   - serializedVersion: 2
-    x: 104
-    y: 39
+    x: 114
+    y: 26
     width: 10
     height: 20
 --- !u!114 &114730454898181214
@@ -692,23 +692,23 @@ MonoBehaviour:
   m_nodeID: 3
   m_rectangle:
     serializedVersion: 2
-    x: 736
-    y: 31
+    x: 693
+    y: 10
     width: 128
     height: 42
   m_title: Dialogue Box
   m_inputs: 02000000
   m_inputPoint:
     serializedVersion: 2
-    x: 726
-    y: 42
+    x: 683
+    y: 21
     width: 10
     height: 20
   m_outputs: 04000000
   m_outputPoints:
   - serializedVersion: 2
-    x: 864
-    y: 42
+    x: 821
+    y: 21
     width: 10
     height: 20
   m_toggleSelection: 0
@@ -726,23 +726,23 @@ MonoBehaviour:
   m_nodeID: 2
   m_rectangle:
     serializedVersion: 2
-    x: 386
-    y: 28
+    x: 359
+    y: 9
     width: 295.55057
     height: 204
   m_title: Character
   m_inputs: 01000000
   m_inputPoint:
     serializedVersion: 2
-    x: 376
-    y: 120
+    x: 349
+    y: 101
     width: 10
     height: 20
   m_outputs: 03000000
   m_outputPoints:
   - serializedVersion: 2
-    x: 681.55054
-    y: 120
+    x: 654.55054
+    y: 101
     width: 10
     height: 20
   m_toggleSelection: 0

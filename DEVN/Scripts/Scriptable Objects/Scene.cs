@@ -89,7 +89,7 @@ public class Scene : ScriptableObject
 		// remove all of the nodes in the page
 		Undo.RegisterFullObjectHierarchyUndo(currentPage, "Remove Page");
         for (int i = nodeCount - 1; i >= 0; i--)
-            NodeEditor.GetNodeManager().RemoveNode(nodes[i], true);
+            NodeEditor.GetNodeManager().RemoveNode(nodes[i]);
         
 		// record scene and remove page from scene
         Undo.RecordObject(this, "Remove Page");

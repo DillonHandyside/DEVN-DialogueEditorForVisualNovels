@@ -15,7 +15,6 @@ public enum ValueType
     String
 }
 
-
 /// <summary>
 /// custom key-value class which allows for different value types,
 /// unlike a dictionary
@@ -27,17 +26,6 @@ public class KeyValue
     public Value m_value; // variable value
     public ValueType m_valueType; // variable type
 
-	public KeyValue()
-	{
-		m_key = "";
-		m_valueType = ValueType.Boolean;
-
-		// intialise default values
-		m_value.m_boolean = false;
-		m_value.m_float = 0.0f;
-		m_value.m_string = "";
-	}
-
     public KeyValue(string key, ValueType valueType)
     {
         m_key = key;
@@ -47,6 +35,13 @@ public class KeyValue
         m_value.m_boolean = false;
         m_value.m_float = 0.0f;
         m_value.m_string = "";
+    }
+
+    public KeyValue(KeyValue keyValue)
+    {
+        m_key = keyValue.m_key;
+        m_valueType = keyValue.m_valueType;
+        m_value = keyValue.m_value;
     }
 }
     
@@ -73,20 +68,65 @@ public struct Value
 [System.Serializable]
 public class Blackboard : ScriptableObject
 {
-	public string m_blackboardName;
-	
-	public List<KeyValue> m_booleans = new List<KeyValue>();
-	public List<KeyValue> m_floats = new List<KeyValue>();
-	public List<KeyValue> m_strings = new List<KeyValue>();
+    [HideInInspector]
+    [SerializeField] private int m_blackboardID;
+
+    [HideInInspector]
+	[SerializeField] private List<KeyValue> m_booleans = new List<KeyValue>();
+    [HideInInspector]
+	[SerializeField] private List<KeyValue> m_floats = new List<KeyValue>();
+    [HideInInspector]
+	[SerializeField] private List<KeyValue> m_strings = new List<KeyValue>();
+
+    [HideInInspector]
+    [SerializeField] private int m_booleanID = 0;
+    [HideInInspector]
+    [SerializeField] private int m_floatID = 0;
+    [HideInInspector]
+    [SerializeField] private int m_stringID = 0;
+
+    #region getters
+
+    public int GetBlackboardID() { return m_blackboardID; }
+    public List<KeyValue> GetBooleans() { return m_booleans; }
+    public List<KeyValue> GetFloats() { return m_floats; }
+    public List<KeyValue> GetStrings() { return m_strings; }
+    public int NewBooleanID() { return m_booleanID++; }
+    public int NewFloatID() { return m_floatID++; }
+    public int NewStringID() { return m_stringID++; }
+
+    #endregion
 
 #if UNITY_EDITOR
-		
-	/// <summary>
-	/// adds a new key-value variable to the blackboard
-	/// </summary>
-	/// <param name="key">variable name</param>
-	/// <param name="valueType">variable type, e.g. Boolean, Float</param>
-	public void AddKey(string key, ValueType valueType)
+        
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="blackboard"></param>
+    public void Copy(Blackboard blackboard)
+    {
+        m_blackboardID = blackboard.GetInstanceID();
+
+        for (int i = 0; i < blackboard.m_booleans.Count; i++)
+            m_booleans.Add(new KeyValue(blackboard.m_booleans[i]));
+
+        for (int i = 0; i < blackboard.m_floats.Count; i++)
+            m_floats.Add(new KeyValue(blackboard.m_floats[i]));
+
+        for (int i = 0; i < blackboard.m_strings.Count; i++)
+            m_strings.Add(new KeyValue(blackboard.m_strings[i]));
+
+        m_booleanID = blackboard.m_booleanID;
+        m_floatID = blackboard.m_floatID;
+        m_stringID = blackboard.m_stringID;
+    }
+
+    /// <summary>
+    /// adds a new key-value variable to the blackboard
+    /// </summary>
+    /// <param name="key">variable name</param>
+    /// <param name="valueType">variable type, e.g. Boolean, Float</param>
+    public void AddKey(string key, ValueType valueType)
     {
         KeyValue keyValue = new KeyValue(key, valueType);
 
@@ -106,6 +146,12 @@ public class Blackboard : ScriptableObject
 		}
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="target"></param>
+    /// <param name="newKey"></param>
+    /// <param name="valueType"></param>
 	public void SetKey(string target, string newKey, ValueType valueType)
 	{
 		if (target != newKey && IsKeyTaken(newKey))
@@ -145,9 +191,13 @@ public class Blackboard : ScriptableObject
 		}
 	}
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns></returns>
 	public bool IsKeyTaken(string key)
 	{
-
 		for (int i = 0; i < m_booleans.Count; i++)
 		{
 			if (m_booleans[i].m_key == key)
@@ -266,26 +316,23 @@ public class Blackboard : ScriptableObject
     /// <returns>the variable type, e.g. Boolean, Float etc.</returns>
     public ValueType GetValueType(string key)
     {
-        ValueType valueType = ValueType.Boolean;
+        ValueType valueType = ValueType.String;
 
+        // is it a boolean?
 		for (int i = 0; i < m_booleans.Count; i++)
 		{
 			if (m_booleans[i].m_key == key)
 				valueType = m_booleans[i].m_valueType; // get value data
 		}
 
+        // not a boolean, so might be a float
 		for (int i = 0; i < m_floats.Count; i++)
 		{
 			if (m_floats[i].m_key == key)
 				valueType = m_floats[i].m_valueType; // get value data
 		}
 
-		for (int i = 0; i < m_strings.Count; i++)
-		{
-			if (m_strings[i].m_key == key)
-				valueType = m_strings[i].m_valueType; // get value data
-		}
-
+        // not a float, so must be a string
 		return valueType;
     }
 
@@ -293,34 +340,36 @@ public class Blackboard : ScriptableObject
     /// deletes the key-value variable with the name of the given key
     /// </summary>
     /// <param name="key">the name of the variable to remove</param>
-    public void RemoveKey(string key)
+    public void RemoveKey(string key, ValueType valueType)
 	{
-		for (int i = 0; i < m_booleans.Count; i++)
-		{
-			if (m_booleans[i].m_key == key)
-			{
-				m_booleans.Remove(m_booleans[i]); // perform removal
-				return; // stop search
-			}
-		}
+        List<KeyValue> listToSearch = null;
 
-		for (int i = 0; i < m_floats.Count; i++)
-		{
-			if (m_floats[i].m_key == key)
-			{
-				m_floats.Remove(m_floats[i]); // perform removal
-				return; // stop search
-			}
-		}
+        switch (valueType)
+        {
+            case ValueType.Boolean:
+                listToSearch = m_booleans;
+                break;
 
-		for (int i = 0; i < m_strings.Count; i++)
-		{
-			if (m_strings[i].m_key == key)
-			{
-				m_strings.Remove(m_strings[i]); // perform removal
-				return; // stop search
-			}
-		}
+            case ValueType.Float:
+                listToSearch = m_floats;
+                break;
+
+            case ValueType.String:
+                listToSearch = m_strings;
+                break;
+        }
+
+        if (listToSearch == null)
+            return;
+
+        for (int i = 0; i < listToSearch.Count; i++)
+        {
+            if (listToSearch[i].m_key == key)
+            {
+                listToSearch.Remove(listToSearch[i]);
+                return;
+            }
+        }
 	}
 
     /// <summary>
@@ -353,33 +402,28 @@ public class Blackboard : ScriptableObject
     public List<string> GetAllOfValueType(ValueType valueType)
     {
         List<string> outputKeys = new List<string>();
+        List<KeyValue> listToGet = null;
 
 		switch (valueType)
 		{
 			case ValueType.Boolean:
-				for (int i = 0; i < m_booleans.Count; i++)
-				{
-					if (m_booleans[i].m_valueType == valueType)
-						outputKeys.Add(m_booleans[i].m_key);
-				}
+                listToGet = m_booleans;
 				break;
 
 			case ValueType.Float:
-				for (int i = 0; i < m_floats.Count; i++)
-				{
-					if (m_floats[i].m_valueType == valueType)
-						outputKeys.Add(m_floats[i].m_key);
-				}
+                listToGet = m_floats;
 				break;
 
 			case ValueType.String:
-				for (int i = 0; i < m_strings.Count; i++)
-				{
-					if (m_strings[i].m_valueType == valueType)
-						outputKeys.Add(m_strings[i].m_key);
-				}
+                listToGet = m_strings;
 				break;
 		}
+
+        if (listToGet != null)
+        {
+            for (int i = 0; i < listToGet.Count; i++)
+                outputKeys.Add(listToGet[i].m_key);
+        }
 
         return outputKeys;
     }

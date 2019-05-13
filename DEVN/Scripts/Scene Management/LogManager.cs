@@ -21,7 +21,7 @@ public class LogManager : MonoBehaviour
 	/// <summary>
 	/// 
 	/// </summary>
-	void Start ()
+	void Awake ()
 	{
 		m_instance = this;
 	}

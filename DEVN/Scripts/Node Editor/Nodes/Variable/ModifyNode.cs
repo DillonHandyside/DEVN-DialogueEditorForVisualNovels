@@ -9,29 +9,42 @@ namespace DEVN
 [System.Serializable]
 public class ModifyNode : BaseNode
 {
+    [SerializeField] private ValueType m_valueType;
+
     // blackboard selection variables
-    private Blackboard m_currentBlackboard;
+    [SerializeField] private Blackboard m_blackboard;
 
     // variable selection
-    private string m_currentKey;
-    public int m_variableSelection = 0;
+    [SerializeField] private string m_currentKey;
+    [SerializeField] private int m_variableSelection = 0;
 
     // boolean modification
-    public bool m_booleanValue = false;
-    public int m_booleanSelection = 0;
+    [SerializeField] private bool m_booleanValue = false;
+    [SerializeField] private int m_booleanSelection = 0;
 
     // float modification
-    public float m_floatValue = 0.0f;
-    public int m_floatSelection = 0;
+    [SerializeField] private float m_floatValue = 0.0f;
+    [SerializeField] private int m_floatSelection = 0;
     
     // string modification
-    public string m_stringValue = "";
+    [SerializeField] private string m_stringValue = "";
 
-    private float m_nodeHeight = 0;
+    #region getters
+
+    public ValueType GetValueType() { return m_valueType; }
+    public Blackboard GetBlackboard() { return m_blackboard; }
+    public string GetKey() { return m_currentKey; }
+    public bool GetBooleanValue() { return m_booleanValue; }
+    public int GetBooleanSelection() { return m_booleanSelection; }
+    public float GetFloatValue() { return m_floatValue; }
+    public int GetFloatSelection() { return m_floatSelection; }
+    public string GetStringValue() { return m_stringValue; }
+
+    #endregion
 
 #if UNITY_EDITOR
 
-	public override void Init(Vector2 position)
+    public override void Init(Vector2 position)
     {
         base.Init(position);
         
@@ -39,8 +52,6 @@ public class ModifyNode : BaseNode
 
         m_rectangle.width = 180;
         m_rectangle.height = 90;
-
-        m_nodeHeight = m_rectangle.height;
 
         AddOutputPoint(); // linear
     }
@@ -51,12 +62,12 @@ public class ModifyNode : BaseNode
     /// <param name="id"></param>
     protected override void DrawNodeWindow(int id)
     {
-        Rect fieldRect = new Rect(5, 20, m_rectangle.width - 10, 16);
+        DrawBlackboardPopup();
 
-        if (DrawBlackboardPopup(ref fieldRect))
+        if (m_blackboard)
         {
-            if (DrawVariablePopup(ref fieldRect))
-				DrawContent(fieldRect);
+            if (DrawVariablePopup())
+				DrawContent();
         }
 
 		if (Event.current.type == EventType.Repaint)
@@ -71,19 +82,11 @@ public class ModifyNode : BaseNode
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="fieldRect"></param>
-    /// <returns></returns>
-    private bool DrawBlackboardPopup(ref Rect fieldRect)
+    private void DrawBlackboardPopup()
     {
-        // draw "Blackboard" title and corresponding popup
+        // draw "Blackboard" title and object field
 		EditorGUILayout.LabelField("Blackboard");
-		m_currentBlackboard = EditorGUILayout.ObjectField(m_currentBlackboard, typeof(Blackboard), false) as Blackboard;
-
-		// no blackboards available
-		if (m_currentBlackboard == null)
-			return false;
-		
-		return true;
+        m_blackboard = EditorGUILayout.ObjectField(m_blackboard, typeof(Blackboard), false) as Blackboard;
     }
 
     /// <summary>
@@ -91,9 +94,9 @@ public class ModifyNode : BaseNode
     /// </summary>
     /// <param name="fieldRect"></param>
     /// <returns></returns>
-    private bool DrawVariablePopup(ref Rect fieldRect)
+    private bool DrawVariablePopup()
     {
-        List<string> keys = m_currentBlackboard.GetKeys();
+        List<string> keys = m_blackboard.GetKeys();
 
         // compile string of variable names for popup
         string[] variableNames = new string[keys.Count];
@@ -118,12 +121,12 @@ public class ModifyNode : BaseNode
     /// 
     /// </summary>
     /// <param name="valueType"></param>
-    private void DrawContent(Rect fieldRect)
+    private void DrawContent()
     {
-        ValueType valueType = m_currentBlackboard.GetValueType(m_currentKey);
+        m_valueType = m_blackboard.GetValueType(m_currentKey);
 		EditorGUIUtility.labelWidth = 48;
 
-        switch (valueType)
+        switch (m_valueType)
         {
             case ValueType.Boolean:
                 DrawBoolean();

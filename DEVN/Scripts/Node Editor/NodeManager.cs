@@ -122,22 +122,19 @@ public class NodeManager
     /// handles node removal
     /// </summary>
     /// <param name="node">the desired node to remove</param>
-    public void RemoveNode(BaseNode node, bool allowStartNodeRemoval = false)
+    public void RemoveNode(BaseNode node)
     {
-        if (node is StartNode && !allowStartNodeRemoval)
-			return; // disallow removal of starting node
+        NodeManager nodeManager = NodeEditor.GetNodeManager();
+        ConnectionManager connectionManager = NodeEditor.GetConnectionManager();
 
 		// iterate through all connected input nodes
 		for (int i = 0; i < node.m_inputs.Count; i++)
         {
-            BaseNode connectedNode = NodeEditor.GetNodeManager().GetNode(node.m_inputs[i]);
+            BaseNode connectedNode = nodeManager.GetNode(node.m_inputs[i]);
 
             // find the index of the desired node to remove in the connected node's outputs
-            int indexOfConnectedNode = connectedNode.m_outputs.IndexOf(node.GetNodeID());
-
-            // disconnect connection
-            connectedNode.m_outputs[indexOfConnectedNode] = -1;
-			node.m_inputs.Remove(connectedNode.GetNodeID());
+            int indexOfThisNode = connectedNode.m_outputs.IndexOf(node.GetNodeID());
+            connectionManager.RemoveConnection(connectedNode, indexOfThisNode);
         }
 
         // iterate through all connected output nodes
@@ -145,9 +142,9 @@ public class NodeManager
         {
             if (node.m_outputs[i] == -1)
                 continue; // skip empty outputs
-
-			// disconnect connection
-			NodeEditor.GetConnectionManager().RemoveConnection(node, i);
+            
+            // disconnect connection
+            connectionManager.RemoveConnection(node, i);
         }
 
         // record changes to the page

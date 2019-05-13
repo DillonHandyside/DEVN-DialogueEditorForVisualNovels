@@ -11,13 +11,11 @@ namespace DEVN
 /// </summary>
 public abstract class BaseNode : ScriptableObject
 {
-	// node saving/loading properties
-    [SerializeField] private int m_nodeID;
-    public int GetNodeID() { return m_nodeID; }
+    [SerializeField] private int m_nodeID; // node ID
 
     // node window properties
-    public Rect m_rectangle;
-    public string m_title;
+    [SerializeField] protected Rect m_rectangle;
+    [SerializeField] protected string m_title;
     
     // inputs
     public List<int> m_inputs;
@@ -27,13 +25,19 @@ public abstract class BaseNode : ScriptableObject
     public List<int> m_outputs;
     public List<Rect> m_outputPoints;
 
+    #region getters
+    
+    public int GetNodeID() { return m_nodeID; }
+    
+    #endregion
+
 #if UNITY_EDITOR
 
-	/// <summary>
-	/// override-able node initialisation function
-	/// </summary>
-	/// <param name="position">the x-y co-ordinates to place the node</param>
-	public virtual void Init(Vector2 position)
+    /// <summary>
+    /// override-able node initialisation function
+    /// </summary>
+    /// <param name="position">the x-y co-ordinates to place the node</param>
+    public virtual void Init(Vector2 position)
     {
         Scene scene = NodeEditor.GetScene();
 
@@ -187,6 +191,8 @@ public abstract class BaseNode : ScriptableObject
     /// </summary>
     void DrawBeziers()
     {
+        Color colour = Color.white;
+
         for (int i = 0; i < m_outputs.Count; i++)
         {
             if (m_outputs[i] == -1)
@@ -200,14 +206,24 @@ public abstract class BaseNode : ScriptableObject
             Vector3 startTangent = m_outputPoints[i].center + Vector2.right * 50;
             Vector3 endTangent = outputNode.m_inputPoint.center + Vector2.left * 50;
 
+            // different bezier colours for condition nodes
+            if (this is ConditionNode)
+            {
+                if (i == 0)
+                    colour = Color.green; // true
+                else
+                    colour = Color.red; // false
+            }
+
             // draw the connection
-            Handles.DrawBezier(startPos, endPos, startTangent, endTangent, Color.white, null, 2);
+            Handles.color = colour;
+            Handles.DrawBezier(startPos, endPos, startTangent, endTangent, Handles.color, null, 2);
 
             // draw a square on bezier to handle connection removal
             if (Handles.Button((startPos + endPos) * 0.5f, Quaternion.identity, 4, 8, Handles.RectangleHandleCap))
                 NodeEditor.GetConnectionManager().RemoveConnection(this, i);
         }
-        }
+    }
 
     /// <summary>
     /// handles right-click events, such as the creation of new nodes, copy & paste, etc.

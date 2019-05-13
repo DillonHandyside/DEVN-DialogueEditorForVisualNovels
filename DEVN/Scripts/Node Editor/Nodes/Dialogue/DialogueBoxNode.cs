@@ -33,7 +33,7 @@ public class DialogueBoxNode : BaseNode
         m_title = "Dialogue Box";
 
         m_rectangle.width = 128;
-        m_rectangle.height = 42;
+        m_rectangle.height = 40;
 
         AddOutputPoint(); // linear
     }
@@ -61,12 +61,8 @@ public class DialogueBoxNode : BaseNode
 	/// <param name="id"></param>
 	protected override void DrawNodeWindow(int id)
     {
-        float fieldWidth = m_rectangle.width - 10;
-        float fieldHeight = 16;
-
         // draw show/hide toggle
-        Rect fieldRect = new Rect(5, 20, fieldWidth, fieldHeight);
-		m_toggleSelection = EditorGUI.Popup(fieldRect, m_toggleSelection, m_toggle);
+		m_toggleSelection = EditorGUILayout.Popup(m_toggleSelection, m_toggle);
 
         base.DrawNodeWindow(id);
     }

@@ -34,7 +34,7 @@ public class BGMNode : BaseNode
         m_title = "BGM";
 
         m_rectangle.width = 192;
-        m_rectangle.height = 100;
+        m_rectangle.height = 96;
 
         AddOutputPoint(); // linear
 
@@ -69,34 +69,24 @@ public class BGMNode : BaseNode
 	/// <param name="id">the ID of the node window</param>
 	protected override void DrawNodeWindow(int id)
     {
-        float width = m_rectangle.width - 10;
-        float fieldHeight = 16;
-
-		Rect fieldRect = new Rect(5, 20, width, fieldHeight);
-		Rect buttonRect = new Rect(m_rectangle.width - 54, 72 + m_ambientAudio.Count * fieldHeight, 24, 24);
-
 		// draw BGM audio label & object field
-		GUI.Label(fieldRect, "Background Music");
-		fieldRect.y += fieldHeight;
-        m_bgmAudio = EditorGUI.ObjectField(fieldRect, m_bgmAudio, typeof(AudioClip), false) as AudioClip;
-		fieldRect.y += fieldHeight;
-
-		// draw ambient audio label
-        GUI.Label(fieldRect, "Ambient Tracks");
-		fieldRect.y += fieldHeight;
-
+		EditorGUILayout.LabelField("Background Music");
+        m_bgmAudio = EditorGUILayout.ObjectField(m_bgmAudio, typeof(AudioClip), false) as AudioClip;
+            
 		// draw as many ambient audio object fields as required
+        EditorGUILayout.LabelField("Ambient Tracks");
         for (int i = 0; i < m_ambientAudio.Count; i++)
-		{
-            m_ambientAudio[i] = EditorGUI.ObjectField(fieldRect, m_ambientAudio[i], typeof(AudioClip), false) as AudioClip;
-			fieldRect.y += fieldHeight;
-		}
+            m_ambientAudio[i] = EditorGUILayout.ObjectField(m_ambientAudio[i], typeof(AudioClip), false) as AudioClip;
+        
+        // determine button position
+        Rect buttonRect = new Rect(m_rectangle.width - 48, 0, 21, 16);
+        buttonRect.y = GUILayoutUtility.GetLastRect().y + buttonRect.height + 4;
 
 		// draw the add button
 		if (GUI.Button(buttonRect, "+"))
 			AddAmbientAudio();
 
-		buttonRect.x += 26;
+		buttonRect.x += 22;
 
 		// draw the remove button
 		if (GUI.Button(buttonRect, "-"))
@@ -115,7 +105,7 @@ public class BGMNode : BaseNode
         m_ambientAudio.Add(null);
 
         // resize the node
-        m_rectangle.height += 16;
+        m_rectangle.height += 18;
     }
 
     /// <summary>
@@ -131,7 +121,7 @@ public class BGMNode : BaseNode
             m_ambientAudio.RemoveAt(m_ambientAudio.Count - 1);
 
             // resive the node
-            m_rectangle.height -= 16;
+            m_rectangle.height -= 18;
         }
     }
 

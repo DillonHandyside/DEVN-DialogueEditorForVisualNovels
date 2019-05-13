@@ -27,9 +27,11 @@ public class NodeEditor : EditorWindow
     // reference to the mouse position
     private static Vector2 m_mousePosition;
 
-    // drag variables used for middle-mouse window dragging
+    // drag variables used for scroll-wheel window dragging
     private Vector2 m_offset;
     private Vector2 m_drag;
+
+    private Vector2 m_scrollPosition = Vector2.zero;
 
 	#region getters
 
@@ -60,7 +62,7 @@ public class NodeEditor : EditorWindow
         string path = "Assets/DEVN/Textures/logoDEVN.png";
         m_logoDEVN = EditorGUIUtility.Load(path) as Texture2D;
 
-        Load(true);
+        //Load(true);
     }
 
     /// <summary>
@@ -68,24 +70,26 @@ public class NodeEditor : EditorWindow
     /// </summary>
     void OnGUI()
     {
-        Load();
+        EditorGUILayout.Space();
+        m_scene = EditorGUILayout.ObjectField("Current Scene: ", m_scene, typeof(Scene), true) as Scene;
 
         // don't draw the graph editor if no scriptable object is selected
         if (m_scene == null)
-        {
-            GUI.Label(new Rect(10, 10, 500, 20), "Please select a DialogueScene");
             return;
-        }
+        else
+            Load();
 
         // update mouse position reference
         m_mousePosition = Event.current.mousePosition;
 
         // draw all editor elements in appropriate order
+        m_scrollPosition = EditorGUILayout.BeginScrollView(m_scrollPosition);
         DrawGrid(20, 0.2f, Color.grey);
         DrawGrid(100, 0.4f, Color.grey);
         BeginWindows();
         m_nodeManager.DrawNodes();
         EndWindows();
+        EditorGUILayout.EndScrollView();
         DrawToolbar();
 		DrawLogo();
 
@@ -94,11 +98,8 @@ public class NodeEditor : EditorWindow
 
         m_nodeManager.UpdateNodes();
 
-        if (GUI.changed)
-        {
-            EditorUtility.SetDirty(m_scene);
-            Repaint();
-        }
+        EditorUtility.SetDirty(m_scene);
+        Repaint();
     }
 
     /// <summary>
@@ -106,20 +107,23 @@ public class NodeEditor : EditorWindow
     /// </summary>
     private void Load(bool isReload = false)
     {
-        // if the user clicks on a new dialogue scene scriptable object
-        if ((Selection.activeObject != m_scene || isReload ||
-            EditorApplication.isPlayingOrWillChangePlaymode) &&
-            Selection.activeObject is Scene)
-        {
-            // assign the dialogue scene to the one the user clicked
-            m_scene = Selection.activeObject as Scene;
+        m_scene.Init();
+        m_nodeManager.UpdateNodes();
 
-            // load the nodes
-            m_scene.Init();
-            m_nodeManager.UpdateNodes();
-        }
-        else if (Selection.activeObject != m_scene)
-            m_scene = null;
+        // if the user clicks on a new dialogue scene scriptable object
+        //if ((Selection.activeObject != m_scene || isReload ||
+        //    EditorApplication.isPlayingOrWillChangePlaymode) &&
+        //    Selection.activeObject is Scene)
+        //{
+        //    // assign the dialogue scene to the one the user clicked
+        //    m_scene = Selection.activeObject as Scene;
+
+        //    // load the nodes
+        //    m_scene.Init();
+        //    m_nodeManager.UpdateNodes();
+        //}
+        //else if (Selection.activeObject != m_scene)
+        //    m_scene = null;
     }
 
     /// <summary>
@@ -138,10 +142,8 @@ public class NodeEditor : EditorWindow
 
 		// background relevant nodes
 		genericMenu.AddItem(new GUIContent("New Node/Background/Background"), false, () => m_nodeManager.AddNode(typeof(BackgroundNode)));
-		genericMenu.AddItem(new GUIContent("New Node/Background/CG"), false, () => m_nodeManager.AddNode(typeof(CGNode)));
 
 		// character relevant nodes
-		genericMenu.AddItem(new GUIContent("New Node/Character/Invert"), false, () => m_nodeManager.AddNode(typeof(CharacterInvertNode)));
 		genericMenu.AddItem(new GUIContent("New Node/Character/Scale"), false, () => m_nodeManager.AddNode(typeof(CharacterScaleNode)));
 		genericMenu.AddItem(new GUIContent("New Node/Character/Translate"), false, () => m_nodeManager.AddNode(typeof(CharacterTranslateNode)));
 		genericMenu.AddSeparator("New Node/Character/");
@@ -163,6 +165,8 @@ public class NodeEditor : EditorWindow
 
         // end node
         genericMenu.AddItem(new GUIContent("New Node/End"), false, () => m_nodeManager.AddNode(typeof(EndNode)));
+
+        // page add/remove
         genericMenu.AddSeparator("");
         genericMenu.AddItem(new GUIContent("New Page"), false, m_scene.NewPage);
 
@@ -270,20 +274,20 @@ public class NodeEditor : EditorWindow
     /// </summary>
     private void DrawLogo()
     {
-        float xPosLogo = Screen.width - 155;
-        float yPosLogo = Screen.height - 100;
-        float xPosText = Screen.width - 195;
-        float yPosText = yPosLogo + 60;
+        float xPosLogo = GUILayoutUtility.GetLastRect().width - 72;
+        float yPosLogo = GUILayoutUtility.GetLastRect().y - 60;
+        float xPosText = xPosLogo - 118;
+        float yPosText = yPosLogo + 40;
 
         // adjust transparency
         GUI.color = new Color(1, 1, 1, 0.25f);
 
         // draw logo & text
-        GUI.DrawTexture(new Rect(xPosLogo, yPosLogo, 150.0f, 75.0f), m_logoDEVN);
-        GUI.Label(new Rect(xPosText, yPosText, 300.0f, 20.0f), "Dialogue Editor for Visual Novels");
+        GUI.DrawTexture(new Rect(xPosLogo, yPosLogo, 100, 50), m_logoDEVN);
+        GUI.Label(new Rect(xPosText, yPosText, 300, 20), "Dialogue Editor for Visual Novels");
 
         // reset transparency
-        GUI.color = new Color(1, 1, 1, 1.0f);
+        GUI.color = new Color(1, 1, 1, 1);
     }
 
     /// <summary>

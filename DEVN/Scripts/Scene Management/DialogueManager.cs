@@ -19,7 +19,10 @@ public class DialogueManager : MonoBehaviour
 	private DialogueNode m_currentNode;
 
 	// reference to dialogue box UI elements
+    [Header("Dialogue Box Object")]
 	[SerializeField] private GameObject m_dialogueBox;
+
+    [Header("Text Fields")]
 	[SerializeField] private Text m_speaker;
 	[SerializeField] private Text m_dialogue;
 		

@@ -18,8 +18,9 @@ public class BackgroundManager : MonoBehaviour
 	private SceneManager m_sceneManager;
 
 	// references to the background elements in the scene
-	[SerializeField] private Image m_colourBackground;
+    [Header("Background Images")]
 	[SerializeField] private Image m_imageBackground;
+	[SerializeField] private Image m_colourBackground;
 
 	#region getters
 

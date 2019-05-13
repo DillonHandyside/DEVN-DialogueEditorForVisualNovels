@@ -16,13 +16,7 @@ public class CharacterTransformer
 		SceneManager sceneManager = SceneManager.GetInstance();
 		CharacterManager characterManager = CharacterManager.GetInstance();
 
-		if (node is CharacterInvertNode)
-		{
-			CharacterInvertNode invertNode = node as CharacterInvertNode;
-			InvertCharacter(characterManager.TryGetCharacter(invertNode.GetCharacter()));
-			sceneManager.NextNode(); // proceed to next node
-		}
-		else if (node is CharacterScaleNode)
+		if (node is CharacterScaleNode)
 		{
 			CharacterScaleNode scaleNode = node as CharacterScaleNode;
 			GameObject character = characterManager.TryGetCharacter(scaleNode.GetCharacter());
@@ -48,16 +42,6 @@ public class CharacterTransformer
 
 			sceneManager.NextNode();
 		}
-	}
-
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="character"></param>
-	public void InvertCharacter(GameObject character)
-	{
-		float currentX = character.transform.localScale.x;
-		character.transform.localScale = new Vector3(-currentX, 1, 1);
 	}
 
 	/// <summary>
@@ -111,7 +95,7 @@ public class CharacterTransformer
     /// <returns></returns>
     private Vector2 GetScreenPosition(Vector2 position)
     {
-        GameObject inactiveCharacterPanel = CharacterManager.GetInstance().m_inactiveCharacterPanel;
+        GameObject inactiveCharacterPanel = CharacterManager.GetInstance().GetBackgroundPanel();
 
         //
         RectTransform panelTransform = inactiveCharacterPanel.GetComponent<RectTransform>();
