@@ -75,7 +75,7 @@ public class Scene : ScriptableObject
     /// page deletion function which deletes a page asset and it's nodes,
 	/// and records said deletion for undo functionality
     /// </summary>
-    public void RemovePage()
+    public void DeletePage()
     {
 		// print warning box to prevent accidental page deletion
         if (!EditorUtility.DisplayDialog("Wait!",
@@ -87,12 +87,12 @@ public class Scene : ScriptableObject
         int nodeCount = nodes.Count;
 
 		// remove all of the nodes in the page
-		Undo.RegisterFullObjectHierarchyUndo(currentPage, "Remove Page");
+		Undo.RegisterFullObjectHierarchyUndo(currentPage, "Delete Page");
         for (int i = nodeCount - 1; i >= 0; i--)
             NodeEditor.GetNodeManager().RemoveNode(nodes[i]);
         
 		// record scene and remove page from scene
-        Undo.RecordObject(this, "Remove Page");
+        Undo.RecordObject(this, "Delete Page");
         m_pages.Remove(currentPage);
 
         // perform clamp to ensure no index out of range errors

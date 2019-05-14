@@ -37,7 +37,12 @@ public class SettingsManager : MonoBehaviour
 
 	public static SettingsManager GetInstance() { return m_instance; }
 	public float GetTextSpeed() { return m_textSpeed; }
-
+	public float GetMasterVolume() { return m_masterVolume; }
+	public float GetBGMVolume() { return m_bgmVolume; }
+	public float GetAmbientVolume() { return m_ambienceVolume; }
+	public float GetSFXVolume() { return m_sfxVolume; }
+	public float GetVoiceVolume() { return m_voiceVolume; }
+		 
 	#endregion
 
 	#region setters

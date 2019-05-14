@@ -22,7 +22,7 @@ public class StartNode : BaseNode
         
         m_title = "Start";
 
-        m_rectangle.position = new Vector2(4, 4);
+        m_rectangle.position = new Vector2(4, 32);
         m_rectangle.width = 100;
         m_rectangle.height = 50;
 

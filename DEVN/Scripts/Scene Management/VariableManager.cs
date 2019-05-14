@@ -9,7 +9,8 @@ public class VariableManager
     // singleton
     private static VariableManager m_instance;
 
-    private ConditionNode m_currentConditionNode;
+	// scene manager ref
+	private SceneManager m_sceneManager;
 
     #region getters
 
@@ -22,14 +23,22 @@ public class VariableManager
 
     #endregion
 	
+	/// <summary>
+	/// 
+	/// </summary>
+	public VariableManager()
+	{
+		// cache scene manager instance
+		m_sceneManager = SceneManager.GetInstance();
+		Debug.Assert(m_sceneManager != null, "DEVN: SceneManager cache unsuccessful!");
+	}
+
     /// <summary>
     /// 
     /// </summary>
     /// <param name="node"></param>
-    public void PerformModify(BaseNode node)
+    public void PerformModify(ModifyNode modifyNode)
     {
-        ModifyNode modifyNode = node as ModifyNode;
-
         string key = modifyNode.GetKey();
         Blackboard blackboard = FindBlackboard(modifyNode.GetBlackboard());
         Value value = blackboard.GetValue(key);
@@ -58,26 +67,26 @@ public class VariableManager
                 break;
         }
 
-        SceneManager.GetInstance().NextNode();
+        m_sceneManager.NextNode();
     }
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="node"></param>
-    /// <returns></returns>
-    public int EvaluateCondition(BaseNode node)
+    public void EvaluateCondition(ConditionNode conditionNode)
     {
-        m_currentConditionNode = node as ConditionNode;
-
-        string keyA = m_currentConditionNode.GetKeyA();
-        Blackboard blackboardA = m_currentConditionNode.GetBlackboardA();
+        string keyA = conditionNode.GetKeyA();
+        Blackboard blackboardA = conditionNode.GetBlackboardA();
         Value valueA = FindBlackboard(blackboardA).GetValue(keyA);
+		int outputIndex = 0;
 
-        if (m_currentConditionNode.GetSourceSelection() == 0)
-            return BlackboardAndValue(valueA);
+        if (conditionNode.GetSourceSelection() == 0)
+			outputIndex = BlackboardAndValue(conditionNode, valueA);
         else
-            return BlackboardAndBlackboard(valueA);
+			outputIndex = BlackboardAndBlackboard(conditionNode, valueA);
+
+		m_sceneManager.NextNode(1 - outputIndex);
     }
 
     /// <summary>
@@ -85,19 +94,19 @@ public class VariableManager
     /// </summary>
     /// <param name="valueA"></param>
     /// <returns></returns>
-    private int BlackboardAndValue(Value valueA)
+    private int BlackboardAndValue(ConditionNode conditionNode, Value valueA)
     {
-        switch (m_currentConditionNode.GetValueType())
+        switch (conditionNode.GetValueType())
         {
             case ValueType.Boolean:
-                bool booleanValue = m_currentConditionNode.GetBooleanValue();
+                bool booleanValue = conditionNode.GetBooleanValue();
                 if (valueA.m_boolean == booleanValue)
                     return 1; // bool is equal to value
                 break;
 
             case ValueType.Float:
-                float floatValue = m_currentConditionNode.GetFloatValue();
-                switch (m_currentConditionNode.GetFloatSelection())
+                float floatValue = conditionNode.GetFloatValue();
+                switch (conditionNode.GetFloatSelection())
                 {
                     case 0:
                         if (valueA.m_float < floatValue)
@@ -116,7 +125,7 @@ public class VariableManager
                 break;
 
             case ValueType.String:
-                string stringValue = m_currentConditionNode.GetStringValue();
+                string stringValue = conditionNode.GetStringValue();
                 if (valueA.m_string == stringValue)
                     return 1; // string is equal to value
                 break;
@@ -130,13 +139,13 @@ public class VariableManager
     /// </summary>
     /// <param name="valueA"></param>
     /// <returns></returns>
-    private int BlackboardAndBlackboard(Value valueA)
+    private int BlackboardAndBlackboard(ConditionNode conditionNode, Value valueA)
     {
-        string keyB = m_currentConditionNode.GetKeyB();
-        Blackboard blackboardB = m_currentConditionNode.GetBlackboardB();
+        string keyB = conditionNode.GetKeyB();
+        Blackboard blackboardB = conditionNode.GetBlackboardB();
         Value valueB = FindBlackboard(blackboardB).GetValue(keyB);
 
-        switch (m_currentConditionNode.GetValueType())
+        switch (conditionNode.GetValueType())
         {
             case ValueType.Boolean:
                 if (valueA.m_boolean == valueB.m_boolean)
@@ -145,7 +154,7 @@ public class VariableManager
                 break;
 
             case ValueType.Float:
-                switch (m_currentConditionNode.GetFloatSelection())
+                switch (conditionNode.GetFloatSelection())
                 {
                     case 0:
                         if (valueA.m_float < valueB.m_float)

@@ -55,17 +55,17 @@ public class BlackboardEditor : EditorWindow
         m_blackboard = EditorGUILayout.ObjectField("Current Blackboard", m_blackboard,
                        typeof(Blackboard), false) as Blackboard;
 
-        // only draw blackboard contents/elements if a blackboard is selected
-        if (m_blackboard != null)
+		// only draw blackboard contents/elements if a blackboard is selected
+		if (m_blackboard != null)
 		{
 			if (previousBlackboard != m_blackboard)
 				InitialiseReorderableLists();
 
-            DrawContent(); // draw scroll view and reorderable lists
-            DrawLogo(); // draw DEVN watermark
-		}
+			DrawContent(); // draw scroll view and reorderable lists
+			DrawLogo(); // draw DEVN watermark
 
-		EditorUtility.SetDirty(m_blackboard);
+			EditorUtility.SetDirty(m_blackboard);
+		}
     }
 
 	/// <summary>
@@ -87,9 +87,9 @@ public class BlackboardEditor : EditorWindow
     /// </summary>
 	private void InitialiseReorderableLists()
 	{
-		m_booleanList = new ReorderableList(m_blackboard.GetBooleans(), typeof(KeyValue), true, true, true, true);
-		m_floatList = new ReorderableList(m_blackboard.GetFloats(), typeof(KeyValue), true, true, true, true);
-		m_stringList = new ReorderableList(m_blackboard.GetStrings(), typeof(KeyValue), true, true, true, true);
+		m_booleanList = new ReorderableList(m_blackboard.GetBooleans(), typeof(KeyValue), false, true, true, true);
+		m_floatList = new ReorderableList(m_blackboard.GetFloats(), typeof(KeyValue), false, true, true, true);
+		m_stringList = new ReorderableList(m_blackboard.GetStrings(), typeof(KeyValue), false, true, true, true);
 	}
 
     /// <summary>
@@ -171,7 +171,7 @@ public class BlackboardEditor : EditorWindow
         switch (valueType)
         {
             case ValueType.Boolean: // toggle
-                secondHalf.x = rect.width + 8;
+                secondHalf.x = rect.width;
                 secondHalf.width = 16;
                 m_blackboard.SetValue(key, EditorGUI.Toggle(secondHalf, m_blackboard.GetValue(key).m_boolean));
                 break;

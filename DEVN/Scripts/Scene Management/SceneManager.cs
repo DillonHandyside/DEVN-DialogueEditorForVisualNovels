@@ -123,27 +123,13 @@ public class SceneManager : MonoBehaviour
 		return null;
 	}
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public void NextNode()
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="outputIndex"></param>
+    public void NextNode(int outputIndex = 0)
     {
-		// linear node, output index is 0
-		if (m_currentNode.m_outputs.Count == 1)
-			m_currentNode = GetNode(m_currentNode.m_outputs[0]);
-
-        // condition node, output index is either 0 for true, 1 for false
-        else if (m_currentNode is ConditionNode)
-        {
-            VariableManager variableManager = VariableManager.GetInstance();
-            int outputIndex = variableManager.EvaluateCondition(m_currentNode);
-
-            if (outputIndex == 1)
-                m_currentNode = GetNode(m_currentNode.m_outputs[0]); // true
-            else
-                m_currentNode = GetNode(m_currentNode.m_outputs[1]); // false
-        }
-        
+		m_currentNode = GetNode(m_currentNode.m_outputs[outputIndex]);
         UpdateScene();
     }
 
@@ -177,44 +163,157 @@ public class SceneManager : MonoBehaviour
 	{
 		SetIsInputAllowed(false);
 
-        // background node
-        if (m_currentNode is BackgroundNode)
-            BackgroundManager.GetInstance().SetBackground();
+		// background node
+		if (m_currentNode is BackgroundNode)
+			UpdateBackground();
 
-        // audio nodes
-        else if (m_currentNode is BGMNode)
-            AudioManager.GetInstance().SetBGM();
-        else if (m_currentNode is SFXNode)
-            StartCoroutine(AudioManager.GetInstance().PlaySFX());
-        
-        // character nodes
-        else if (m_currentNode is CharacterNode || m_currentNode is CharacterScaleNode || 
-                 m_currentNode is CharacterTranslateNode)
-            CharacterManager.GetInstance().EvaluateCharacterNode(m_currentNode);
+		// audio nodes
+		else if (m_currentNode is BGMNode)
+		{
+			BGMNode bgmNode = m_currentNode as BGMNode;
+			AudioManager.GetInstance().SetBGM(bgmNode.GetBGM(), bgmNode.GetAmbientAudio(), true);
+		}
+		else if (m_currentNode is SFXNode)
+		{
+			SFXNode sfxNode = m_currentNode as SFXNode;
+			StartCoroutine(AudioManager.GetInstance().PlaySFX(sfxNode.GetSFX(), true, sfxNode.GetWaitForFinish()));
+		}
 
-        // variable nodes
-        else if (m_currentNode is ConditionNode)
-            NextNode();
-        else if (m_currentNode is ModifyNode)
-            VariableManager.GetInstance().PerformModify(m_currentNode);
+		// character nodes
+		else if (m_currentNode is CharacterNode)
+			EnterExitCharacter();
+		else if (m_currentNode is CharacterScaleNode || m_currentNode is CharacterTranslateNode)
+			EvaluateTransformNode();
 
-        // dialogue nodes
-        else if (m_currentNode is DialogueNode)
-            DialogueManager.GetInstance().SetDialogue();
-        else if (m_currentNode is DialogueBoxNode)
-        {
-            if ((m_currentNode as DialogueBoxNode).GetToggleSelection() == 0)
-                DialogueManager.GetInstance().ToggleDialogueBox(true);
-            else
-                DialogueManager.GetInstance().ToggleDialogueBox(false);
+		// variable nodes
+		else if (m_currentNode is ConditionNode)
+			VariableManager.GetInstance().EvaluateCondition(m_currentNode as ConditionNode);
+		else if (m_currentNode is ModifyNode)
+			VariableManager.GetInstance().PerformModify(m_currentNode as ModifyNode);
 
-            NextNode();
-        }
+		// dialogue nodes
+		else if (m_currentNode is BranchNode)
+			DialogueManager.GetInstance().DisplayChoices((m_currentNode as BranchNode).GetBranches());
+		else if (m_currentNode is DialogueNode)
+			DialogueManager.GetInstance().SetDialogue(m_currentNode as DialogueNode);
+		else if (m_currentNode is DialogueBoxNode)
+			DialogueManager.GetInstance().SetDialogueBox(m_currentNode as DialogueBoxNode);
 
-        // transition nodes
-        else if (m_currentNode is PageNode || m_currentNode is EndNode)
-            Transition();
+		// transition nodes
+		else if (m_currentNode is PageNode || m_currentNode is EndNode)
+			Transition();
     }
+
+	/// <summary>
+	/// 
+	/// </summary>
+	private void UpdateBackground()
+	{
+		// get BackgroundManager singleton instance and log any potential errors
+		BackgroundManager backgroundManager = BackgroundManager.GetInstance();
+		Debug.Assert(backgroundManager != null, "DEVN: BackgroundManager singleton not found!");
+
+		// get background node
+		BackgroundNode backgroundNode = m_currentNode as BackgroundNode;
+		Color fadeColour = backgroundNode.GetFadeColour();
+		float fadeTime = backgroundNode.GetFadeTime();
+
+		// enter or exit?
+		if (backgroundNode.GetToggleSelection() == 0) // enter
+		{
+			// perform background fade-in
+			Sprite background = backgroundNode.GetBackground();
+			bool waitForFinish = backgroundNode.GetWaitForFinish();
+			backgroundManager.EnterBackground(background, fadeColour, fadeTime, true, waitForFinish);
+		}
+		else // exit
+			backgroundManager.ExitBackground(fadeColour, fadeTime);
+	}
+	
+	/// <summary>
+	/// 
+	/// </summary>
+	private void EnterExitCharacter()
+	{
+		// get CharacterManager singleton instance
+		CharacterManager characterManager = CharacterManager.GetInstance();
+		Debug.Assert(characterManager != null, "DEVN: CharacterManager singleton not found!");
+			
+		// get character enter/exit details such as fadeTime, default sprite etc.
+		CharacterNode characterNode = m_currentNode as CharacterNode;
+		Character character = characterNode.GetCharacter();
+		Sprite sprite = characterNode.GetSprite();
+		float fadeTime = characterNode.GetFadeTime();
+		bool waitForFinish = characterNode.GetWaitForFinish();
+
+		// enter or exit?
+		if (characterNode.GetToggleSelection() == 0) // enter
+		{
+			// get xPosition and invert, then enter character
+			float xPosition = characterNode.GetXPosition();
+			bool isInvert = characterNode.GetIsInverted();
+			characterManager.EnterCharacter(character, sprite, xPosition, fadeTime, waitForFinish, isInvert);
+		}
+		else // exit
+			characterManager.ExitCharacter(character, sprite, fadeTime, waitForFinish);
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	private void EvaluateTransformNode()
+	{
+		// get CharacterManager singleton instance
+		CharacterManager characterManager = CharacterManager.GetInstance();
+		Debug.Assert(characterManager != null, "DEVN: CharacterManager singleton not found!");
+
+		// get CharacterTransformer
+		CharacterTransformer characterTransformer = characterManager.GetCharacterTransformer();
+		Debug.Assert(characterTransformer != null, "DEVN: CharacterTransformer does not exist!");
+		
+		if (m_currentNode is CharacterScaleNode)
+			ScaleCharacter(characterManager, characterTransformer);
+		else if (m_currentNode is CharacterTranslateNode)
+			TranslateCharacter(characterManager, characterTransformer);
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="characterManager"></param>
+	/// <param name="characterTransformer"></param>
+	private void ScaleCharacter(CharacterManager characterManager, CharacterTransformer characterTransformer)
+	{
+		CharacterScaleNode scaleNode = m_currentNode as CharacterScaleNode;
+		GameObject character = characterManager.TryGetCharacter(scaleNode.GetCharacter());
+		Vector2 scale = scaleNode.GetScale();
+
+		if (scaleNode.GetIsLerp())
+			StartCoroutine(characterTransformer.LerpCharacterScale(character, scale, scaleNode.GetLerpTime()));
+		else
+			characterTransformer.SetCharacterScale(character, scale);
+
+		NextNode();
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="characterManager"></param>
+	/// <param name="characterTransformer"></param>
+	private void TranslateCharacter(CharacterManager characterManager, CharacterTransformer characterTransformer)
+	{
+		CharacterTranslateNode translateNode = m_currentNode as CharacterTranslateNode;
+		GameObject character = characterManager.TryGetCharacter(translateNode.GetCharacter());
+		Vector2 position = translateNode.GetTranslation();
+
+		if (translateNode.GetIsLerp())
+			characterManager.StartCoroutine(characterTransformer.LerpCharacterPosition(character, position, translateNode.GetLerpTime()));
+		else
+			characterTransformer.SetCharacterPosition(character, position);
+
+		NextNode();
+	}
 }
 
 }

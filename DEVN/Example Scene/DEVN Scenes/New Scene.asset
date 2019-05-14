@@ -4,7 +4,8 @@
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -14,11 +15,47 @@ MonoBehaviour:
   m_currentPage: 0
   m_pages:
   - {fileID: 114875364284700284}
+--- !u!114 &114030798543111820
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f5d16997c22cc241bd5f4c6cf433796, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 53
+  m_rectangle:
+    serializedVersion: 2
+    x: 1299
+    y: 37
+    width: 128
+    height: 40
+  m_title: Dialogue Box
+  m_inputs: 06000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 1289
+    y: 47
+    width: 10
+    height: 20
+  m_outputs: 36000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 1427
+    y: 47
+    width: 10
+    height: 20
+  m_toggleSelection: 0
 --- !u!114 &114090464456507812
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -28,28 +65,28 @@ MonoBehaviour:
   m_nodeID: 9
   m_rectangle:
     serializedVersion: 2
-    x: 101
-    y: 147
+    x: 399
+    y: 39
     width: 256
     height: 166
   m_title: Condition
   m_inputs: 08000000
   m_inputPoint:
     serializedVersion: 2
-    x: 91
-    y: 220
+    x: 389
+    y: 112
     width: 10
     height: 20
   m_outputs: 0300000004000000
   m_outputPoints:
   - serializedVersion: 2
-    x: 357
-    y: 192.33333
+    x: 655
+    y: 84.33333
     width: 10
     height: 20
   - serializedVersion: 2
-    x: 357
-    y: 247.66666
+    x: 655
+    y: 139.66666
     width: 10
     height: 20
   m_valueType: 1
@@ -69,7 +106,42 @@ MonoBehaviour:
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bf1f0fa704193a4d9f493dbabc686e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 0
+  m_rectangle:
+    serializedVersion: 2
+    x: 10
+    y: 34
+    width: 100
+    height: 50
+  m_title: Start
+  m_inputs: 
+  m_inputPoint:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 10
+    height: 20
+  m_outputs: 08000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 110
+    y: 49
+    width: 10
+    height: 20
+--- !u!114 &114184134195273352
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -91,18 +163,61 @@ MonoBehaviour:
     y: 0
     width: 10
     height: 20
-  m_outputs: 08000000
+  m_outputs: ffffffff
   m_outputPoints:
   - serializedVersion: 2
     x: 104
     y: 19
     width: 10
     height: 20
+--- !u!114 &114197228122083632
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 269eb79aee5fdb040bf0e653d6e9d202, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 50
+  m_rectangle:
+    serializedVersion: 2
+    x: 1837
+    y: 38
+    width: 340
+    height: 114
+  m_title: Branch
+  m_inputs: 36000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 1827
+    y: 85
+    width: 10
+    height: 20
+  m_outputs: 3300000034000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 2177
+    y: 66
+    width: 10
+    height: 20
+  - serializedVersion: 2
+    x: 2177
+    y: 104
+    width: 10
+    height: 20
+  m_branches:
+  - Test1
+  - Test2
 --- !u!114 &114389557633313390
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -112,23 +227,23 @@ MonoBehaviour:
   m_nodeID: 6
   m_rectangle:
     serializedVersion: 2
-    x: 639
-    y: 118
+    x: 963
+    y: 36
     width: 295.55057
     height: 204
   m_title: Character
-  m_inputs: 0300000004000000
+  m_inputs: 0400000003000000
   m_inputPoint:
     serializedVersion: 2
-    x: 629
-    y: 210
+    x: 953
+    y: 128
     width: 10
     height: 20
-  m_outputs: ffffffff
+  m_outputs: 35000000
   m_outputPoints:
   - serializedVersion: 2
-    x: 934.55054
-    y: 210
+    x: 1258.5505
+    y: 128
     width: 10
     height: 20
   m_toggleSelection: 0
@@ -139,11 +254,84 @@ MonoBehaviour:
   m_fadeTime: 0.5
   m_isInverted: 0
   m_waitForFinish: 1
+--- !u!114 &114476386065450356
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bf1f0fa704193a4d9f493dbabc686e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 0
+  m_rectangle:
+    serializedVersion: 2
+    x: 4
+    y: 4
+    width: 100
+    height: 50
+  m_title: Start
+  m_inputs: 
+  m_inputPoint:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 10
+    height: 20
+  m_outputs: ffffffff
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 104
+    y: 19
+    width: 10
+    height: 20
+--- !u!114 &114531721467179406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b19fd96f384d73488a80aba14d3f33d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 52
+  m_rectangle:
+    serializedVersion: 2
+    x: 2221
+    y: 235
+    width: 340
+    height: 188
+  m_title: Dialogue
+  m_inputs: 32000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 2211
+    y: 319
+    width: 10
+    height: 20
+  m_outputs: ffffffff
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 2561
+    y: 319
+    width: 10
+    height: 20
+  m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
+  m_spriteSelection: 2
+  m_audioSelection: 0
+  m_dialogue: Even nicer!
 --- !u!114 &114571280406173018
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -153,23 +341,23 @@ MonoBehaviour:
   m_nodeID: 8
   m_rectangle:
     serializedVersion: 2
-    x: 130
-    y: 6
+    x: 160
+    y: 35
     width: 180
     height: 148
   m_title: Modify
   m_inputs: 00000000
   m_inputPoint:
     serializedVersion: 2
-    x: 120
-    y: 70
+    x: 150
+    y: 99
     width: 10
     height: 20
   m_outputs: 09000000
   m_outputPoints:
   - serializedVersion: 2
-    x: 310
-    y: 70
+    x: 340
+    y: 99
     width: 10
     height: 20
   m_valueType: 1
@@ -178,14 +366,49 @@ MonoBehaviour:
   m_variableSelection: 5
   m_booleanValue: 1
   m_booleanSelection: 0
-  m_floatValue: 6
+  m_floatValue: 4
   m_floatSelection: 1
   m_stringValue: test
+--- !u!114 &114576349427144106
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bf1f0fa704193a4d9f493dbabc686e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 0
+  m_rectangle:
+    serializedVersion: 2
+    x: 4
+    y: 4
+    width: 100
+    height: 50
+  m_title: Start
+  m_inputs: 
+  m_inputPoint:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 10
+    height: 20
+  m_outputs: ffffffff
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 104
+    y: 19
+    width: 10
+    height: 20
 --- !u!114 &114672067789844646
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -195,23 +418,23 @@ MonoBehaviour:
   m_nodeID: 4
   m_rectangle:
     serializedVersion: 2
-    x: 425
-    y: 220
+    x: 716
+    y: 257
     width: 170
     height: 212
   m_title: Background
   m_inputs: 09000000
   m_inputPoint:
     serializedVersion: 2
-    x: 415
-    y: 316
+    x: 706
+    y: 353
     width: 10
     height: 20
   m_outputs: 06000000
   m_outputPoints:
   - serializedVersion: 2
-    x: 595
-    y: 316
+    x: 886
+    y: 353
     width: 10
     height: 20
   m_toggleSelection: 0
@@ -219,18 +442,129 @@ MonoBehaviour:
   m_fadeColour: {r: 0, g: 0, b: 0, a: 1}
   m_fadeTime: 0.5
   m_waitForFinish: 1
+--- !u!114 &114709306156863156
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bf1f0fa704193a4d9f493dbabc686e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 0
+  m_rectangle:
+    serializedVersion: 2
+    x: 4
+    y: 4
+    width: 100
+    height: 50
+  m_title: Start
+  m_inputs: 
+  m_inputPoint:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 10
+    height: 20
+  m_outputs: ffffffff
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 104
+    y: 19
+    width: 10
+    height: 20
+--- !u!114 &114751421854732180
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b19fd96f384d73488a80aba14d3f33d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 51
+  m_rectangle:
+    serializedVersion: 2
+    x: 2224
+    y: 36
+    width: 340
+    height: 188
+  m_title: Dialogue
+  m_inputs: 32000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 2214
+    y: 120
+    width: 10
+    height: 20
+  m_outputs: ffffffff
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 2564
+    y: 120
+    width: 10
+    height: 20
+  m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
+  m_spriteSelection: 0
+  m_audioSelection: 0
+  m_dialogue: Nice!
+--- !u!114 &114757290348550988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b19fd96f384d73488a80aba14d3f33d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 54
+  m_rectangle:
+    serializedVersion: 2
+    x: 1461
+    y: 38
+    width: 340
+    height: 188
+  m_title: Dialogue
+  m_inputs: 35000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 1451
+    y: 122
+    width: 10
+    height: 20
+  m_outputs: 32000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 1801
+    y: 122
+    width: 10
+    height: 20
+  m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
+  m_spriteSelection: 0
+  m_audioSelection: 0
+  m_dialogue: Say something.
 --- !u!114 &114875364284700284
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 44c786e63f8b54f4eaf62140c9011b53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_currentID: 50
+  m_currentID: 57
   m_nodes:
   - {fileID: 114117448993653742}
   - {fileID: 114917664678085618}
@@ -238,11 +572,17 @@ MonoBehaviour:
   - {fileID: 114389557633313390}
   - {fileID: 114571280406173018}
   - {fileID: 114090464456507812}
+  - {fileID: 114197228122083632}
+  - {fileID: 114751421854732180}
+  - {fileID: 114531721467179406}
+  - {fileID: 114030798543111820}
+  - {fileID: 114757290348550988}
 --- !u!114 &114917664678085618
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -252,23 +592,23 @@ MonoBehaviour:
   m_nodeID: 3
   m_rectangle:
     serializedVersion: 2
-    x: 425
-    y: 3
+    x: 719
+    y: 38
     width: 170
     height: 212
   m_title: Background
   m_inputs: 09000000
   m_inputPoint:
     serializedVersion: 2
-    x: 415
-    y: 99
+    x: 709
+    y: 134
     width: 10
     height: 20
   m_outputs: 06000000
   m_outputPoints:
   - serializedVersion: 2
-    x: 595
-    y: 99
+    x: 889
+    y: 134
     width: 10
     height: 20
   m_toggleSelection: 0

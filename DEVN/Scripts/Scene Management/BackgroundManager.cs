@@ -35,59 +35,68 @@ public class BackgroundManager : MonoBehaviour
 	{
 		m_instance = this; // initialise singleton
 
-		// cache scene manager
+		// cache scene manager reference
 		m_sceneManager = GetComponent<SceneManager>();
+		Debug.Assert(m_sceneManager != null, "DEVN: SceneManager cache unsuccessful!");
 	}
-
+		
 	/// <summary>
-	/// set background function which determines whether to fade a background
-	/// in or out, and performs the relevant coroutine
+	/// use this to set a new background/environment and perform a fade-in!
 	/// </summary>
-	public void SetBackground()
+	/// <param name="background">the image sprite of the new background</param>
+	/// <param name="fadeColour">the colour of fade-in (e.g. Color.black or Color.white)</param>
+	/// <param name="fadeInTime">the time it takes to fade in, don't make this too long! Recommended: 0.5f to 3.0f</param>
+	/// <param name="nextNode">do you want to proceed to the next node of the current scene?
+	/// If you're calling this function manually, you probably want to leave this as false</param>
+	/// <param name="waitForFinish">this only matters if nextNode is true. If true, the scene waits
+	/// until the background has finished fading in before proceeding to the next node</param>
+	public void EnterBackground(Sprite background, Color fadeColour, float fadeInTime = 0.5f, 
+		bool nextNode = false, bool waitForFinish = false)
 	{
-		BackgroundNode currentNode = m_sceneManager.GetCurrentNode() as BackgroundNode;
-		m_colourBackground.color = currentNode.GetFadeColour(); // set fade colour
-
-		if (m_imageBackground.sprite == null)
-		{
-			// set background
-			m_imageBackground.sprite = currentNode.GetBackground();
-
-			// perform fade in
-			StartCoroutine(FadeIn(m_imageBackground, currentNode.GetFadeTime())); 
-		}
-		else
-		{
-			bool isExit = currentNode.GetToggleSelection() == 1;
-
-			// perform fade out
-			StartCoroutine(FadeOut(m_imageBackground, currentNode.GetFadeTime(), isExit)); 
-		}
+		m_colourBackground.color = fadeColour; // set fade colour
+			
+		StartCoroutine(FadeIn(background, fadeInTime, nextNode, waitForFinish)); // perform fade in
 	}
 
 	/// <summary>
-	/// helper function which performs a fade-in on an image over a 
-	/// certain amount of time
+	/// use this to perform a fade-out of the current background/environment!
 	/// </summary>
-	/// <param name="image">the image to fade in</param>
+	/// <param name="fadeColour">the colour of fade-in (e.g. Color.black or Color.white)</param>
+	/// <param name="fadeOutTime">the time it takes to fade out, don't make this too long! Recommended: 0.5f to 3.0f</param>
+	public void ExitBackground(Color fadeColour, float fadeOutTime = 0.5f)
+	{
+		m_colourBackground.color = fadeColour; // set fade colour
+
+		StartCoroutine(FadeOut(fadeOutTime)); // perform fade out
+	}
+	
+
+	/// <summary>
+	/// helper function which performs a fade-in on an image over a certain amount of time
+	/// </summary>
+	/// <param name="background">the background/environment image</param>
 	/// <param name="fadeInTime">the amount of time to fade in</param>
-	/// <returns>coroutine IEnumerator</returns>
-	IEnumerator FadeIn(Image image, float fadeInTime = 0.5f)
+	/// <param name="nextNode">proceed to next node?</param>
+	/// <param name="waitForFinish">wait for fade to finish before proceeding to next node?</param>
+	private IEnumerator FadeIn(Sprite background, float fadeInTime = 0.5f, bool nextNode = false,
+		bool waitForFinish = false)
 	{
-		float elapsedTime = 0.0f;
+		if (m_imageBackground.sprite != null)
+			Debug.LogWarning("DEVN: Perform Background \"Exit\" before entering another background!");
 
-		BackgroundNode backgroundNode = m_sceneManager.GetCurrentNode() as BackgroundNode;
-		image.sprite = backgroundNode.GetBackground();
+		m_imageBackground.sprite = background;
 
 		// instantly proceed to next node if "wait for finish" is false
-		if (!backgroundNode.GetWaitForFinish())
+		if (!waitForFinish && nextNode)
 			m_sceneManager.NextNode();
+
+		float elapsedTime = 0.0f;
 
 		while (elapsedTime < fadeInTime)
 		{
 			// set transparency
 			float percentage = elapsedTime / fadeInTime;
-			image.color = new Color(1, 1, 1, percentage);
+			m_imageBackground.color = new Color(1, 1, 1, percentage);
 
 			// increment time
 			elapsedTime += Time.deltaTime;
@@ -96,7 +105,7 @@ public class BackgroundManager : MonoBehaviour
 		}
 
 		// proceed to next node if "wait for finish" is true
-		if (backgroundNode.GetWaitForFinish())
+		if (waitForFinish && nextNode)
 			m_sceneManager.NextNode();
 	}
 
@@ -105,11 +114,8 @@ public class BackgroundManager : MonoBehaviour
 	/// certain amount of time, and performs a fade-in of a new background
 	/// if required
 	/// </summary>
-	/// <param name="image">the background to fade out</param>
 	/// <param name="fadeOutTime">the amount of time to fade out</param>
-	/// <param name="isExit">if true, no consequence fade-in will be performed</param>
-	/// <returns>coroutine IEnumerator</returns>
-	IEnumerator FadeOut(Image image, float fadeOutTime = 0.5f, bool isExit = false)
+	private IEnumerator FadeOut(float fadeOutTime = 0.5f)
 	{
 		float elapsedTime = 0.0f;
 
@@ -117,21 +123,15 @@ public class BackgroundManager : MonoBehaviour
 		{
 			// set transparency
 			float percentage = 1 - (elapsedTime / fadeOutTime);
-			image.color = new Color(1, 1, 1, percentage);
+			m_imageBackground.color = new Color(1, 1, 1, percentage);
 
 			// increment time
 			elapsedTime += Time.deltaTime;
 
 			yield return null;
 		}
-		
-		image.sprite = null; // clear the background
 
-		// perform fade in if required
-		if (!isExit)
-			StartCoroutine(FadeIn(image, fadeOutTime));
-		else
-			m_sceneManager.NextNode();
+		m_imageBackground.sprite = null; // clear the background
 	}
 }
 

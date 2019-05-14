@@ -10,43 +10,6 @@ public class CharacterTransformer
 	/// <summary>
 	/// 
 	/// </summary>
-	/// <param name="node"></param>
-	public void EvaluateTransformNode(BaseNode node)
-	{
-		SceneManager sceneManager = SceneManager.GetInstance();
-		CharacterManager characterManager = CharacterManager.GetInstance();
-
-		if (node is CharacterScaleNode)
-		{
-			CharacterScaleNode scaleNode = node as CharacterScaleNode;
-			GameObject character = characterManager.TryGetCharacter(scaleNode.GetCharacter());
-			Vector2 scale = scaleNode.GetScale();
-
-			if (scaleNode.GetIsLerp())
-				characterManager.StartCoroutine(LerpCharacterScale(character, scale, scaleNode.GetLerpTime()));
-			else
-				SetCharacterScale(character, scale);
-
-			sceneManager.NextNode();
-		}
-		else if (node is CharacterTranslateNode)
-		{
-			CharacterTranslateNode translateNode = node as CharacterTranslateNode;
-			GameObject character = characterManager.TryGetCharacter(translateNode.GetCharacter());
-			Vector2 position = translateNode.GetTranslation();
-
-			if (translateNode.GetIsLerp())
-				characterManager.StartCoroutine(LerpCharacterPosition(character, position, translateNode.GetLerpTime()));
-			else
-				SetCharacterPosition(character, position);
-
-			sceneManager.NextNode();
-		}
-	}
-
-	/// <summary>
-	/// 
-	/// </summary>
 	/// <param name="character"></param>
 	/// <param name="xPosition"></param>
 	public void SetCharacterPosition(GameObject character, Vector2 position)

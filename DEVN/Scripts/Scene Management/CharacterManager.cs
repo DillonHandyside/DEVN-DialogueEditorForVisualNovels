@@ -6,6 +6,9 @@ using UnityEngine.UI;
 namespace DEVN
 {
 
+/// <summary>
+/// 
+/// </summary>
 public class CharacterManager : MonoBehaviour
 {
 	// singleton
@@ -27,6 +30,7 @@ public class CharacterManager : MonoBehaviour
 	#region getters
 
 	public static CharacterManager GetInstance() { return m_instance; }
+	public CharacterTransformer GetCharacterTransformer() { return m_characterTransformer; }
     public GameObject GetBackgroundPanel() { return m_backgroundPanel; }
 
 	#endregion
@@ -40,7 +44,9 @@ public class CharacterManager : MonoBehaviour
 
 		// cache scene manager reference
 		m_sceneManager = GetComponent<SceneManager>();
+		Debug.Assert(m_sceneManager != null, "DEVN: SceneManager cache unsuccessful!");
 
+		// create character transformer for scaling/translation
 		m_characterTransformer = new CharacterTransformer();
 
 		m_characters = new List<GameObject>();
@@ -49,31 +55,17 @@ public class CharacterManager : MonoBehaviour
 	/// <summary>
 	/// 
 	/// </summary>
-	/// <param name="node"></param>
-	public void EvaluateCharacterNode(BaseNode node)
-	{
-		if (node is CharacterNode)
-		{
-			CharacterNode characterNode = node as CharacterNode;
-
-			if (characterNode.GetToggleSelection() == 0)
-				EnterCharacter(characterNode);
-			else
-				ExitCharacter(characterNode);
-		}
-		else
-			m_characterTransformer.EvaluateTransformNode(node);
-		
-	}
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="characterNode"></param>
-	public void EnterCharacter(CharacterNode characterNode)
+	/// <param name="character"></param>
+	/// <param name="sprite"></param>
+	/// <param name="xPosition"></param>
+	/// <param name="fadeInTime"></param>
+	/// <param name="waitForFinish"></param>
+	/// <param name="isInvert"></param>
+	public void EnterCharacter(Character character, Sprite sprite, float xPosition,
+		float fadeInTime = 0.5f, bool waitForFinish = false, bool isInvert = false)
 	{
 		// check to see if the character already exists in the scene
-		if (TryGetCharacter(characterNode.GetCharacter()) != null)
+		if (TryGetCharacter(character) != null)
 		{
 			Debug.LogWarning("DEVN: Do not attempt to enter two of the same characters.");
 			m_sceneManager.NextNode();
@@ -81,39 +73,47 @@ public class CharacterManager : MonoBehaviour
 		}
 
 		// create new character and parent it to canvas
-		GameObject character = Instantiate(m_characterPrefab);
-		character.transform.SetParent(m_backgroundPanel.transform, false);
+		GameObject characterObject = Instantiate(m_characterPrefab);
+		characterObject.transform.SetParent(m_backgroundPanel.transform, false);
 
 		// invert if necessary
-		if (characterNode.GetIsInverted())
-			m_characterTransformer.SetCharacterScale(character, new Vector2(1, -1));
+		if (isInvert)
+			m_characterTransformer.SetCharacterScale(characterObject, new Vector2(1, -1));
 
-		SetSprite(character, characterNode.GetSprite()); // set sprite
+		// set sprite
+		SetSprite(characterObject, sprite); 
 
-		Vector2 position = new Vector2(characterNode.GetXPosition(), 0);
-		m_characterTransformer.SetCharacterPosition(character, position); // set position
+		// set position
+		m_characterTransformer.SetCharacterPosition(characterObject, new Vector2(xPosition, 0)); 
 
-		CharacterInfo characterInfo = character.GetComponent<CharacterInfo>();
-		characterInfo.SetCharacter(characterNode.GetCharacter());
+		// set character info
+		CharacterInfo characterInfo = characterObject.GetComponent<CharacterInfo>();
+		characterInfo.SetCharacter(character);
 
-		m_characters.Add(character);
+		m_characters.Add(characterObject);
 
 		// perform fade-in
-		StartCoroutine(FadeIn(character, characterNode.GetFadeTime()));
+		StartCoroutine(FadeIn(characterObject, fadeInTime));
 	}
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="characterNode"></param>
-	public void ExitCharacter(CharacterNode characterNode)
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="character"></param>
+	/// <param name="sprite"></param>
+	/// <param name="fadeOutTime"></param>
+	/// <param name="waitForFinish"></param>
+	public void ExitCharacter(Character character, Sprite sprite, float fadeOutTime = 0.5f, 
+		bool waitForFinish = false)
 	{
-		GameObject character = TryGetCharacter(characterNode.GetCharacter());
+		GameObject characterObject = TryGetCharacter(character);
 
-		if (character != null)
+		if (characterObject != null)
 		{
+			SetSprite(characterObject, sprite); // set sprite
+
 			// perform fade-out and removal
-			StartCoroutine(FadeOut(character, characterNode.GetFadeTime()));
+			StartCoroutine(FadeOut(characterObject, fadeOutTime));
 			return; // exit succeeded
 		}
 
@@ -144,6 +144,8 @@ public class CharacterManager : MonoBehaviour
 	/// <summary>
 	/// 
 	/// </summary>
+	/// <param name="character"></param>
+	/// <param name="sprite"></param>
 	public void SetSprite(GameObject character, Sprite sprite)
 	{
 		Image characterImage = character.GetComponent<Image>();
@@ -172,15 +174,14 @@ public class CharacterManager : MonoBehaviour
 	/// <summary>
 	/// 
 	/// </summary>
-	/// <param name="image"></param>
+	/// <param name="character"></param>
 	/// <param name="fadeInTime"></param>
+	/// <param name="waitForFinish"></param>
 	/// <returns></returns>
-	IEnumerator FadeIn(GameObject character, float fadeInTime = 0.5f)
+	private IEnumerator FadeIn(GameObject character, float fadeInTime = 0.5f, bool waitForFinish = false)
 	{
-		CharacterNode dialogueNode = m_sceneManager.GetCurrentNode() as CharacterNode;
-
 		// if not "wait for finish", jump straight to next node
-		if (!dialogueNode.GetWaitForFinish())
+		if (!waitForFinish)
 			m_sceneManager.NextNode();
 
 		float elapsedTime = 0.0f;
@@ -196,22 +197,21 @@ public class CharacterManager : MonoBehaviour
 		}
 
 		// if "wait for finish", go to next node after fade
-		if (dialogueNode.GetWaitForFinish())
+		if (waitForFinish)
 			m_sceneManager.NextNode(); 
 	}
 
 	/// <summary>
 	/// 
 	/// </summary>
-	/// <param name="image"></param>
+	/// <param name="character"></param>
 	/// <param name="fadeOutTime"></param>
+	/// <param name="waitForFinish"></param>
 	/// <returns></returns>
-	IEnumerator FadeOut(GameObject character, float fadeOutTime = 0.5f)
+	private IEnumerator FadeOut(GameObject character, float fadeOutTime = 0.5f, bool waitForFinish = false)
 	{
-		CharacterNode dialogueNode = m_sceneManager.GetCurrentNode() as CharacterNode;
-
 		// if not "wait for finish", jump straight to next node
-		if (!dialogueNode.GetWaitForFinish())
+		if (!waitForFinish)
 			m_sceneManager.NextNode();
 
 		float elapsedTime = 0.0f;
@@ -226,11 +226,12 @@ public class CharacterManager : MonoBehaviour
 			yield return null;
 		}
 
+		// destroy the character
 		m_characters.Remove(character);
 		Destroy(character);
 
 		// if "wait for finish", go to next node after fade
-		if (dialogueNode.GetWaitForFinish())
+		if (waitForFinish)
 			m_sceneManager.NextNode();
 	}
 }

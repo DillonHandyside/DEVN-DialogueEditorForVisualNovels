@@ -16,9 +16,12 @@ enum MouseButton
 public class NodeEditor : EditorWindow
 {
 	private Texture2D m_logoDEVN; // watermark logo
+	
+    private static Scene m_scene; // the current selected Scene
 
-    // the current selected DialogueScene scriptable object
-    private static Scene m_scene;
+	// this scene is used for remembering the current scene on assembly reload & 
+	// entering/exiting play mode
+	private Scene m_previousScene;
 
     // references to the node and connection managers
     private static NodeManager m_nodeManager;
@@ -58,11 +61,11 @@ public class NodeEditor : EditorWindow
         m_nodeManager = new NodeManager();
         m_connectionManager = new ConnectionManager();
 
+		m_scene = m_previousScene;
+
         // load logo
         string path = "Assets/DEVN/Textures/logoDEVN.png";
         m_logoDEVN = EditorGUIUtility.Load(path) as Texture2D;
-
-        //Load(true);
     }
 
     /// <summary>
@@ -71,59 +74,36 @@ public class NodeEditor : EditorWindow
     void OnGUI()
     {
         EditorGUILayout.Space();
-        m_scene = EditorGUILayout.ObjectField("Current Scene: ", m_scene, typeof(Scene), true) as Scene;
+		EditorGUILayout.BeginHorizontal();
+		EditorGUILayout.BeginHorizontal(GUILayout.Width(256));
+		EditorGUIUtility.labelWidth = 96;
+        m_scene = EditorGUILayout.ObjectField("Current Scene ", m_scene, typeof(Scene), true) as Scene;
+		EditorGUILayout.EndHorizontal();
+		EditorGUILayout.Separator();
 
-        // don't draw the graph editor if no scriptable object is selected
-        if (m_scene == null)
-            return;
-        else
-            Load();
+		// don't draw the graph editor if no scriptable object is selected
+		if (m_scene == null)
+			return;
+		
+		m_scene.Init();
+		m_nodeManager.UpdateNodes();
 
-        // update mouse position reference
-        m_mousePosition = Event.current.mousePosition;
+		if (m_scene != m_previousScene)
+			m_previousScene = m_scene;
+		
+		// update mouse position reference
+		m_mousePosition = Event.current.mousePosition;
 
-        // draw all editor elements in appropriate order
-        m_scrollPosition = EditorGUILayout.BeginScrollView(m_scrollPosition);
-        DrawGrid(20, 0.2f, Color.grey);
-        DrawGrid(100, 0.4f, Color.grey);
-        BeginWindows();
-        m_nodeManager.DrawNodes();
-        EndWindows();
-        EditorGUILayout.EndScrollView();
-        DrawToolbar();
+		// draw all editor elements in appropriate order
+		DrawToolbar();
+		EditorGUILayout.EndHorizontal();
+		DrawContent();
 		DrawLogo();
+		
+		ProcessEvents(Event.current); // process click/button events
 
-        // event processing
-        ProcessEvents(Event.current);
-
-        m_nodeManager.UpdateNodes();
-
-        EditorUtility.SetDirty(m_scene);
-        Repaint();
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    private void Load(bool isReload = false)
-    {
-        m_scene.Init();
-        m_nodeManager.UpdateNodes();
-
-        // if the user clicks on a new dialogue scene scriptable object
-        //if ((Selection.activeObject != m_scene || isReload ||
-        //    EditorApplication.isPlayingOrWillChangePlaymode) &&
-        //    Selection.activeObject is Scene)
-        //{
-        //    // assign the dialogue scene to the one the user clicked
-        //    m_scene = Selection.activeObject as Scene;
-
-        //    // load the nodes
-        //    m_scene.Init();
-        //    m_nodeManager.UpdateNodes();
-        //}
-        //else if (Selection.activeObject != m_scene)
-        //    m_scene = null;
+		EditorUtility.SetDirty(m_scene); // save scene changes
+		Repaint();
     }
 
     /// <summary>
@@ -133,49 +113,60 @@ public class NodeEditor : EditorWindow
     {
         GenericMenu genericMenu = new GenericMenu(); // initialise context menu
 
-        // -- add new nodes to this function! --
-        // genericMenu.AddItem(new GUIContent("New Node/Category/Node"), false, () => m_nodeManager.AddNode(typeof(YourNode)));
+		// -- add new nodes to this function! --
+		// genericMenu.AddItem(new GUIContent("New Node/Category/Your Node"), false, () => m_nodeManager.AddNode(typeof(YourNode)));
 
-        // audio relevant nodes
-        genericMenu.AddItem(new GUIContent("New Node/Audio/BGM"), false, () => m_nodeManager.AddNode(typeof(BGMNode)));
+		#region in-built DEVN nodes
+
+		// audio nodes
+		genericMenu.AddItem(new GUIContent("New Node/Audio/BGM"), false, () => m_nodeManager.AddNode(typeof(BGMNode)));
 		genericMenu.AddItem(new GUIContent("New Node/Audio/SFX"), false, () => m_nodeManager.AddNode(typeof(SFXNode)));
 
-		// background relevant nodes
+		// background nodes
 		genericMenu.AddItem(new GUIContent("New Node/Background/Background"), false, () => m_nodeManager.AddNode(typeof(BackgroundNode)));
 
-		// character relevant nodes
+		// character nodes
 		genericMenu.AddItem(new GUIContent("New Node/Character/Scale"), false, () => m_nodeManager.AddNode(typeof(CharacterScaleNode)));
 		genericMenu.AddItem(new GUIContent("New Node/Character/Translate"), false, () => m_nodeManager.AddNode(typeof(CharacterTranslateNode)));
 		genericMenu.AddSeparator("New Node/Character/");
 		genericMenu.AddItem(new GUIContent("New Node/Character/Character"), false, () => m_nodeManager.AddNode(typeof(CharacterNode)));
 
-		// dialogue relevant nodes
+		// dialogue nodes
 		genericMenu.AddItem(new GUIContent("New Node/Dialogue/Branch"), false, () => m_nodeManager.AddNode(typeof(BranchNode)));
         genericMenu.AddItem(new GUIContent("New Node/Dialogue/Dialogue"), false, () => m_nodeManager.AddNode(typeof(DialogueNode)));
 		genericMenu.AddSeparator("New Node/Dialogue/");
 		genericMenu.AddItem(new GUIContent("New Node/Dialogue/Dialogue Box"), false, () => m_nodeManager.AddNode(typeof(DialogueBoxNode)));
 
-        // utility relevant nodes
+        // utility nodes
         genericMenu.AddItem(new GUIContent("New Node/Utility/Delay"), false, () => m_nodeManager.AddNode(typeof(DelayNode)));
         genericMenu.AddItem(new GUIContent("New Node/Utility/Page"), false, () => m_nodeManager.AddNode(typeof(PageNode)));
 
-        // variable relevant nodes
+        // variable nodes
         genericMenu.AddItem(new GUIContent("New Node/Variable/Condition"), false, () => m_nodeManager.AddNode(typeof(ConditionNode)));
         genericMenu.AddItem(new GUIContent("New Node/Variable/Modify"), false, () => m_nodeManager.AddNode(typeof(ModifyNode)));
 
         // end node
         genericMenu.AddItem(new GUIContent("New Node/End"), false, () => m_nodeManager.AddNode(typeof(EndNode)));
 
-        // page add/remove
-        genericMenu.AddSeparator("");
+		#endregion
+
+		#region page creation/deletion
+
+		// new page
+		genericMenu.AddSeparator("");
         genericMenu.AddItem(new GUIContent("New Page"), false, m_scene.NewPage);
 
+		// remove page, disallow removal if only one page exists
         if (m_scene.GetPages().Count > 1)
-            genericMenu.AddItem(new GUIContent("Remove Page"), false, m_scene.RemovePage);
+            genericMenu.AddItem(new GUIContent("Delete Page"), false, m_scene.DeletePage);
         else
-            genericMenu.AddDisabledItem(new GUIContent("Remove Page"));
+            genericMenu.AddDisabledItem(new GUIContent("Delete Page"));
 
-        genericMenu.AddSeparator("");
+		#endregion
+
+		#region node copy/paste/deletion
+
+		genericMenu.AddSeparator("");
 
         // house-keeping (copy, paste, delete, etc.)
         genericMenu.AddDisabledItem(new GUIContent("Copy"));
@@ -185,7 +176,9 @@ public class NodeEditor : EditorWindow
             genericMenu.AddDisabledItem(new GUIContent("Paste"));
         genericMenu.AddDisabledItem(new GUIContent("Delete"));
 
-        genericMenu.ShowAsContext(); // print context menu
+		#endregion
+
+		genericMenu.ShowAsContext(); // print context menu
     }
 
     /// <summary>
@@ -219,6 +212,28 @@ public class NodeEditor : EditorWindow
                 break;
         }
     }
+
+	/// <summary>
+	/// 
+	/// </summary>
+	private void DrawContent()
+	{
+		Rect scrollViewRect = GUILayoutUtility.GetLastRect();
+		scrollViewRect.y += scrollViewRect.height;
+		scrollViewRect.height = Screen.height - 56;
+		m_scrollPosition = GUI.BeginScrollView(scrollViewRect, m_scrollPosition, scrollViewRect);
+
+		// grid
+		DrawGrid(20, 0.2f, Color.grey);
+		DrawGrid(100, 0.4f, Color.grey);
+
+		// nodes
+		BeginWindows();
+		m_nodeManager.DrawNodes();
+		EndWindows();
+
+		GUI.EndScrollView();
+	}
 
     /// <summary>
     /// 
@@ -258,24 +273,26 @@ public class NodeEditor : EditorWindow
     /// </summary>
     private void DrawToolbar()
     {
+		EditorGUILayout.BeginHorizontal(GUILayout.MaxWidth(48));
+
         string[] pages = new string[m_scene.GetPages().Count];
         for (int i = 0; i < pages.Length; i++)
             pages[i] = "Page " + (i + 1);
 
-        int prevPage = m_scene.GetCurrentPageID();
-        m_scene.SetCurrentPage(GUILayout.Toolbar(prevPage, pages));
+		int currentPage = m_scene.GetCurrentPageID();
+		GUILayoutOption maxWidth = GUILayout.MaxWidth(Screen.width - 272);
+		m_scene.SetCurrentPage(GUILayout.Toolbar(currentPage, pages, maxWidth));
 
-        if (m_scene.GetCurrentPageID() != prevPage)
-            Load(true);
-    }
+		EditorGUILayout.EndHorizontal();
+	}
 
     /// <summary>
     /// 
     /// </summary>
     private void DrawLogo()
     {
-        float xPosLogo = GUILayoutUtility.GetLastRect().width - 72;
-        float yPosLogo = GUILayoutUtility.GetLastRect().y - 60;
+        float xPosLogo = Screen.width - 80;
+        float yPosLogo = Screen.height - 80;
         float xPosText = xPosLogo - 118;
         float yPosText = yPosLogo + 40;
 
