@@ -13,6 +13,8 @@ public class SettingsManager : MonoBehaviour
 	// singleton
 	private static SettingsManager m_instance;
 
+    private SceneManager m_sceneManager;
+
 	// dialogue settings, e.g. text speed and auto speed
 	[Header("Dialogue Settings")]
 	[Range(0, 1)]
@@ -63,6 +65,9 @@ public class SettingsManager : MonoBehaviour
 	void Start ()
 	{
 		m_instance = this; // initialise singleton
+
+        m_sceneManager = SceneManager.GetInstance();
+        Debug.Assert(m_sceneManager != null, "DEVN: SceneManager instance does not exist!");
 	}
 	
 	/// <summary>
@@ -70,11 +75,11 @@ public class SettingsManager : MonoBehaviour
 	/// </summary>
 	void Update ()
 	{
-        DialogueManager.GetInstance().SetDialogueSpeed(m_textSpeed);
-        DialogueManager.GetInstance().SetAutoSpeed(m_autoSpeed);
+        m_sceneManager.GetDialogueManager().SetDialogueSpeed(m_textSpeed);
+        m_sceneManager.GetDialogueManager().SetAutoSpeed(m_autoSpeed);
 
 		// update mixer settings. Volume between -80 to 0 db
-		AudioMixer audioMixer = AudioManager.GetInstance().GetAudioMixer();
+		AudioMixer audioMixer = m_sceneManager.GetAudioManager().GetAudioMixer();
 
 		audioMixer.SetFloat("volumeMaster", Mathf.Log10(m_masterVolume) * 20); // master
 		audioMixer.SetFloat("volumeBGM", Mathf.Log10(m_bgmVolume) * 20); // BGM

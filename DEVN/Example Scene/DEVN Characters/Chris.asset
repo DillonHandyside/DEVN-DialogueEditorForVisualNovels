@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Name: Chris
   m_EditorClassIdentifier: 
   m_name: Chris
-  m_sprites: []
+  m_sprites:
+  - {fileID: 0}
   m_audioClips: []

@@ -96,8 +96,6 @@ public class Blackboard : ScriptableObject
     public int NewStringID() { return m_stringID++; }
 
     #endregion
-
-#if UNITY_EDITOR
         
     /// <summary>
     /// 
@@ -427,8 +425,6 @@ public class Blackboard : ScriptableObject
 
         return outputKeys;
     }
-
-#endif
 }
 
 }

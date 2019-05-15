@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace DEVN
 {
@@ -21,18 +19,6 @@ public class CharacterInfo : MonoBehaviour
 	public void SetCharacter(Character character) { m_character = character; }
 
 	#endregion
-
-	// Use this for initialization
-	void Start ()
-	{
-		
-	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-		
-	}
 }
 
 }

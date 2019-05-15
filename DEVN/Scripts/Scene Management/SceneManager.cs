@@ -16,13 +16,23 @@ public class SceneManager : MonoBehaviour
 	// singleton
 	private static SceneManager m_instance;
 
+    // delete later
 	[SerializeField] private Scene m_startScene;
-	[HideInInspector]
-    [SerializeField] private Scene m_currentScene;
+    
+    // scene management variables
+	private Scene m_currentScene; 
     private BaseNode m_currentNode;
     private List<BaseNode> m_sceneNodes;
 
     private List<Blackboard> m_blackboards;
+
+    // reference to all of the different managers
+    private AudioManager m_audioManager;
+    private BackgroundManager m_backgroundManager;
+    private CharacterManager m_characterManager;
+    private DialogueManager m_dialogueManager;
+    private LogManager m_logManager;
+    private VariableManager m_variableManager;
 	
 	private bool m_isInputAllowed = false;
 
@@ -31,6 +41,11 @@ public class SceneManager : MonoBehaviour
 	public static SceneManager GetInstance() { return m_instance; }
 	public BaseNode GetCurrentNode() { return m_currentNode; }
     public List<Blackboard> GetBlackboards() { return m_blackboards; }
+    public AudioManager GetAudioManager() { return m_audioManager; }
+    public BackgroundManager GetBackgroundManager() { return m_backgroundManager; }
+    public CharacterManager GetCharacterManager() { return m_characterManager; }
+    public DialogueManager GetDialogueManager() { return m_dialogueManager; }
+    public LogManager GetLogManager() { return m_logManager; }
 
 	#endregion
 
@@ -57,6 +72,24 @@ public class SceneManager : MonoBehaviour
             m_blackboards.Add(blackboard);
         }
 
+        // cache references to all required managers
+        m_audioManager = GetComponent<AudioManager>();
+        m_backgroundManager = GetComponent<BackgroundManager>();
+        m_characterManager = GetComponent<CharacterManager>();
+        m_dialogueManager = GetComponent<DialogueManager>();
+        m_logManager = GetComponent<LogManager>();
+
+        // check if all managers were cached successfully
+        Debug.Assert(m_audioManager != null, "DEVN: AudioManager cache unsuccessful!");
+        Debug.Assert(m_backgroundManager != null, "DEVN: BackgroundManager cache unsuccessful!");
+        Debug.Assert(m_characterManager != null, "DEVN: CharacterManager cache unsuccessful!");
+        Debug.Assert(m_dialogueManager != null, "DEVN: DialogueManager cache unsuccessful!");
+        Debug.Assert(m_logManager != null, "DEVN: LogManager cache unsuccessful!");
+        
+        // create variable manager
+        m_variableManager = new VariableManager();
+
+        // delete this later
 		NewScene(m_startScene);
 	}
 	
@@ -65,54 +98,69 @@ public class SceneManager : MonoBehaviour
 	/// </summary>
 	void Update ()
 	{
-		DialogueManager dialogueManager = DialogueManager.GetInstance();
-
 		// dialogue box toggle
 		if (Input.GetKeyDown(KeyCode.Backspace))
 		{
 			SetIsInputAllowed(!m_isInputAllowed);
-			dialogueManager.ToggleDialogueBox();
+            m_dialogueManager.ToggleDialogueBox();
 		}
 
 		if (m_isInputAllowed && Input.GetKeyDown(KeyCode.Space))
 		{
-			if (dialogueManager.GetIsTyping())
-				dialogueManager.SkipTypewrite();
+			if (m_dialogueManager.GetIsTyping())
+                m_dialogueManager.SkipTypewrite();
 			else
 				NextNode();
 		}
 	}
 
 	/// <summary>
-	/// 
+	/// use this function to start a new DEVN scene!
 	/// </summary>
-	/// <param name="scene"></param>
+	/// <param name="scene">pass in the scene you want to start here</param>
 	public void NewScene(Scene scene)
 	{
-		m_currentScene = scene;
-
-		m_sceneNodes = m_currentScene.GetNodes(0);
-		m_currentNode = m_sceneNodes[0]; // start node
-
-		NextNode();
-	}
+		m_currentScene = scene; // set scene
+        NewPage(0); // page 1
+    }
 
     /// <summary>
-    /// 
+    /// use this function to proceed to the next node in a DEVN scene! Be sure you know
+    /// what you're doing when manually calling this function
     /// </summary>
-    /// <param name="pageNumber"></param>
-    public void NewPage(int pageNumber)
+    /// <param name="outputIndex">the index of the output path you want to traverse. 
+    /// For linear nodes with only one output, use the default parameter (0). For
+    /// any node with divergence (more than one output) pass in the desired parameter</param>
+    public void NextNode(int outputIndex = 0)
     {
-        m_sceneNodes = m_currentScene.GetNodes(pageNumber);
-        m_currentNode = m_sceneNodes[0]; // start node
+        // prevent index out of range error
+        if (outputIndex < m_currentNode.m_outputs.Count)
+        {
+            // update node and scene
+            m_currentNode = GetNode(m_currentNode.m_outputs[outputIndex]);
+            UpdateScene();
+        }
+        else 
+            Debug.LogWarning("DEVN: Given index is out of range! Can not proceed to next node");
+    }
 
+    /// <summary>
+    /// helper function which jumps to a new page, and proceeds from it's start node
+    /// </summary>
+    /// <param name="pageNumber">the page to jump to</param>
+    private void NewPage(int pageNumber)
+    {
+        m_sceneNodes = m_currentScene.GetNodes(pageNumber); // get all nodes on page
+
+        // get start node and jump instantly to next node        
+        m_currentNode = m_sceneNodes[0];
         NextNode();
     }
 
 	/// <summary>
 	/// 
 	/// </summary>
-	public BaseNode GetNode(int nodeID)
+	private BaseNode GetNode(int nodeID)
 	{
 		for (int i = 0; i < m_sceneNodes.Count; i++)
 		{
@@ -122,16 +170,6 @@ public class SceneManager : MonoBehaviour
 
 		return null;
 	}
-
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="outputIndex"></param>
-    public void NextNode(int outputIndex = 0)
-    {
-		m_currentNode = GetNode(m_currentNode.m_outputs[outputIndex]);
-        UpdateScene();
-    }
 
 	/// <summary>
 	/// 
@@ -171,12 +209,12 @@ public class SceneManager : MonoBehaviour
 		else if (m_currentNode is BGMNode)
 		{
 			BGMNode bgmNode = m_currentNode as BGMNode;
-			AudioManager.GetInstance().SetBGM(bgmNode.GetBGM(), bgmNode.GetAmbientAudio(), true);
+			m_audioManager.SetBGM(bgmNode.GetBGM(), bgmNode.GetAmbientAudio(), true);
 		}
 		else if (m_currentNode is SFXNode)
 		{
 			SFXNode sfxNode = m_currentNode as SFXNode;
-			StartCoroutine(AudioManager.GetInstance().PlaySFX(sfxNode.GetSFX(), true, sfxNode.GetWaitForFinish()));
+			StartCoroutine(m_audioManager.PlaySFX(sfxNode.GetSFX(), true, sfxNode.GetWaitForFinish()));
 		}
 
 		// character nodes
@@ -187,17 +225,17 @@ public class SceneManager : MonoBehaviour
 
 		// variable nodes
 		else if (m_currentNode is ConditionNode)
-			VariableManager.GetInstance().EvaluateCondition(m_currentNode as ConditionNode);
+			m_variableManager.EvaluateCondition(m_currentNode as ConditionNode);
 		else if (m_currentNode is ModifyNode)
-			VariableManager.GetInstance().PerformModify(m_currentNode as ModifyNode);
+			m_variableManager.PerformModify(m_currentNode as ModifyNode);
 
 		// dialogue nodes
 		else if (m_currentNode is BranchNode)
-			DialogueManager.GetInstance().DisplayChoices((m_currentNode as BranchNode).GetBranches());
+			m_dialogueManager.DisplayChoices((m_currentNode as BranchNode).GetBranches());
 		else if (m_currentNode is DialogueNode)
-			DialogueManager.GetInstance().SetDialogue(m_currentNode as DialogueNode);
+			m_dialogueManager.SetDialogue(m_currentNode as DialogueNode);
 		else if (m_currentNode is DialogueBoxNode)
-			DialogueManager.GetInstance().SetDialogueBox(m_currentNode as DialogueBoxNode);
+			m_dialogueManager.SetDialogueBox(m_currentNode as DialogueBoxNode);
 
 		// transition nodes
 		else if (m_currentNode is PageNode || m_currentNode is EndNode)
@@ -209,10 +247,6 @@ public class SceneManager : MonoBehaviour
 	/// </summary>
 	private void UpdateBackground()
 	{
-		// get BackgroundManager singleton instance and log any potential errors
-		BackgroundManager backgroundManager = BackgroundManager.GetInstance();
-		Debug.Assert(backgroundManager != null, "DEVN: BackgroundManager singleton not found!");
-
 		// get background node
 		BackgroundNode backgroundNode = m_currentNode as BackgroundNode;
 		Color fadeColour = backgroundNode.GetFadeColour();
@@ -224,10 +258,10 @@ public class SceneManager : MonoBehaviour
 			// perform background fade-in
 			Sprite background = backgroundNode.GetBackground();
 			bool waitForFinish = backgroundNode.GetWaitForFinish();
-			backgroundManager.EnterBackground(background, fadeColour, fadeTime, true, waitForFinish);
+			m_backgroundManager.EnterBackground(background, fadeColour, fadeTime, true, waitForFinish);
 		}
 		else // exit
-			backgroundManager.ExitBackground(fadeColour, fadeTime);
+			m_backgroundManager.ExitBackground(fadeColour, fadeTime);
 	}
 	
 	/// <summary>
@@ -235,10 +269,6 @@ public class SceneManager : MonoBehaviour
 	/// </summary>
 	private void EnterExitCharacter()
 	{
-		// get CharacterManager singleton instance
-		CharacterManager characterManager = CharacterManager.GetInstance();
-		Debug.Assert(characterManager != null, "DEVN: CharacterManager singleton not found!");
-			
 		// get character enter/exit details such as fadeTime, default sprite etc.
 		CharacterNode characterNode = m_currentNode as CharacterNode;
 		Character character = characterNode.GetCharacter();
@@ -252,10 +282,10 @@ public class SceneManager : MonoBehaviour
 			// get xPosition and invert, then enter character
 			float xPosition = characterNode.GetXPosition();
 			bool isInvert = characterNode.GetIsInverted();
-			characterManager.EnterCharacter(character, sprite, xPosition, fadeTime, waitForFinish, isInvert);
+			m_characterManager.EnterCharacter(character, sprite, xPosition, fadeTime, waitForFinish, isInvert);
 		}
 		else // exit
-			characterManager.ExitCharacter(character, sprite, fadeTime, waitForFinish);
+			m_characterManager.ExitCharacter(character, sprite, fadeTime, waitForFinish);
 	}
 
 	/// <summary>
@@ -263,29 +293,24 @@ public class SceneManager : MonoBehaviour
 	/// </summary>
 	private void EvaluateTransformNode()
 	{
-		// get CharacterManager singleton instance
-		CharacterManager characterManager = CharacterManager.GetInstance();
-		Debug.Assert(characterManager != null, "DEVN: CharacterManager singleton not found!");
-
 		// get CharacterTransformer
-		CharacterTransformer characterTransformer = characterManager.GetCharacterTransformer();
+		CharacterTransformer characterTransformer = m_characterManager.GetCharacterTransformer();
 		Debug.Assert(characterTransformer != null, "DEVN: CharacterTransformer does not exist!");
 		
 		if (m_currentNode is CharacterScaleNode)
-			ScaleCharacter(characterManager, characterTransformer);
+			ScaleCharacter(characterTransformer);
 		else if (m_currentNode is CharacterTranslateNode)
-			TranslateCharacter(characterManager, characterTransformer);
+			TranslateCharacter(characterTransformer);
 	}
 
 	/// <summary>
 	/// 
 	/// </summary>
-	/// <param name="characterManager"></param>
 	/// <param name="characterTransformer"></param>
-	private void ScaleCharacter(CharacterManager characterManager, CharacterTransformer characterTransformer)
+	private void ScaleCharacter(CharacterTransformer characterTransformer)
 	{
 		CharacterScaleNode scaleNode = m_currentNode as CharacterScaleNode;
-		GameObject character = characterManager.TryGetCharacter(scaleNode.GetCharacter());
+		GameObject character = m_characterManager.TryGetCharacter(scaleNode.GetCharacter());
 		Vector2 scale = scaleNode.GetScale();
 
 		if (scaleNode.GetIsLerp())
@@ -299,16 +324,15 @@ public class SceneManager : MonoBehaviour
 	/// <summary>
 	/// 
 	/// </summary>
-	/// <param name="characterManager"></param>
 	/// <param name="characterTransformer"></param>
-	private void TranslateCharacter(CharacterManager characterManager, CharacterTransformer characterTransformer)
+	private void TranslateCharacter(CharacterTransformer characterTransformer)
 	{
 		CharacterTranslateNode translateNode = m_currentNode as CharacterTranslateNode;
-		GameObject character = characterManager.TryGetCharacter(translateNode.GetCharacter());
+		GameObject character = m_characterManager.TryGetCharacter(translateNode.GetCharacter());
 		Vector2 position = translateNode.GetTranslation();
 
 		if (translateNode.GetIsLerp())
-			characterManager.StartCoroutine(characterTransformer.LerpCharacterPosition(character, position, translateNode.GetLerpTime()));
+            StartCoroutine(characterTransformer.LerpCharacterPosition(character, position, translateNode.GetLerpTime()));
 		else
 			characterTransformer.SetCharacterPosition(character, position);
 

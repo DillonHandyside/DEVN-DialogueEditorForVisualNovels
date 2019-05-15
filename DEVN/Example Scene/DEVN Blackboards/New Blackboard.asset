@@ -4,8 +4,7 @@
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -32,8 +31,20 @@ MonoBehaviour:
       m_float: 0
       m_string: 
     m_valueType: 0
+  - m_key: Boolean 4
+    m_value:
+      m_boolean: 0
+      m_float: 0
+      m_string: 
+    m_valueType: 0
+  - m_key: Boolean 5
+    m_value:
+      m_boolean: 0
+      m_float: 0
+      m_string: 
+    m_valueType: 0
   m_floats:
-  - m_key: Float 0
+  - m_key: courage
     m_value:
       m_boolean: 0
       m_float: 0
@@ -51,6 +62,12 @@ MonoBehaviour:
       m_float: -5
       m_string: 
     m_valueType: 1
+  - m_key: Float 3
+    m_value:
+      m_boolean: 0
+      m_float: 0
+      m_string: 
+    m_valueType: 1
   m_strings:
   - m_key: String 0
     m_value:
@@ -58,6 +75,6 @@ MonoBehaviour:
       m_float: 0
       m_string: Testy
     m_valueType: 2
-  m_booleanID: 4
-  m_floatID: 3
+  m_booleanID: 6
+  m_floatID: 4
   m_stringID: 1

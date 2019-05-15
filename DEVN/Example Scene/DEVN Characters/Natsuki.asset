@@ -15,4 +15,5 @@ MonoBehaviour:
   m_sprites:
   - {fileID: 21300000, guid: bf709ebdf31e80943b36077534b20628, type: 3}
   - {fileID: 21300000, guid: 763fbdcecf049eb4cb6fe84dbc51e2a2, type: 3}
-  m_audioClips: []
+  m_audioClips:
+  - {fileID: 8300000, guid: 67bbb82998d39bb48931993315dbb786, type: 3}

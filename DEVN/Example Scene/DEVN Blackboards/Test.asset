@@ -11,6 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f38020c6220c6084bbf403ed9c585838, type: 3}
   m_Name: Test
   m_EditorClassIdentifier: 
+  m_blackboardID: 0
   m_booleans:
   - m_key: Boolean 0
     m_value:
@@ -18,8 +19,14 @@ MonoBehaviour:
       m_float: 0
       m_string: 
     m_valueType: 0
-  m_floats: []
+  m_floats:
+  - m_key: bond
+    m_value:
+      m_boolean: 0
+      m_float: 3
+      m_string: 
+    m_valueType: 1
   m_strings: []
   m_booleanID: 1
-  m_floatID: 0
+  m_floatID: 1
   m_stringID: 0

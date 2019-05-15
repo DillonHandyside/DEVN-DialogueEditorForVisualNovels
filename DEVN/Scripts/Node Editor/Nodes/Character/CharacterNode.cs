@@ -112,14 +112,19 @@ public class CharacterNode : BaseNode
 			// get sprites and sprite names
 			List<Sprite> sprites = m_character.m_sprites;
 			string[] spriteNames = new string[sprites.Count];
-			for (int i = 0; i < sprites.Count; i++)
-				spriteNames[i] = sprites[i].name;
+            for (int i = 0; i < sprites.Count; i++)
+            {
+                if (sprites[i] == null)
+                    spriteNames[i] = "None";
+                else
+                    spriteNames[i] = sprites[i].name;
+            }
 
 			// draw drop-down sprite selection menu
 			m_spriteSelection = EditorGUI.Popup(fieldRect, m_spriteSelection, spriteNames);
 			fieldRect.y += fieldHeight + 2;
 
-			if (m_character.m_sprites.Count != 0)
+			if (spriteNames[m_spriteSelection] != "None" && spriteNames[m_spriteSelection] != null)
 			{
 				// determine sprite width and height
 				m_sprite = sprites[m_spriteSelection];

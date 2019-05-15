@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using UnityEditorInternal;
 using DEVN;
 
 #if UNITY_EDITOR
+
+using UnityEditorInternal;
 
 /// <summary>
 /// An editor window which allows the user to create and edit blackboards.
