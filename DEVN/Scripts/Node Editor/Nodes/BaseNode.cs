@@ -133,7 +133,7 @@ public abstract class BaseNode : ScriptableObject
     /// </summary>
     protected void AddOutputPoint()
     {
-        m_outputPoints.Add(new Rect(0, 0, 10, 20));
+		m_outputPoints.Add(new Rect(0, 0, 10, 20));
         m_outputs.Add(-1); // output points to nothing (node ID of -1)
     }
 
@@ -203,8 +203,8 @@ public abstract class BaseNode : ScriptableObject
             // define positional variables
             Vector3 startPos = m_outputPoints[i].center;
             Vector3 endPos = outputNode.m_inputPoint.center;
-            Vector3 startTangent = m_outputPoints[i].center + Vector2.right * 50;
-            Vector3 endTangent = outputNode.m_inputPoint.center + Vector2.left * 50;
+            Vector3 startTangent = startPos + Vector3.right * 50;
+            Vector3 endTangent = endPos + Vector3.left * 50;
 
             // different bezier colours for condition nodes
             if (this is ConditionNode)

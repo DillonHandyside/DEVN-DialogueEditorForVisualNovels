@@ -8,24 +8,28 @@ namespace DEVN
 /// <summary>
 /// background manager class responsible for fading backgrounds in and out
 /// </summary>
-public class BackgroundManager : MonoBehaviour
+public class BackgroundManager
 {
 	// scene manager ref
 	private SceneManager m_sceneManager;
 
 	// references to the background elements in the scene
-    [Header("Background Images")]
-	[SerializeField] private Image m_imageBackground;
-	[SerializeField] private Image m_colourBackground;
+	private Image m_imageBackground;
+	private Image m_colourBackground;
 
 	/// <summary>
-	/// constructor
+	/// are you sure you want to construct your own BackgroundManager? You may want to use 
+	/// SceneManager.GetBackgroundManager() instead
 	/// </summary>
-	void Awake ()
+	/// <param name="sceneManager">reference to the scene manager instance</param>
+	/// <param name="backgroundComponent">a background component which houses the relevent UI elements</param>
+	public BackgroundManager(SceneManager sceneManager, BackgroundComponent backgroundComponent)
 	{
-		// cache scene manager reference
-		m_sceneManager = GetComponent<SceneManager>();
-		Debug.Assert(m_sceneManager != null, "DEVN: SceneManager cache unsuccessful!");
+		m_sceneManager = sceneManager; // assign scene manager reference
+			
+		// assign references to the relevant UI elements
+		m_imageBackground = backgroundComponent.GetImageBackground();
+		m_colourBackground = backgroundComponent.GetColourBackground();
 	}
 		
 	/// <summary>
@@ -42,8 +46,9 @@ public class BackgroundManager : MonoBehaviour
 		bool nextNode = false, bool waitForFinish = false)
 	{
 		m_colourBackground.color = fadeColour; // set fade colour
-			
-		StartCoroutine(FadeIn(background, fadeInTime, nextNode, waitForFinish)); // perform fade in
+
+		// perform fade in
+		m_sceneManager.StartCoroutine(FadeIn(background, fadeInTime, nextNode, waitForFinish)); 
 	}
 
 	/// <summary>
@@ -55,7 +60,7 @@ public class BackgroundManager : MonoBehaviour
 	{
 		m_colourBackground.color = fadeColour; // set fade colour
 
-		StartCoroutine(FadeOut(fadeOutTime)); // perform fade out
+		m_sceneManager.StartCoroutine(FadeOut(fadeOutTime)); // perform fade out
 	}
 	
 

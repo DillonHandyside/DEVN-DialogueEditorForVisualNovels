@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 
 #if UNITY_EDITOR
@@ -112,6 +110,48 @@ public class ConnectionManager
             ClearConnectionSelection();
         }
     }
+
+	/// <summary>
+	/// 
+	/// </summary>
+	public void DrawBezierToMouse()
+	{
+		Color colour = Color.white;
+
+		if (m_selectedLeftNode != null)
+		{
+			// define positional variables
+			Vector3 startPos = m_selectedLeftNode.m_outputPoints[m_selectedOutput].center;
+			Vector3 endPos = NodeEditor.GetMousePosition();
+			Vector3 startTangent = startPos + Vector3.right * 50;
+			Vector3 endTangent = endPos + Vector3.left * 50;
+
+			// different bezier colours for condition nodes
+			if (m_selectedLeftNode is ConditionNode)
+			{
+				if (m_selectedOutput == 0)
+					colour = Color.green; // true
+				else
+					colour = Color.red; // false
+			}
+
+			// draw the connection
+			Handles.color = colour;
+			Handles.DrawBezier(startPos, endPos, startTangent, endTangent, Handles.color, null, 2);
+		}
+		else if (m_selectedRightNode != null)
+		{
+			// define positional variables
+			Vector3 startPos = NodeEditor.GetMousePosition();
+			Vector3 endPos = m_selectedRightNode.m_inputPoint.center;
+			Vector3 startTangent = startPos + Vector3.right * 50;
+			Vector3 endTangent = endPos + Vector3.left * 50;
+
+			// draw the connection
+			Handles.color = colour;
+			Handles.DrawBezier(startPos, endPos, startTangent, endTangent, Handles.color, null, 2);
+		}
+	}
 }
 
 }

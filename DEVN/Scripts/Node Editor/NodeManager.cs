@@ -128,9 +128,10 @@ public class NodeManager
         ConnectionManager connectionManager = NodeEditor.GetConnectionManager();
 
 		// iterate through all connected input nodes
-		for (int i = 0; i < node.m_inputs.Count; i++)
+		int noOfInputs = node.m_inputs.Count;
+		for (int i = 0; i < noOfInputs; i++)
         {
-            BaseNode connectedNode = nodeManager.GetNode(node.m_inputs[i]);
+            BaseNode connectedNode = nodeManager.GetNode(node.m_inputs[0]);
 
             // find the index of the desired node to remove in the connected node's outputs
             int indexOfThisNode = connectedNode.m_outputs.IndexOf(node.GetNodeID());

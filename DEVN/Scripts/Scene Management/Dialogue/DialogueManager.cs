@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,28 +9,15 @@ namespace DEVN
 /// singleton manager class responsible for managing all of the dialogue
 /// nodes with-in a DEVN scene
 /// </summary>
-public class DialogueManager : MonoBehaviour
+public class DialogueManager
 {
 	// scene manager ref
 	private SceneManager m_sceneManager;
 
 	// references to dialogue box UI elements
-    [Header("Dialogue")]
-    [Tooltip("Plug in a parent panel, this is used to enable/disable the dialogue box when required")]
-	[SerializeField] private GameObject m_dialogueBox;
-    [Tooltip("Plug in the text field that displays the speaking character's name")]
-	[SerializeField] private Text m_speaker;
-    [Tooltip("Plug in the text field that displays the dialogue")]
-	[SerializeField] private Text m_dialogue;
-
-    // references to branch UI elements
-	[Header("Branches")]
-    [Tooltip("Plug in the \"Branch\" prefab found in \"DEVN\\Prefabs\"")]
-	[SerializeField] private GameObject m_branchPrefab;
-    [Tooltip("Plug in a parent panel, this is used to enable/disable the branches when a choice occurs")]
-	[SerializeField] private GameObject m_branches;
-    [Tooltip("Plug in a scroll-view content panel, the branch prefabs will be added to this")]
-	[SerializeField] private Transform m_branchContent;
+	private GameObject m_dialogueBox;
+	private Text m_speaker;
+	private Text m_dialogue;
 		
 	// reference to typewrite coroutine, so StopCoroutine can be used
 	private IEnumerator m_typewriteEvent;
@@ -59,11 +45,16 @@ public class DialogueManager : MonoBehaviour
 	/// <summary>
 	/// 
 	/// </summary>
-	void Awake ()
+	/// <param name="sceneManager">reference to the scene manager instance</param>
+	/// <param name="dialogueComponent">a dialogue component which houses the relevent UI elements</param>
+	public DialogueManager(SceneManager sceneManager, DialogueComponent dialogueComponent)
 	{
-		// cache scene manager reference
-		m_sceneManager = GetComponent<SceneManager>();
-		Debug.Assert(m_sceneManager != null, "DEVN: SceneManager cache unsuccessful!");
+		m_sceneManager = sceneManager; // assign scene manager reference
+			
+		// assign references to all the relevant dialogue elements
+		m_dialogueBox = dialogueComponent.GetDialogueBox();
+		m_speaker = dialogueComponent.GetSpeaker();
+		m_dialogue = dialogueComponent.GetDialogue();
 	}
 
 	/// <summary>
@@ -72,59 +63,47 @@ public class DialogueManager : MonoBehaviour
 	public void SetDialogue(DialogueNode dialogueNode)
 	{
 		// allow input during dialogue, to allow skip & continue
-		m_sceneManager.SetIsInputAllowed(true);
+		InputManager inputManager = m_sceneManager.GetInputManager();
+		if (inputManager != null)
+			m_sceneManager.GetInputManager().SetIsInputAllowed(true);
 			
 		// attempt to get this dialogue node's character, log an error if there is none
 		Character character = dialogueNode.GetCharacter();
 		Debug.Assert(character != null, "DEVN: Dialogue requires a speaking character!");
-
+		
 		// update speaker text field
 		m_speaker.text = character.m_name; 
-		
-		CharacterManager characterManager = m_sceneManager.GetCharacterManager();
-		GameObject characterObject = characterManager.TryGetCharacter(character);
+		m_sceneManager.StartCoroutine(m_typewriteEvent = TypewriteText(dialogueNode.GetDialogue()));
+
 		Sprite currentSprite = dialogueNode.GetSprite();
+		CharacterManager characterManager = m_sceneManager.GetCharacterManager();
 
-		if (currentSprite != null)
+		// only update character sprite if a character manager exists
+		if (characterManager != null)
 		{
-			if (characterObject != null)
-				characterManager.SetSprite(characterObject, currentSprite);
-			else
-				Debug.LogWarning("DEVN: Do not attempt to change the sprite of a character that is not in the scene.");
-		}
-		else if (characterObject != null)
-			currentSprite = characterObject.GetComponent<Image>().sprite;
-		else
-			currentSprite = null;
-		
-		if (characterObject)
-			characterManager.HighlightSpeakingCharacter(character);
-
-		m_sceneManager.GetLogManager().LogDialogue(currentSprite, character.m_name, dialogueNode.GetDialogue());
-		
-		StartCoroutine(m_typewriteEvent = TypewriteText(dialogueNode.GetDialogue()));
-	}
-
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="branches"></param>
-	public void DisplayChoices(List<string> branches)
-	{
-		for (int i = 0; i < branches.Count; i++)
-		{
-			int branchIndex = i;
-			GameObject branch = Instantiate(m_branchPrefab, m_branchContent);
+			// find the character in the scene
+			GameObject characterObject = characterManager.TryGetCharacter(character);
 			
-			Button branchButton = branch.GetComponent<Button>();
-			branchButton.onClick.AddListener(() => m_sceneManager.NextNode(branchIndex));
-			branchButton.onClick.AddListener(() => { m_branches.SetActive(false); });
-
-			Text branchText = branch.GetComponentInChildren<Text>();
-			branchText.text = branches[i];
+			if (currentSprite != null)
+			{
+				if (characterObject != null)
+					characterManager.SetSprite(characterObject, currentSprite);
+				else
+					Debug.LogWarning("DEVN: Do not attempt to change the sprite of a character that is not in the scene.");
+			}
+			else if (characterObject != null)
+				currentSprite = characterObject.GetComponent<Image>().sprite;
+			else
+				currentSprite = null;
+		
+			if (characterObject)
+				characterManager.HighlightSpeakingCharacter(character);
 		}
 
-		m_branches.SetActive(true);
+		// only log dialogue if a log exists
+		LogManager logManager = m_sceneManager.GetLogManager();
+		if (logManager != null)
+			logManager.LogDialogue(currentSprite, character.m_name, dialogueNode.GetDialogue());
 	}
 
 	/// <summary>
@@ -175,18 +154,18 @@ public class DialogueManager : MonoBehaviour
     public void ToggleAuto()
     {
         m_isAutoEnabled = !m_isAutoEnabled;
-        m_sceneManager.SetIsInputAllowed(!m_isAutoEnabled);
+        m_sceneManager.GetInputManager().SetIsInputAllowed(!m_isAutoEnabled);
 
         if (m_sceneManager.GetCurrentNode() is DialogueNode &&
             m_isAutoEnabled && m_isTyping == false)
-            StartCoroutine(WaitForAuto());
+            m_sceneManager.StartCoroutine(WaitForAuto());
     }
 
     /// <summary>
     /// 
     /// </summary>
     /// <returns></returns>
-    IEnumerator WaitForAuto()
+    private IEnumerator WaitForAuto()
     {
         // determine wait time
         float waitTime = m_dialogue.text.Length * ((1.1f - m_autoSpeed) * 0.1f);
@@ -201,7 +180,7 @@ public class DialogueManager : MonoBehaviour
     /// 
     /// </summary>
     /// <returns></returns>
-    IEnumerator TypewriteText(string dialogue)
+    private IEnumerator TypewriteText(string dialogue)
 	{
 		m_dialogue.text = "";
 		m_isTyping = true;
@@ -215,7 +194,7 @@ public class DialogueManager : MonoBehaviour
 		m_isTyping = false;
 
         if (m_isAutoEnabled)
-            StartCoroutine(WaitForAuto());
+            m_sceneManager.StartCoroutine(WaitForAuto());
 	}
 
 	/// <summary>
@@ -223,7 +202,7 @@ public class DialogueManager : MonoBehaviour
 	/// </summary>
 	public void SkipTypewrite()
 	{
-		StopCoroutine(m_typewriteEvent);
+		m_sceneManager.StopCoroutine(m_typewriteEvent);
 			
 		DialogueNode dialogueNode = m_sceneManager.GetCurrentNode() as DialogueNode;
 		m_dialogue.text = dialogueNode.GetDialogue();

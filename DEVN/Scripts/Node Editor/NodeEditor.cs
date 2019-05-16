@@ -98,8 +98,8 @@ public class NodeEditor : EditorWindow
 		DrawToolbar();
 		EditorGUILayout.EndHorizontal();
 		DrawContent();
+		m_connectionManager.DrawBezierToMouse();
 		DrawLogo();
-		
 		ProcessEvents(Event.current); // process click/button events
 
 		EditorUtility.SetDirty(m_scene); // save scene changes
@@ -197,11 +197,11 @@ public class NodeEditor : EditorWindow
                 if (e.button == (int)MouseButton.LeftClick)
                     m_connectionManager.ClearConnectionSelection();
 
-                // process right-click context menu
-                if (e.button == (int)MouseButton.RightClick)
-                    ProcessContextMenu();
+				// process right-click context menu
+				if (e.button == (int)MouseButton.RightClick)
+					ProcessContextMenu();
 
-                break;
+				break;
 
             case EventType.MouseDrag:
 

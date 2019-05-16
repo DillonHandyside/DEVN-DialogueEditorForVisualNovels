@@ -9,36 +9,40 @@ namespace DEVN
 /// <summary>
 /// 
 /// </summary>
-public class CharacterManager : MonoBehaviour
+public class CharacterManager
 {
 	// scene manager ref
 	private SceneManager m_sceneManager;
 
 	private CharacterTransformer m_characterTransformer;
-
-    [Header("Character Prefab")]
-	[SerializeField] private GameObject m_characterPrefab;
+		
+	private GameObject m_characterPrefab;
+	private RectTransform m_backgroundPanel;
+	private RectTransform m_foregroundPanel;
+		
 	private List<GameObject> m_characters;
-
-    [Header("Canvas Panels")]
-	[SerializeField] private GameObject m_backgroundPanel;
-	[SerializeField] private GameObject m_foregroundPanel;
 
 	#region getters
         
 	public CharacterTransformer GetCharacterTransformer() { return m_characterTransformer; }
-    public GameObject GetBackgroundPanel() { return m_backgroundPanel; }
+    public RectTransform GetBackgroundPanel() { return m_backgroundPanel; }
 
-	#endregion
+		#endregion
 
 	/// <summary>
-	/// 
+	/// are you sure you want to construct your own CharacterManager? You may want to use 
+	/// SceneManager.GetCharacterManager() instead
 	/// </summary>
-	void Awake()
+	/// <param name="sceneManager"></param>
+	/// <param name="characterComponent"></param>
+	public CharacterManager(SceneManager sceneManager, CharacterComponent characterComponent)
 	{
-		// cache scene manager reference
-		m_sceneManager = GetComponent<SceneManager>();
-		Debug.Assert(m_sceneManager != null, "DEVN: SceneManager cache unsuccessful!");
+		m_sceneManager = sceneManager; // assign scene manager reference
+			
+		// assign references to all the relevant character elements
+		m_characterPrefab = characterComponent.GetCharacterPrefab();
+		m_backgroundPanel = characterComponent.GetBackgroundPanel();
+		m_foregroundPanel = characterComponent.GetForegroundPanel();
 
 		// create character transformer for scaling/translation
 		m_characterTransformer = new CharacterTransformer();
@@ -67,7 +71,7 @@ public class CharacterManager : MonoBehaviour
 		}
 
 		// create new character and parent it to canvas
-		GameObject characterObject = Instantiate(m_characterPrefab);
+		GameObject characterObject = Object.Instantiate(m_characterPrefab);
 		characterObject.transform.SetParent(m_backgroundPanel.transform, false);
 
 		// invert if necessary
@@ -87,7 +91,7 @@ public class CharacterManager : MonoBehaviour
 		m_characters.Add(characterObject);
 
 		// perform fade-in
-		StartCoroutine(FadeIn(characterObject, fadeInTime));
+		m_sceneManager.StartCoroutine(FadeIn(characterObject, fadeInTime));
 	}
 
 	/// <summary>
@@ -107,7 +111,7 @@ public class CharacterManager : MonoBehaviour
 			SetSprite(characterObject, sprite); // set sprite
 
 			// perform fade-out and removal
-			StartCoroutine(FadeOut(characterObject, fadeOutTime));
+			m_sceneManager.StartCoroutine(FadeOut(characterObject, fadeOutTime));
 			return; // exit succeeded
 		}
 
@@ -222,7 +226,7 @@ public class CharacterManager : MonoBehaviour
 
 		// destroy the character
 		m_characters.Remove(character);
-		Destroy(character);
+		Object.Destroy(character);
 
 		// if "wait for finish", go to next node after fade
 		if (waitForFinish)

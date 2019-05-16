@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace DEVN
@@ -59,10 +58,9 @@ public class CharacterTransformer
     private Vector2 GetScreenPosition(Vector2 position)
     {
         CharacterManager characterManager = SceneManager.GetInstance().GetCharacterManager();
-        GameObject inactiveCharacterPanel = characterManager.GetBackgroundPanel();
 
         //
-        RectTransform panelTransform = inactiveCharacterPanel.GetComponent<RectTransform>();
+        RectTransform panelTransform = characterManager.GetBackgroundPanel();
         float screenExtentX = panelTransform.rect.width * 0.5f;
         float screenExtentY = panelTransform.rect.height * 0.5f;
 

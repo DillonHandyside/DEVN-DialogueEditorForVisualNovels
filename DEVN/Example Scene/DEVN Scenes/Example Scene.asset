@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f97195559373da409a1adde84887dff, type: 3}
   m_Name: Example Scene
   m_EditorClassIdentifier: 
-  m_currentPage: 0
+  m_currentPage: 1
   m_pages:
   - {fileID: 114769186061097480}
   - {fileID: 114060781223807674}
@@ -29,8 +29,8 @@ MonoBehaviour:
   m_nodeID: 0
   m_rectangle:
     serializedVersion: 2
-    x: -1842
-    y: 34
+    x: -303
+    y: 44
     width: 100
     height: 50
   m_title: Start
@@ -44,8 +44,8 @@ MonoBehaviour:
   m_outputs: 07000000
   m_outputPoints:
   - serializedVersion: 2
-    x: -1742
-    y: 49
+    x: -203
+    y: 59
     width: 10
     height: 20
 --- !u!114 &114017086133164082
@@ -62,23 +62,23 @@ MonoBehaviour:
   m_nodeID: 1
   m_rectangle:
     serializedVersion: 2
-    x: -1519
-    y: 36
+    x: 20
+    y: 46
     width: 340
     height: 188
   m_title: Dialogue
   m_inputs: 07000000
   m_inputPoint:
     serializedVersion: 2
-    x: -1529
-    y: 120
+    x: 10
+    y: 130
     width: 10
     height: 20
   m_outputs: 02000000
   m_outputPoints:
   - serializedVersion: 2
-    x: -1179
-    y: 120
+    x: 360
+    y: 130
     width: 10
     height: 20
   m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
@@ -137,23 +137,23 @@ MonoBehaviour:
   m_nodeID: 2
   m_rectangle:
     serializedVersion: 2
-    x: -1150
-    y: 35
+    x: 389
+    y: 45
     width: 340
     height: 188
   m_title: Dialogue
   m_inputs: 01000000
   m_inputPoint:
     serializedVersion: 2
-    x: -1160
-    y: 119
+    x: 379
+    y: 129
     width: 10
     height: 20
   m_outputs: 08000000
   m_outputPoints:
   - serializedVersion: 2
-    x: -810
-    y: 119
+    x: 729
+    y: 129
     width: 10
     height: 20
   m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
@@ -201,23 +201,23 @@ MonoBehaviour:
   m_nodeID: 10
   m_rectangle:
     serializedVersion: 2
-    x: 975
-    y: 38
+    x: 2514
+    y: 48
     width: 340
     height: 188
   m_title: Dialogue
   m_inputs: 060000000d000000
   m_inputPoint:
     serializedVersion: 2
-    x: 965
-    y: 122
+    x: 2504
+    y: 132
     width: 10
     height: 20
   m_outputs: 0b000000
   m_outputPoints:
   - serializedVersion: 2
-    x: 1315
-    y: 122
+    x: 2854
+    y: 132
     width: 10
     height: 20
   m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
@@ -238,23 +238,23 @@ MonoBehaviour:
   m_nodeID: 5
   m_rectangle:
     serializedVersion: 2
-    x: -203
-    y: 43
+    x: 1336
+    y: 53
     width: 340
     height: 188
   m_title: Dialogue
   m_inputs: 04000000
   m_inputPoint:
     serializedVersion: 2
-    x: -213
-    y: 127
+    x: 1326
+    y: 137
     width: 10
     height: 20
   m_outputs: 09000000
   m_outputPoints:
   - serializedVersion: 2
-    x: 137
-    y: 127
+    x: 1676
+    y: 137
     width: 10
     height: 20
   m_character: {fileID: 11400000, guid: e6d4a9e17170db84b8db609e2cc88472, type: 2}
@@ -275,27 +275,27 @@ MonoBehaviour:
   m_nodeID: 13
   m_rectangle:
     serializedVersion: 2
-    x: 756
-    y: 41
+    x: 2295
+    y: 51
     width: 190
     height: 146
   m_title: Character Scale
   m_inputs: 0c000000
   m_inputPoint:
     serializedVersion: 2
-    x: 746
-    y: 104
+    x: 2285
+    y: 114
     width: 10
     height: 20
   m_outputs: 0a000000
   m_outputPoints:
   - serializedVersion: 2
-    x: 946
-    y: 104
+    x: 2485
+    y: 114
     width: 10
     height: 20
   m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
-  m_scale: {x: 1.1, y: 1.1}
+  m_scale: {x: 1.1, y: 0}
   m_isLerp: 1
   m_lerpTime: 0.1
 --- !u!114 &114252309205581986
@@ -312,23 +312,23 @@ MonoBehaviour:
   m_nodeID: 12
   m_rectangle:
     serializedVersion: 2
-    x: 544
-    y: 43
+    x: 2083
+    y: 53
     width: 190
     height: 146
   m_title: Character Scale
   m_inputs: 06000000
   m_inputPoint:
     serializedVersion: 2
-    x: 534
-    y: 106
+    x: 2073
+    y: 116
     width: 10
     height: 20
   m_outputs: 0d000000
   m_outputPoints:
   - serializedVersion: 2
-    x: 734
-    y: 106
+    x: 2273
+    y: 116
     width: 10
     height: 20
   m_character: {fileID: 11400000, guid: e6d4a9e17170db84b8db609e2cc88472, type: 2}
@@ -354,7 +354,7 @@ MonoBehaviour:
     width: 100
     height: 58
   m_title: Page
-  m_inputs: 03000000
+  m_inputs: 09000000
   m_inputPoint:
     serializedVersion: 2
     x: 898
@@ -378,23 +378,23 @@ MonoBehaviour:
   m_nodeID: 8
   m_rectangle:
     serializedVersion: 2
-    x: -927
-    y: 233
+    x: 612
+    y: 243
     width: 190
     height: 146
   m_title: Character Scale
   m_inputs: 02000000
   m_inputPoint:
     serializedVersion: 2
-    x: -937
-    y: 296
+    x: 602
+    y: 306
     width: 10
     height: 20
   m_outputs: 03000000
   m_outputPoints:
   - serializedVersion: 2
-    x: -737
-    y: 296
+    x: 802
+    y: 306
     width: 10
     height: 20
   m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
@@ -415,23 +415,23 @@ MonoBehaviour:
   m_nodeID: 7
   m_rectangle:
     serializedVersion: 2
-    x: -1724
-    y: 37
+    x: -185
+    y: 47
     width: 190
     height: 146
   m_title: Character Scale
   m_inputs: 00000000
   m_inputPoint:
     serializedVersion: 2
-    x: -1734
-    y: 100
+    x: -195
+    y: 110
     width: 10
     height: 20
   m_outputs: 01000000
   m_outputPoints:
   - serializedVersion: 2
-    x: -1534
-    y: 100
+    x: 5
+    y: 110
     width: 10
     height: 20
   m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
@@ -452,23 +452,23 @@ MonoBehaviour:
   m_nodeID: 6
   m_rectangle:
     serializedVersion: 2
-    x: 174
-    y: 44
+    x: 1713
+    y: 54
     width: 340
     height: 188
   m_title: Dialogue
   m_inputs: 09000000
   m_inputPoint:
     serializedVersion: 2
-    x: 164
-    y: 128
+    x: 1703
+    y: 138
     width: 10
     height: 20
   m_outputs: 0c000000
   m_outputPoints:
   - serializedVersion: 2
-    x: 514
-    y: 128
+    x: 2053
+    y: 138
     width: 10
     height: 20
   m_character: {fileID: 11400000, guid: e6d4a9e17170db84b8db609e2cc88472, type: 2}
@@ -490,29 +490,63 @@ MonoBehaviour:
   m_nodeID: 11
   m_rectangle:
     serializedVersion: 2
-    x: 1350
-    y: 39
+    x: 2889
+    y: 49
     width: 340
     height: 188
   m_title: Dialogue
   m_inputs: 0a000000
   m_inputPoint:
     serializedVersion: 2
-    x: 1340
-    y: 123
+    x: 2879
+    y: 133
     width: 10
     height: 20
   m_outputs: ffffffff
   m_outputPoints:
   - serializedVersion: 2
-    x: 1690
-    y: 123
+    x: 3229
+    y: 133
     width: 10
     height: 20
   m_character: {fileID: 11400000, guid: 9707123f5c723ae47bcdfa66aa341c44, type: 2}
   m_spriteSelection: 0
   m_audioSelection: 0
   m_dialogue: It's right in your name!
+--- !u!114 &114690764115534588
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f5d16997c22cc241bd5f4c6cf433796, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 9
+  m_rectangle:
+    serializedVersion: 2
+    x: 758
+    y: 139
+    width: 128
+    height: 40
+  m_title: Dialogue Box
+  m_inputs: 02000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 748
+    y: 149
+    width: 10
+    height: 20
+  m_outputs: 04000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 886
+    y: 149
+    width: 10
+    height: 20
+  m_toggleSelection: 0
 --- !u!114 &114701884743067078
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -560,23 +594,23 @@ MonoBehaviour:
   m_nodeID: 3
   m_rectangle:
     serializedVersion: 2
-    x: -755
-    y: 40
+    x: 784
+    y: 50
     width: 296.90265
     height: 204
   m_title: Character
   m_inputs: 08000000
   m_inputPoint:
     serializedVersion: 2
-    x: -765
-    y: 132
+    x: 774
+    y: 142
     width: 10
     height: 20
   m_outputs: 04000000
   m_outputPoints:
   - serializedVersion: 2
-    x: -458.09735
-    y: 132
+    x: 1080.9026
+    y: 142
     width: 10
     height: 20
   m_toggleSelection: 0
@@ -598,13 +632,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44c786e63f8b54f4eaf62140c9011b53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_currentID: 8
+  m_currentID: 10
   m_nodes:
   - {fileID: 114701884743067078}
   - {fileID: 114049378096227056}
   - {fileID: 114942006522109840}
-  - {fileID: 114884931878139492}
   - {fileID: 114443260548937314}
+  - {fileID: 114690764115534588}
 --- !u!114 &114829307296821846
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -619,23 +653,23 @@ MonoBehaviour:
   m_nodeID: 9
   m_rectangle:
     serializedVersion: 2
-    x: -123
-    y: 245
+    x: 1416
+    y: 255
     width: 190
     height: 164
   m_title: Character Translate
   m_inputs: 05000000
   m_inputPoint:
     serializedVersion: 2
-    x: -133
-    y: 317
+    x: 1406
+    y: 327
     width: 10
     height: 20
   m_outputs: 06000000
   m_outputPoints:
   - serializedVersion: 2
-    x: 67
-    y: 317
+    x: 1606
+    y: 327
     width: 10
     height: 20
   m_character: {fileID: 11400000, guid: e6d4a9e17170db84b8db609e2cc88472, type: 2}
@@ -656,63 +690,29 @@ MonoBehaviour:
   m_nodeID: 4
   m_rectangle:
     serializedVersion: 2
-    x: -422
-    y: 40
+    x: 1117
+    y: 50
     width: 190
     height: 146
   m_title: Character Scale
   m_inputs: 03000000
   m_inputPoint:
     serializedVersion: 2
-    x: -432
-    y: 103
+    x: 1107
+    y: 113
     width: 10
     height: 20
   m_outputs: 05000000
   m_outputPoints:
   - serializedVersion: 2
-    x: -232
-    y: 103
+    x: 1307
+    y: 113
     width: 10
     height: 20
   m_character: {fileID: 11400000, guid: e6d4a9e17170db84b8db609e2cc88472, type: 2}
   m_scale: {x: 1.1, y: 1.1}
   m_isLerp: 1
   m_lerpTime: 0.25
---- !u!114 &114884931878139492
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f5d16997c22cc241bd5f4c6cf433796, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_nodeID: 3
-  m_rectangle:
-    serializedVersion: 2
-    x: 738
-    y: 94
-    width: 128
-    height: 42
-  m_title: Dialogue Box
-  m_inputs: 02000000
-  m_inputPoint:
-    serializedVersion: 2
-    x: 728
-    y: 105
-    width: 10
-    height: 20
-  m_outputs: 04000000
-  m_outputPoints:
-  - serializedVersion: 2
-    x: 866
-    y: 105
-    width: 10
-    height: 20
-  m_toggleSelection: 0
 --- !u!114 &114942006522109840
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -739,7 +739,7 @@ MonoBehaviour:
     y: 185
     width: 10
     height: 20
-  m_outputs: 03000000
+  m_outputs: 09000000
   m_outputPoints:
   - serializedVersion: 2
     x: 699.55054

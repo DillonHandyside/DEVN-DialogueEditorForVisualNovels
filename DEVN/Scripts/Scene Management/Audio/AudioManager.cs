@@ -10,46 +10,49 @@ namespace DEVN
 /// audio manager class responsible for playing, fading, pausing and stopping background
 /// music and ambient tracks. 
 /// </summary>
-public class AudioManager : MonoBehaviour
+public class AudioManager
 {
 	// scene manager ref
 	private SceneManager m_sceneManager;
 
 	// reference to mixer & relevant mixer groups
-	[Header("Audio Mixer")]
-	[SerializeField] private AudioMixer m_audioMixer;
-    [Header("Mixer Groups")]
-	[SerializeField] private AudioMixerGroup m_BGM;
-	[SerializeField] private AudioMixerGroup m_ambience;
-	[SerializeField] private AudioMixerGroup m_SFX;
-    [SerializeField] private AudioMixerGroup m_voice;
+	private AudioMixer m_audioMixer;
+	private AudioMixerGroup m_BGM;
+	private AudioMixerGroup m_ambience;
+	private AudioMixerGroup m_SFX;
+    private AudioMixerGroup m_voice;
 
 	// reference to the current looping audio in the scene
 	private GameObject m_bgmAudio;
 	private List<GameObject> m_ambientAudio;
 
 	#region getters
-        
-	public AudioMixer GetAudioMixer() { return m_audioMixer; }
-	public AudioMixerGroup GetBGM() { return m_BGM; }
-	public AudioMixerGroup GetAmbience() { return m_ambience; }
-	public AudioMixerGroup GetSFX() { return m_SFX; }
 
-	#endregion	
+	public AudioMixer GetAudioMixer() { return m_audioMixer; }
+
+	#endregion
 
 	/// <summary>
-	/// awake function which initialises audio relevant variables
+	/// are you sure you want to construct your own AudioManager? You may want to use 
+	/// SceneManager.GetAudioManager() instead
 	/// </summary>
-	void Awake ()
+	/// <param name="sceneManager">reference to the scene manager instance</param>
+	/// <param name="audioComponent">an audio component which houses the relevent audio elements</param>
+	public AudioManager(SceneManager sceneManager, AudioComponent audioComponent)
 	{
-		// cache scene manager reference
-		m_sceneManager = GetComponent<SceneManager>();
-		Debug.Assert(m_sceneManager != null, "DEVN: SceneManager cache unsuccessful!");
-            
-        m_bgmAudio = new GameObject();
-        AudioSource bgmSource = m_bgmAudio.AddComponent<AudioSource>();
-        bgmSource.outputAudioMixerGroup = m_BGM;
-        bgmSource.loop = true;
+		m_sceneManager = sceneManager; // assign scene manager reference
+
+		// assign references to all the relevant audio elements
+		m_audioMixer = audioComponent.GetAudioMixer();
+		m_BGM = audioComponent.GetBGM();
+		m_ambience = audioComponent.GetAmbience();
+		m_SFX = audioComponent.GetSFX();
+		m_voice = audioComponent.GetVoice();
+
+		m_bgmAudio = new GameObject();
+		AudioSource bgmSource = m_bgmAudio.AddComponent<AudioSource>();
+		bgmSource.outputAudioMixerGroup = m_BGM;
+		bgmSource.loop = true;
 
 		// initialise empty lists to reference ambience and SFX tracks
 		m_ambientAudio = new List<GameObject>();
@@ -163,7 +166,7 @@ public class AudioManager : MonoBehaviour
 		{
 			GameObject ambience = m_ambientAudio[i]; // get reference
 			m_ambientAudio.Remove(ambience); // remove from list
-			Destroy(ambience.gameObject); // delete ambient track
+			Object.Destroy(ambience.gameObject); // delete ambient track
 		}
 	}
 
@@ -193,7 +196,7 @@ public class AudioManager : MonoBehaviour
 			yield return null; // wait until SFX has stopped playing
 		
 		// destroy the SFX
-		Destroy(sfx.gameObject);
+		Object.Destroy(sfx.gameObject);
 
 		// proceed to next node if "wait for finish" is true
 		if (waitForFinish && nextNode)
@@ -218,7 +221,7 @@ public class AudioManager : MonoBehaviour
 			yield return null; // wait until voice has stopped playing
 
 		// destroy the voice clip
-		Destroy(voice.gameObject);
+		Object.Destroy(voice.gameObject);
 	}
 }
 
