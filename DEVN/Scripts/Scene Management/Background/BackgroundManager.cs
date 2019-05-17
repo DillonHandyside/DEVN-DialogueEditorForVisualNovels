@@ -17,6 +17,12 @@ public class BackgroundManager
 	private Image m_imageBackground;
 	private Image m_colourBackground;
 
+	#region getters
+
+	public Sprite GetBackground() { return m_imageBackground.sprite; }
+
+	#endregion
+
 	/// <summary>
 	/// are you sure you want to construct your own BackgroundManager? You may want to use 
 	/// SceneManager.GetBackgroundManager() instead
@@ -56,13 +62,21 @@ public class BackgroundManager
 	/// </summary>
 	/// <param name="fadeColour">the colour of fade-in (e.g. Color.black or Color.white)</param>
 	/// <param name="fadeOutTime">the time it takes to fade out, don't make this too long! Recommended: 0.5f to 3.0f</param>
-	public void ExitBackground(Color fadeColour, float fadeOutTime = 0.5f)
+	public void ExitBackground(Color fadeColour, float fadeOutTime = 0.5f, bool nextNode = false)
 	{
 		m_colourBackground.color = fadeColour; // set fade colour
 
-		m_sceneManager.StartCoroutine(FadeOut(fadeOutTime)); // perform fade out
+		m_sceneManager.StartCoroutine(FadeOut(fadeOutTime, nextNode)); // perform fade out
 	}
-	
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="background"></param>
+	public void SetBackground(Sprite background)
+	{
+		m_imageBackground.sprite = background;
+	}
 
 	/// <summary>
 	/// helper function which performs a fade-in on an image over a certain amount of time
@@ -108,7 +122,7 @@ public class BackgroundManager
 	/// if required
 	/// </summary>
 	/// <param name="fadeOutTime">the amount of time to fade out</param>
-	private IEnumerator FadeOut(float fadeOutTime = 0.5f)
+	private IEnumerator FadeOut(float fadeOutTime = 0.5f, bool nextNode = false)
 	{
 		float elapsedTime = 0.0f;
 
@@ -125,6 +139,9 @@ public class BackgroundManager
 		}
 
 		m_imageBackground.sprite = null; // clear the background
+
+		if (nextNode)
+			m_sceneManager.NextNode();
 	}
 }
 

@@ -26,15 +26,17 @@ public class CharacterManager
         
 	public CharacterTransformer GetCharacterTransformer() { return m_characterTransformer; }
     public RectTransform GetBackgroundPanel() { return m_backgroundPanel; }
+	public List<GameObject> GetCharacters() { return m_characters; }
 
-		#endregion
+	#endregion
 
 	/// <summary>
 	/// are you sure you want to construct your own CharacterManager? You may want to use 
 	/// SceneManager.GetCharacterManager() instead
 	/// </summary>
-	/// <param name="sceneManager"></param>
-	/// <param name="characterComponent"></param>
+	/// <param name="sceneManager">reference to the scene manager instance</param>
+	/// <param name="characterComponent">a character component which houses the relevant prefab
+	/// and UI elements</param>
 	public CharacterManager(SceneManager sceneManager, CharacterComponent characterComponent)
 	{
 		m_sceneManager = sceneManager; // assign scene manager reference
@@ -46,8 +48,7 @@ public class CharacterManager
 
 		// create character transformer for scaling/translation
 		m_characterTransformer = new CharacterTransformer();
-
-		m_characters = new List<GameObject>();
+		m_characters = new List<GameObject>(); // initialise list of characters
 	}
 
 	/// <summary>
@@ -71,8 +72,7 @@ public class CharacterManager
 		}
 
 		// create new character and parent it to canvas
-		GameObject characterObject = Object.Instantiate(m_characterPrefab);
-		characterObject.transform.SetParent(m_backgroundPanel.transform, false);
+		GameObject characterObject = Object.Instantiate(m_characterPrefab, m_backgroundPanel);
 
 		// invert if necessary
 		if (isInvert)
@@ -167,6 +167,24 @@ public class CharacterManager
 		GameObject characterToHighlight = TryGetCharacter(speakingCharacter);
 		characterToHighlight.transform.SetParent(m_foregroundPanel.transform);
 		characterToHighlight.GetComponent<Image>().color = new Color(1, 1, 1);
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="characters"></param>
+	public void SetCharacters(List<GameObject> characters)
+	{
+		for (int i = 0; i < m_characters.Count; i++)
+			Object.Destroy(m_characters[i]);
+		
+		m_characters.Clear();
+
+		for (int i = 0; i < characters.Count; i++)
+		{
+			GameObject character = Object.Instantiate(characters[i], m_backgroundPanel);
+			m_characters.Add(character);
+		}
 	}
 
 	/// <summary>

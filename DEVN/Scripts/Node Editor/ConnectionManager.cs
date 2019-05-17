@@ -8,15 +8,32 @@ namespace DEVN
 
 public class ConnectionManager
 {
-    public BaseNode m_selectedLeftNode;
-    public BaseNode m_selectedRightNode;
-    public int m_selectedOutput;
+    private BaseNode m_selectedLeftNode;
+    private BaseNode m_selectedRightNode;
+    private int m_selectedOutput;
 
     //
-    public GUIStyle m_inputStyle;
-    public GUIStyle m_outputStyle;
+    private GUIStyle m_inputStyle;
+    private GUIStyle m_outputStyle;
 
-    public ConnectionManager()
+	#region getters
+
+	public BaseNode GetSelectedLeftNode() { return m_selectedLeftNode; }
+	public BaseNode GetSelectedRightNode() { return m_selectedRightNode; }
+	public int GetSelectedOutput() { return m_selectedOutput; }
+	public GUIStyle GetInputStyle() { return m_inputStyle; }
+	public GUIStyle GetOutputStyle() { return m_outputStyle; }
+
+		#endregion
+
+	#region setters
+
+	public void SetSelectedLeftNode(BaseNode node) { m_selectedLeftNode = node; }
+	public void SetSelectedRightNode(BaseNode node) { m_selectedRightNode = node; }
+
+	#endregion
+
+	public ConnectionManager()
     {
         // input point style initialisation
         m_inputStyle = new GUIStyle();
@@ -52,7 +69,7 @@ public class ConnectionManager
     public void RemoveConnection(BaseNode inputNode, int outputIndex)
     {
 		NodeManager nodeManager = NodeEditor.GetNodeManager();
-        BaseNode connectedNode = nodeManager.GetNode(inputNode.m_outputs[outputIndex]);
+        BaseNode connectedNode = nodeManager.FindNode(inputNode.m_outputs[outputIndex]);
             
         Undo.RecordObject(inputNode, "Remove Connection");
         Undo.RecordObject(connectedNode, "Remove Connection");
@@ -60,7 +77,7 @@ public class ConnectionManager
         connectedNode.m_inputs.Remove(inputNode.GetNodeID());
         inputNode.m_outputs[outputIndex] = -1;
     }
-
+	
     /// <summary>
     /// 
     /// </summary>

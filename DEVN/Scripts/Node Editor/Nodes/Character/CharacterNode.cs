@@ -114,17 +114,22 @@ public class CharacterNode : BaseNode
 			string[] spriteNames = new string[sprites.Count];
             for (int i = 0; i < sprites.Count; i++)
             {
-                if (sprites[i] == null)
-                    spriteNames[i] = "None";
+				Sprite sprite = sprites[i];
+
+                if (sprite == null)
+				{
+					spriteNames[i] = "Null";
+					Debug.LogError("DEVN: Character contains null sprites!");
+				}
                 else
-                    spriteNames[i] = sprites[i].name;
+                    spriteNames[i] = sprite.name;
             }
 
 			// draw drop-down sprite selection menu
 			m_spriteSelection = EditorGUI.Popup(fieldRect, m_spriteSelection, spriteNames);
 			fieldRect.y += fieldHeight + 2;
 
-			if (spriteNames[m_spriteSelection] != "None" && spriteNames[m_spriteSelection] != null)
+			if (sprites[m_spriteSelection] != null && spriteNames[m_spriteSelection] != null)
 			{
 				// determine sprite width and height
 				m_sprite = sprites[m_spriteSelection];

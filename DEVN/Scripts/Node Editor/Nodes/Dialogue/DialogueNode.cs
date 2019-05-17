@@ -137,13 +137,26 @@ public class DialogueNode : BaseNode
 		string[] spriteNames = new string[sprites.Count + 1];
 		spriteNames[0] = "None";
 		for (int i = 0; i < sprites.Count; i++)
-			spriteNames[i + 1] = sprites[i].name;
+			{
+				Sprite sprite = sprites[i];
+
+				if (sprite == null)
+				{
+					spriteNames[i + 1] = "Null";
+					Debug.LogError("DEVN: Character contains null sprites!");
+				}
+				else
+					spriteNames[i + 1] = sprite.name;
+			}
 
 		// draw drop-down sprite selection menu
 		m_spriteSelection = EditorGUI.Popup(m_fieldRect, m_spriteSelection, spriteNames);
+
+		// clamp to prevent index out of range errors
+		m_spriteSelection = Mathf.Clamp(m_spriteSelection, 0, sprites.Count);
 		m_fieldRect.y += m_fieldRect.height + 2;
 			
-		if (m_spriteSelection == 0)
+		if (m_spriteSelection == 0 || sprites[m_spriteSelection - 1] == null)
 			m_sprite = null; // sprite selection is "None"
 		else 
 		{
@@ -173,13 +186,26 @@ public class DialogueNode : BaseNode
 		string[] audioNames = new string[characterAudio.Count + 1];
 		audioNames[0] = "None";
 		for (int i = 0; i < characterAudio.Count; i++)
-			audioNames[i + 1] = characterAudio[i].name;
+			{
+				AudioClip audio = characterAudio[i];
+
+				if (audio == null)
+				{
+					audioNames[i + 1] = "Null";
+					Debug.LogError("DEVN: Character contains null audio!");
+				}
+				else
+					audioNames[i + 1] = audio.name;
+			}
 
 		// draw drop-down audio selection menu
 		m_audioSelection = EditorGUI.Popup(m_fieldRect, m_audioSelection, audioNames);
+
+		// clamp to prevent index out of range errors
+		m_audioSelection = Mathf.Clamp(m_audioSelection, 0, characterAudio.Count);
 		m_fieldRect.y += m_fieldRect.height + 2;
 			
-		if (m_audioSelection == 0)
+		if (m_audioSelection == 0 || characterAudio[m_audioSelection - 1] == null)
 			m_characterAudio = null; // audio selection is "None"
 		else 
 			m_characterAudio = characterAudio[m_audioSelection - 1];

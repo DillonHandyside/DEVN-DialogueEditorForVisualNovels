@@ -12,11 +12,10 @@ public class VariableManager
 	/// <summary>
 	/// 
 	/// </summary>
-	public VariableManager()
+	/// <param name="sceneManager"></param>
+	public VariableManager(SceneManager sceneManager)
 	{
-		// cache scene manager instance
-		m_sceneManager = SceneManager.GetInstance();
-		Debug.Assert(m_sceneManager != null, "DEVN: SceneManager cache unsuccessful!");
+		m_sceneManager = sceneManager; // assign scene manager reference
 	}
 
     /// <summary>

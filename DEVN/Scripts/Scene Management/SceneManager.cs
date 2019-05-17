@@ -27,9 +27,10 @@ public class SceneManager : MonoBehaviour
     private DialogueManager m_dialogueManager;
 	private InputManager m_inputManager;
     private LogManager m_logManager;
+	private SaveManager m_saveManager;
+	private UtilityManager m_utilityManager;
     private VariableManager m_variableManager;
 	
-
 	#region getters
 
 	public static SceneManager GetInstance() { return m_instance; }
@@ -40,6 +41,8 @@ public class SceneManager : MonoBehaviour
     public CharacterManager GetCharacterManager() { return m_characterManager; }
     public DialogueManager GetDialogueManager() { return m_dialogueManager; }
 	public InputManager GetInputManager() { return m_inputManager; }
+	public SaveManager GetSaveManager() { return m_saveManager; }
+	public UtilityManager GetUtilityManager() { return m_utilityManager; }
     public LogManager GetLogManager() { return m_logManager; }
 
 	#endregion
@@ -69,7 +72,9 @@ public class SceneManager : MonoBehaviour
 		DialogueComponent dialogueComponent = GetComponent<DialogueComponent>();
 		InputComponent inputComponent = GetComponent<InputComponent>();
 		LogComponent logComponent = GetComponent<LogComponent>();
+		SaveComponent saveComponent = GetComponent<SaveComponent>();
 
+		// create a manager for each component
 		if (audioComponent != null)
 			m_audioManager = new AudioManager(this, audioComponent);
 		if (backgroundComponent != null)
@@ -84,8 +89,11 @@ public class SceneManager : MonoBehaviour
 			m_inputManager = new InputManager(this, inputComponent);
 		if (logComponent != null)
 			m_logManager = new LogManager(logComponent);
-
-        m_variableManager = new VariableManager();
+		if (saveComponent != null)
+			m_saveManager = new SaveManager(this, saveComponent);
+		
+		m_utilityManager = new UtilityManager(this);
+        m_variableManager = new VariableManager(this);
 
         // delete this later
 		NewScene(m_startScene);
@@ -130,6 +138,16 @@ public class SceneManager : MonoBehaviour
             Debug.LogWarning("DEVN: Given index is out of range! Can not proceed to next node");
     }
 
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="node"></param>
+	public void JumpToNode(BaseNode node)
+	{
+		m_currentNode = node;
+		UpdateScene();
+	}
+
     /// <summary>
     /// helper function which jumps to a new page, and proceeds from it's start node
     /// </summary>
@@ -164,6 +182,8 @@ public class SceneManager : MonoBehaviour
 	{
 		if (m_inputManager != null)
 			m_inputManager.SetIsInputAllowed(false);
+
+		m_saveManager.Update(m_currentScene, m_currentNode);
 			
 		// evaluate all the different node types
 		if (EvaluateAudioNode())
@@ -173,6 +193,8 @@ public class SceneManager : MonoBehaviour
 		if (EvaluateCharacterNode())
 			return;
 		if (EvaluateDialogueNode())
+			return;
+		if (EvaluateUtilityNode())
 			return;
 		if (EvaluateVariableNode())
 			return;
@@ -309,6 +331,21 @@ public class SceneManager : MonoBehaviour
 	/// 
 	/// </summary>
 	/// <returns></returns>
+	private bool EvaluateUtilityNode()
+	{
+		if (m_currentNode is DelayNode)
+		{
+			StartCoroutine(m_utilityManager.Delay((m_currentNode as DelayNode).GetDelayTime(), true));
+			return true;
+		}
+
+		return false;
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <returns></returns>
 	private bool EvaluateVariableNode()
 	{
 		if (m_currentNode is ConditionNode)
@@ -367,7 +404,7 @@ public class SceneManager : MonoBehaviour
 			m_backgroundManager.EnterBackground(background, fadeColour, fadeTime, true, waitForFinish);
 		}
 		else // exit
-			m_backgroundManager.ExitBackground(fadeColour, fadeTime);
+			m_backgroundManager.ExitBackground(fadeColour, fadeTime, true);
 	}
 	
 	/// <summary>

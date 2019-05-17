@@ -18,6 +18,7 @@ public class NodeManager
     #region getters
 
     public List<BaseNode> GetNodes() { return m_nodes; }
+	public BaseNode GetLastNode() { return m_nodes[m_nodes.Count - 1]; }
     public BaseNode GetClipboard() { return m_clipboard; }
 
     #endregion
@@ -48,7 +49,7 @@ public class NodeManager
     /// </summary>
     /// <param name="nodeID"></param>
     /// <returns></returns>
-    public BaseNode GetNode(int nodeID)
+    public BaseNode FindNode(int nodeID)
     {
         for (int i = 0; i < m_nodes.Count; i++)
         {
@@ -63,7 +64,6 @@ public class NodeManager
     /// 
     /// </summary>
     /// <param name="nodeType"></param>
-    /// <returns></returns>
     public BaseNode AddNode(System.Type type)
     {
         Scene currentScene = NodeEditor.GetScene();
@@ -79,7 +79,21 @@ public class NodeManager
 
             Undo.RegisterCreatedObjectUndo(node, "New Node");
         }
-        
+
+		ConnectionManager connectionManager = NodeEditor.GetConnectionManager();
+		BaseNode selectedLeftNode = connectionManager.GetSelectedLeftNode();
+		BaseNode selectedRightNode = connectionManager.GetSelectedRightNode();
+		if (selectedLeftNode != null || selectedRightNode != null)
+		{
+			if (selectedLeftNode != null)
+				connectionManager.SetSelectedRightNode(node);
+			else
+				connectionManager.SetSelectedLeftNode(node);
+
+			connectionManager.CreateConnection();
+			connectionManager.ClearConnectionSelection();
+		}
+
 		// add node to scene
         string path = AssetDatabase.GetAssetPath(currentScene);
         AssetDatabase.AddObjectToAsset(node, path);
@@ -88,9 +102,9 @@ public class NodeManager
         node.hideFlags = HideFlags.HideInHierarchy;
         AssetDatabase.SaveAssets();
 
-        GUI.changed = true;
+		GUI.changed = true;
 
-        return node;
+		return node;
     }
 
     /// <summary>
@@ -131,7 +145,7 @@ public class NodeManager
 		int noOfInputs = node.m_inputs.Count;
 		for (int i = 0; i < noOfInputs; i++)
         {
-            BaseNode connectedNode = nodeManager.GetNode(node.m_inputs[0]);
+            BaseNode connectedNode = nodeManager.FindNode(node.m_inputs[0]);
 
             // find the index of the desired node to remove in the connected node's outputs
             int indexOfThisNode = connectedNode.m_outputs.IndexOf(node.GetNodeID());

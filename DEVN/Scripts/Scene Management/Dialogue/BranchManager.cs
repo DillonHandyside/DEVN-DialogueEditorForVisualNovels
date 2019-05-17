@@ -53,31 +53,31 @@ public class BranchManager
 			branchButton.onClick.AddListener(() => { m_branches.SetActive(false); });
 			branchButton.onClick.AddListener(() => { ClearChoices(); });
 
-			if (previousBranch != null)
-			{
-				Navigation verticalNavigation = previousBranch.navigation;
-				verticalNavigation.selectOnDown = branchButton;
-				previousBranch.navigation = verticalNavigation;
+			//if (previousBranch != null)
+			//{
+			//	Navigation verticalNavigation = previousBranch.navigation;
+			//	verticalNavigation.selectOnDown = branchButton;
+			//	previousBranch.navigation = verticalNavigation;
 
-				verticalNavigation.selectOnDown = null;
-				verticalNavigation.selectOnUp = previousBranch;
-				branchButton.navigation = verticalNavigation;
+			//	verticalNavigation.selectOnDown = null;
+			//	verticalNavigation.selectOnUp = previousBranch;
+			//	branchButton.navigation = verticalNavigation;
 
-			}
+			//}
 
-			//
-			previousBranch = branchButton;
+			////
+			//previousBranch = branchButton;
 		}
 		
-		Navigation firstNavigation = firstBranch.navigation;
-		firstNavigation.selectOnUp = previousBranch;
-		firstBranch.navigation = firstNavigation;
+		//Navigation firstNavigation = firstBranch.navigation;
+		//firstNavigation.selectOnUp = previousBranch;
+		//firstBranch.navigation = firstNavigation;
 
-		Navigation lastNavigation = previousBranch.navigation;
-		lastNavigation.selectOnDown = firstBranch;
-		previousBranch.navigation = lastNavigation;
+		//Navigation lastNavigation = previousBranch.navigation;
+		//lastNavigation.selectOnDown = firstBranch;
+		//previousBranch.navigation = lastNavigation;
 
-		m_sceneManager.GetInputManager().SetSelectedGameObject(firstBranch.gameObject);
+		//m_sceneManager.GetInputManager().SetSelectedGameObject(firstBranch.gameObject);
 
 		// display the branch panel
 		m_branches.SetActive(true);

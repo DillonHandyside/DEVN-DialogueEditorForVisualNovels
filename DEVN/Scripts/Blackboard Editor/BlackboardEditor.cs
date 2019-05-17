@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using DEVN;
 
 #if UNITY_EDITOR
 
 using UnityEditorInternal;
+
+namespace DEVN
+{
 
 /// <summary>
 /// An editor window which allows the user to create and edit blackboards.
@@ -265,6 +267,8 @@ public class BlackboardEditor : EditorWindow
         // reset transparency
         GUI.color = new Color(1, 1, 1, 1);
     }
+}
+
 }
 
 #endif

@@ -155,7 +155,7 @@ public abstract class BaseNode : ScriptableObject
 
 		// draw the input point as a button
 		ConnectionManager connectionManager = NodeEditor.GetConnectionManager();
-        if (GUI.Button(m_inputPoint, "", connectionManager.m_inputStyle))
+        if (GUI.Button(m_inputPoint, "", connectionManager.GetInputStyle()))
 			connectionManager.OnClickInput(this);
     }
 
@@ -180,7 +180,7 @@ public abstract class BaseNode : ScriptableObject
 
 			// draw the output point as a button
 			ConnectionManager connectionManager = NodeEditor.GetConnectionManager();
-			if (GUI.Button(m_outputPoints[i], "", connectionManager.m_outputStyle))
+			if (GUI.Button(m_outputPoints[i], "", connectionManager.GetOutputStyle()))
 				connectionManager.OnClickOutput(this, i);
         }
     }
@@ -198,7 +198,7 @@ public abstract class BaseNode : ScriptableObject
             if (m_outputs[i] == -1)
                 continue; // skip empty outputs
 
-            BaseNode outputNode = NodeEditor.GetNodeManager().GetNode(m_outputs[i]);
+            BaseNode outputNode = NodeEditor.GetNodeManager().FindNode(m_outputs[i]);
 
             // define positional variables
             Vector3 startPos = m_outputPoints[i].center;
@@ -233,12 +233,11 @@ public abstract class BaseNode : ScriptableObject
         GenericMenu genericMenu = new GenericMenu(); // initialise context menu
 
         genericMenu.AddDisabledItem(new GUIContent("New Node"));
-        genericMenu.AddSeparator("");
 
         // house-keeping (copy, paste, delete, etc.)
-        genericMenu.AddItem(new GUIContent("Copy"), false, () => NodeEditor.GetNodeManager().CopyNode(this));
-        genericMenu.AddDisabledItem(new GUIContent("Paste"));
-        genericMenu.AddItem(new GUIContent("Delete"), false, () => NodeEditor.GetNodeManager().RemoveNode(this));
+        genericMenu.AddItem(new GUIContent("Copy Node"), false, () => NodeEditor.GetNodeManager().CopyNode(this));
+        genericMenu.AddDisabledItem(new GUIContent("Paste Node"));
+        genericMenu.AddItem(new GUIContent("Remove Node"), false, () => NodeEditor.GetNodeManager().RemoveNode(this));
 
         genericMenu.ShowAsContext(); // print context menu
     }

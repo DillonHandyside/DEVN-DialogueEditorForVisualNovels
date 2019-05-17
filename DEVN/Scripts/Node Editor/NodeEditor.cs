@@ -1,10 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using DEVN;
 
 #if UNITY_EDITOR
+
+namespace DEVN
+{
 
 enum MouseButton
 {
@@ -13,6 +14,10 @@ enum MouseButton
     ScrollWheel
 }
 
+/// <summary>
+/// the node-based graph editor window. Provides all of the functionality for drawing
+/// the various graph elements, and processing user input
+/// </summary>
 public class NodeEditor : EditorWindow
 {
 	private Texture2D m_logoDEVN; // watermark logo
@@ -50,18 +55,18 @@ public class NodeEditor : EditorWindow
     {
 		NodeEditor window = GetWindow<NodeEditor>();
 		window.titleContent = new GUIContent("Dialogue Editor");
-    }
+	}
 
-    /// <summary>
-    /// Node editor "awake" function. Initialises all relevant variables
-    /// </summary>
-    private void OnEnable()
+	/// <summary>
+	/// Node editor "awake" function. Initialises all relevant variables
+	/// </summary>
+	private void OnEnable()
     {
         // initialise the node and connection managers
         m_nodeManager = new NodeManager();
         m_connectionManager = new ConnectionManager();
 
-		m_scene = m_previousScene;
+		m_scene = m_previousScene; // set scene to the remembered scene
 
         // load logo
         string path = "Assets/DEVN/Textures/logoDEVN.png";
@@ -97,6 +102,8 @@ public class NodeEditor : EditorWindow
 		// draw all editor elements in appropriate order
 		DrawToolbar();
 		EditorGUILayout.EndHorizontal();
+
+		//
 		DrawContent();
 		m_connectionManager.DrawBezierToMouse();
 		DrawLogo();
@@ -106,80 +113,83 @@ public class NodeEditor : EditorWindow
 		Repaint();
     }
 
-    /// <summary>
-    /// handles right-click events, such as the creation of new nodes, copy & paste, etc.
-    /// </summary>
-    void ProcessContextMenu()
-    {
-        GenericMenu genericMenu = new GenericMenu(); // initialise context menu
+	/// <summary>
+	/// handles the processing of the right-click context menu, including options
+	/// to Add/Remove/Copy/Paste nodes, Add/Remove pages
+	/// </summary>
+	/// <param name="newNodeOnly"></param>
+	private void ProcessContextMenu(bool newNodeOnly = false)
+	{
+		GenericMenu contextMenu = new GenericMenu();
 
 		// -- add new nodes to this function! --
-		// genericMenu.AddItem(new GUIContent("New Node/Category/Your Node"), false, () => m_nodeManager.AddNode(typeof(YourNode)));
-
+		// contextMenu.AddItem(new GUIContent("New Node/Category/Your Node"), false, () => m_nodeManager.AddNode(typeof(YourNode)));
+		
 		#region in-built DEVN nodes
 
 		// audio nodes
-		genericMenu.AddItem(new GUIContent("New Node/Audio/BGM"), false, () => m_nodeManager.AddNode(typeof(BGMNode)));
-		genericMenu.AddItem(new GUIContent("New Node/Audio/SFX"), false, () => m_nodeManager.AddNode(typeof(SFXNode)));
+		contextMenu.AddItem(new GUIContent("New Node/Audio/BGM"), false, () => m_nodeManager.AddNode(typeof(BGMNode)));
+		contextMenu.AddItem(new GUIContent("New Node/Audio/SFX"), false, () => m_nodeManager.AddNode(typeof(SFXNode)));
 
 		// background nodes
-		genericMenu.AddItem(new GUIContent("New Node/Background/Background"), false, () => m_nodeManager.AddNode(typeof(BackgroundNode)));
+		contextMenu.AddItem(new GUIContent("New Node/Background/Background"), false, () => m_nodeManager.AddNode(typeof(BackgroundNode)));
 
 		// character nodes
-		genericMenu.AddItem(new GUIContent("New Node/Character/Scale"), false, () => m_nodeManager.AddNode(typeof(CharacterScaleNode)));
-		genericMenu.AddItem(new GUIContent("New Node/Character/Translate"), false, () => m_nodeManager.AddNode(typeof(CharacterTranslateNode)));
-		genericMenu.AddSeparator("New Node/Character/");
-		genericMenu.AddItem(new GUIContent("New Node/Character/Character"), false, () => m_nodeManager.AddNode(typeof(CharacterNode)));
+		contextMenu.AddItem(new GUIContent("New Node/Character/Scale"), false, () => m_nodeManager.AddNode(typeof(CharacterScaleNode)));
+		contextMenu.AddItem(new GUIContent("New Node/Character/Translate"), false, () => m_nodeManager.AddNode(typeof(CharacterTranslateNode)));
+		contextMenu.AddSeparator("New Node/Character/");
+		contextMenu.AddItem(new GUIContent("New Node/Character/Character"), false, () => m_nodeManager.AddNode(typeof(CharacterNode)));
 
 		// dialogue nodes
-		genericMenu.AddItem(new GUIContent("New Node/Dialogue/Branch"), false, () => m_nodeManager.AddNode(typeof(BranchNode)));
-        genericMenu.AddItem(new GUIContent("New Node/Dialogue/Dialogue"), false, () => m_nodeManager.AddNode(typeof(DialogueNode)));
-		genericMenu.AddSeparator("New Node/Dialogue/");
-		genericMenu.AddItem(new GUIContent("New Node/Dialogue/Dialogue Box"), false, () => m_nodeManager.AddNode(typeof(DialogueBoxNode)));
+		contextMenu.AddItem(new GUIContent("New Node/Dialogue/Branch"), false, () => m_nodeManager.AddNode(typeof(BranchNode)));
+		contextMenu.AddItem(new GUIContent("New Node/Dialogue/Dialogue"), false, () => m_nodeManager.AddNode(typeof(DialogueNode)));
+		contextMenu.AddSeparator("New Node/Dialogue/");
+		contextMenu.AddItem(new GUIContent("New Node/Dialogue/Dialogue Box"), false, () => m_nodeManager.AddNode(typeof(DialogueBoxNode)));
 
-        // utility nodes
-        genericMenu.AddItem(new GUIContent("New Node/Utility/Delay"), false, () => m_nodeManager.AddNode(typeof(DelayNode)));
-        genericMenu.AddItem(new GUIContent("New Node/Utility/Page"), false, () => m_nodeManager.AddNode(typeof(PageNode)));
+		// utility nodes
+		contextMenu.AddItem(new GUIContent("New Node/Utility/Delay"), false, () => m_nodeManager.AddNode(typeof(DelayNode)));
+		contextMenu.AddItem(new GUIContent("New Node/Utility/Page"), false, () => m_nodeManager.AddNode(typeof(PageNode)));
 
-        // variable nodes
-        genericMenu.AddItem(new GUIContent("New Node/Variable/Condition"), false, () => m_nodeManager.AddNode(typeof(ConditionNode)));
-        genericMenu.AddItem(new GUIContent("New Node/Variable/Modify"), false, () => m_nodeManager.AddNode(typeof(ModifyNode)));
+		// variable nodes
+		contextMenu.AddItem(new GUIContent("New Node/Variable/Condition"), false, () => m_nodeManager.AddNode(typeof(ConditionNode)));
+		contextMenu.AddItem(new GUIContent("New Node/Variable/Modify"), false, () => m_nodeManager.AddNode(typeof(ModifyNode)));
 
-        // end node
-        genericMenu.AddItem(new GUIContent("New Node/End"), false, () => m_nodeManager.AddNode(typeof(EndNode)));
+		// end node
+		contextMenu.AddItem(new GUIContent("New Node/End"), false, () => m_nodeManager.AddNode(typeof(EndNode)));
+
+			#endregion
+
+		#region copy/paste/delete nodes
+
+		// house-keeping (copy, paste, delete, etc.)
+		contextMenu.AddDisabledItem(new GUIContent("Copy Node"));
+		if (m_nodeManager.GetClipboard() != null && !newNodeOnly)
+			contextMenu.AddItem(new GUIContent("Paste Node"), false, m_nodeManager.PasteNode);
+		else
+			contextMenu.AddDisabledItem(new GUIContent("Paste Node"));
+		contextMenu.AddDisabledItem(new GUIContent("Remove Node"));
 
 		#endregion
 
-		#region page creation/deletion
+		#region add/remove pages
 
 		// new page
-		genericMenu.AddSeparator("");
-        genericMenu.AddItem(new GUIContent("New Page"), false, m_scene.NewPage);
+		contextMenu.AddSeparator("");
+		if (!newNodeOnly)
+			contextMenu.AddItem(new GUIContent("New Page"), false, m_scene.NewPage);
+		else
+			contextMenu.AddDisabledItem(new GUIContent("New Page"));
 
 		// remove page, disallow removal if only one page exists
-        if (m_scene.GetPages().Count > 1)
-            genericMenu.AddItem(new GUIContent("Delete Page"), false, m_scene.DeletePage);
-        else
-            genericMenu.AddDisabledItem(new GUIContent("Delete Page"));
+		if (m_scene.GetPages().Count > 1 && !newNodeOnly)
+			contextMenu.AddItem(new GUIContent("Remove Page"), false, m_scene.DeletePage);
+		else
+			contextMenu.AddDisabledItem(new GUIContent("Remove Page"));
 
 		#endregion
 
-		#region node copy/paste/deletion
-
-		genericMenu.AddSeparator("");
-
-        // house-keeping (copy, paste, delete, etc.)
-        genericMenu.AddDisabledItem(new GUIContent("Copy"));
-        if (m_nodeManager.GetClipboard() != null)
-            genericMenu.AddItem(new GUIContent("Paste"), false, m_nodeManager.PasteNode);
-        else
-            genericMenu.AddDisabledItem(new GUIContent("Paste"));
-        genericMenu.AddDisabledItem(new GUIContent("Delete"));
-
-		#endregion
-
-		genericMenu.ShowAsContext(); // print context menu
-    }
+		contextMenu.ShowAsContext();
+	}
 
     /// <summary>
     /// 
@@ -193,9 +203,14 @@ public class NodeEditor : EditorWindow
         {
             case EventType.MouseDown:
 
-                // clear connection selection on left click
-                if (e.button == (int)MouseButton.LeftClick)
-                    m_connectionManager.ClearConnectionSelection();
+				// clear connection selection on left click
+				if (e.button == (int)MouseButton.LeftClick)
+				{
+					if (m_connectionManager.GetSelectedLeftNode() != null)
+						ProcessContextMenu(true);
+					else if (m_connectionManager.GetSelectedRightNode() != null)
+						m_connectionManager.ClearConnectionSelection();
+				}
 
 				// process right-click context menu
 				if (e.button == (int)MouseButton.RightClick)
@@ -234,39 +249,6 @@ public class NodeEditor : EditorWindow
 
 		GUI.EndScrollView();
 	}
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="gridSpacing"></param>
-    /// <param name="gridOpacity"></param>
-    /// <param name="gridColor"></param>
-    private void DrawGrid(float gridSpacing, float gridOpacity, Color gridColor)
-    {
-        int widthDivs = Mathf.CeilToInt(Screen.width / gridSpacing);
-        int heightDivs = Mathf.CeilToInt(Screen.height / gridSpacing);
-
-        // begin drawing
-        Handles.BeginGUI();
-        Handles.color = new Color(gridColor.r, gridColor.g, gridColor.b, gridOpacity);
-
-        m_offset += m_drag * 0.5f;
-        Vector3 newOffset = new Vector3(m_offset.x % gridSpacing, m_offset.y % gridSpacing, 0);
-
-        // draw vertical lines
-        for (int i = 0; i <= widthDivs; i++)
-            Handles.DrawLine(new Vector3(gridSpacing * i, -gridSpacing, 0) + newOffset,
-                             new Vector3(gridSpacing * i, Screen.height + gridSpacing, 0f) + newOffset);
-
-        // draw horizontal
-        for (int j = 0; j <= heightDivs; j++)
-            Handles.DrawLine(new Vector3(-gridSpacing, gridSpacing * j, 0) + newOffset,
-                             new Vector3(Screen.width + gridSpacing, gridSpacing * j, 0f) + newOffset);
-
-        // end drawing
-        Handles.color = Color.white;
-        Handles.EndGUI();
-    }
 
     /// <summary>
     /// 
@@ -310,6 +292,39 @@ public class NodeEditor : EditorWindow
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="gridSpacing"></param>
+    /// <param name="gridOpacity"></param>
+    /// <param name="gridColor"></param>
+    private void DrawGrid(float gridSpacing, float gridOpacity, Color gridColor)
+    {
+        int widthDivs = Mathf.CeilToInt(Screen.width / gridSpacing);
+        int heightDivs = Mathf.CeilToInt(Screen.height / gridSpacing);
+
+        // begin drawing
+        Handles.BeginGUI();
+        Handles.color = new Color(gridColor.r, gridColor.g, gridColor.b, gridOpacity);
+
+        m_offset += m_drag * 0.5f;
+        Vector3 newOffset = new Vector3(m_offset.x % gridSpacing, m_offset.y % gridSpacing, 0);
+
+        // draw vertical lines
+        for (int i = 0; i <= widthDivs; i++)
+            Handles.DrawLine(new Vector3(gridSpacing * i, -gridSpacing, 0) + newOffset,
+                             new Vector3(gridSpacing * i, Screen.height + gridSpacing, 0f) + newOffset);
+
+        // draw horizontal
+        for (int j = 0; j <= heightDivs; j++)
+            Handles.DrawLine(new Vector3(-gridSpacing, gridSpacing * j, 0) + newOffset,
+                             new Vector3(Screen.width + gridSpacing, gridSpacing * j, 0f) + newOffset);
+
+        // end drawing
+        Handles.color = Color.white;
+        Handles.EndGUI();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     /// <param name="delta"></param>
     void DragAll(Vector2 delta)
     {
@@ -321,6 +336,8 @@ public class NodeEditor : EditorWindow
 
         GUI.changed = true;
     }
+}
+
 }
 
 #endif
