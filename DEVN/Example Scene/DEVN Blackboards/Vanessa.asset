@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f38020c6220c6084bbf403ed9c585838, type: 3}
+  m_Name: Vanessa
+  m_EditorClassIdentifier: 
+  m_blackboardID: 0
+  m_booleans: []
+  m_floats:
+  - m_key: bond
+    m_value:
+      m_boolean: 0
+      m_float: 0
+      m_string: 
+    m_valueType: 1
+  m_strings: []
+  m_booleanID: 1
+  m_floatID: 1
+  m_stringID: 0

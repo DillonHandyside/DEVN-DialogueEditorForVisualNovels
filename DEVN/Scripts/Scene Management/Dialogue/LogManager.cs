@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace DEVN
 {
@@ -46,6 +47,9 @@ public class LogManager
         // set relevant text fields
         logMessage.GetSpeaker().text = speaker;
         logMessage.GetDialogue().text = dialogue;
+
+        int noOfLines = dialogue.Split('\n').Length;
+        log.GetComponent<LayoutElement>().preferredHeight = 18 + noOfLines * 18;
 	}
 
     /// <summary>

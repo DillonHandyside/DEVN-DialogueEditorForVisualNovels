@@ -76,7 +76,7 @@ public class CharacterManager
 
 		// invert if necessary
 		if (isInvert)
-			m_characterTransformer.SetCharacterScale(characterObject, new Vector2(1, -1));
+			m_characterTransformer.SetCharacterScale(characterObject, new Vector2(-1, 1));
 
 		// set sprite
 		SetSprite(characterObject, sprite); 

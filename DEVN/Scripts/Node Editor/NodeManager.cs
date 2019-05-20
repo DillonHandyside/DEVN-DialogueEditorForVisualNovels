@@ -41,7 +41,11 @@ public class NodeManager
     public void DrawNodes()
     {
         for (int i = 0; i < m_nodes.Count; i++)
-            m_nodes[i].Draw();
+        {
+            BaseNode node = m_nodes[i];
+            Undo.RecordObject(node, "Node Changes");
+            node.Draw();
+        }
     }
 
     /// <summary>

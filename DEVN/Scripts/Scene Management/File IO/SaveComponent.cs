@@ -5,12 +5,15 @@ using UnityEngine;
 namespace DEVN
 {
 
+/// <summary>
+/// 
+/// </summary>
 public class SaveComponent : MonoBehaviour
 {
 	[Header("Save Slot Prefab")]
 	[SerializeField] private GameObject m_saveSlotPrefab;
 
-	[Header("Save UI Elements")]
+	[Header("Save UI Element/s")]
 	[SerializeField] private GameObject m_savePanel;
 	[SerializeField] private RectTransform m_saveContent;
 
@@ -28,17 +31,12 @@ public class SaveComponent : MonoBehaviour
 	
 	public void OpenSaveMenu()
 	{
-		SceneManager.GetInstance().GetSaveManager().OpenSaveLoadMenu();
+		SceneManager.GetInstance().GetSaveManager().UpdateSaveLoadSlots();
 	}
 
 	public void OpenLoadMenu()
 	{
-		SceneManager.GetInstance().GetSaveManager().OpenSaveLoadMenu(true);
-	}
-
-	public void CloseSaveLoadMenu()
-	{
-		SceneManager.GetInstance().GetSaveManager().CloseSaveLoadMenu();
+		SceneManager.GetInstance().GetSaveManager().UpdateSaveLoadSlots(true);
 	}
 }
 

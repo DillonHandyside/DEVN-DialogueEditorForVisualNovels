@@ -4,6 +4,9 @@ using UnityEngine;
 namespace DEVN
 {
 	
+/// <summary>
+/// 
+/// </summary>
 public class SceneManager : MonoBehaviour
 {
 	// singleton
@@ -30,10 +33,13 @@ public class SceneManager : MonoBehaviour
 	private SaveManager m_saveManager;
 	private UtilityManager m_utilityManager;
     private VariableManager m_variableManager;
+
+    private bool m_isInputAllowed = false;
 	
 	#region getters
 
 	public static SceneManager GetInstance() { return m_instance; }
+    public Scene GetCurrentScene() { return m_currentScene; }
 	public BaseNode GetCurrentNode() { return m_currentNode; }
     public List<Blackboard> GetBlackboards() { return m_blackboards; }
     public AudioManager GetAudioManager() { return m_audioManager; }
@@ -44,13 +50,20 @@ public class SceneManager : MonoBehaviour
 	public SaveManager GetSaveManager() { return m_saveManager; }
 	public UtilityManager GetUtilityManager() { return m_utilityManager; }
     public LogManager GetLogManager() { return m_logManager; }
+    public bool GetIsInputAllowed() { return m_isInputAllowed; }
 
-	#endregion
+        #endregion
 
-	/// <summary>
-	/// 
-	/// </summary>
-	void Start ()
+    #region setters
+
+    public void SetIsInputAllowed(bool isInputAllowed) { m_isInputAllowed = isInputAllowed; }
+
+    #endregion
+
+    /// <summary>
+    /// 
+    /// </summary>
+    void Start ()
     {
 		m_instance = this; // initialise singleton
 
@@ -161,9 +174,11 @@ public class SceneManager : MonoBehaviour
         NextNode();
     }
 
-	/// <summary>
-	/// 
-	/// </summary>
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="nodeID"></param>
+    /// <returns></returns>
 	private BaseNode GetNode(int nodeID)
 	{
 		for (int i = 0; i < m_sceneNodes.Count; i++)
@@ -180,10 +195,7 @@ public class SceneManager : MonoBehaviour
 	/// </summary>
     private void UpdateScene()
 	{
-		if (m_inputManager != null)
-			m_inputManager.SetIsInputAllowed(false);
-
-		m_saveManager.Update(m_currentScene, m_currentNode);
+		SetIsInputAllowed(false);
 			
 		// evaluate all the different node types
 		if (EvaluateAudioNode())
@@ -200,12 +212,14 @@ public class SceneManager : MonoBehaviour
 			return;
 		EvaluateTransitionNodes();
     }
-	
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <returns></returns>
-	private bool EvaluateAudioNode()
+
+    #region node evaluation functions
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    private bool EvaluateAudioNode()
 	{
 		if (m_audioManager != null)
 		{
@@ -385,10 +399,14 @@ public class SceneManager : MonoBehaviour
 		}
     }
 
-	/// <summary>
-	/// 
-	/// </summary>
-	private void UpdateBackground()
+        #endregion
+
+    #region node processing functions
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private void UpdateBackground()
 	{
 		// get background node
 		BackgroundNode backgroundNode = m_currentNode as BackgroundNode;
@@ -481,6 +499,8 @@ public class SceneManager : MonoBehaviour
 
 		NextNode();
 	}
+
+    #endregion
 }
 
 }

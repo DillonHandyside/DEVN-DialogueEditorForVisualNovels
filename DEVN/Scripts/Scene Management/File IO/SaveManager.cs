@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,19 +7,25 @@ using UnityEngine.UI;
 namespace DEVN
 {
 
+/// <summary>
+/// 
+/// </summary>
 public class SaveManager
 {
 	// scene manager ref
 	private SceneManager m_sceneManager;
 		
+    // UI elements
 	private GameObject m_saveSlotPrefab;
 	private GameObject m_savePanel;
 	private RectTransform m_saveContent;
-	
-	private int m_numberOfSaves;
 
 	private GameData m_gameData;
 	private SaveData m_currentData = new SaveData();
+
+    private List<GameObject> m_saveSlots = new List<GameObject>();
+
+    private Sprite m_snapshot;
 
 	public SaveManager(SceneManager sceneManager, SaveComponent saveComponent)
 	{
@@ -27,25 +34,102 @@ public class SaveManager
 		m_saveSlotPrefab = saveComponent.GetSaveSlotPrefab();
 		m_savePanel = saveComponent.GetSavePanel();
 		m_saveContent = saveComponent.GetSaveContent();
-		m_numberOfSaves = saveComponent.GetNumberOfSaves();
 
+		int numberOfSaves = saveComponent.GetNumberOfSaves();
+
+        // load game data
 		m_gameData = LoadGameData();
 
+        // init game data if necessary
 		if (m_gameData == null)
-			m_gameData = new GameData(saveComponent.GetNumberOfSaves());
-	}
+			m_gameData = new GameData(numberOfSaves);
+
+        InitSaveLoadSlots(numberOfSaves);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="numberOfSaves"></param>
+    public void InitSaveLoadSlots(int numberOfSaves)
+    {
+        for (int i = 0; i < numberOfSaves; i++)
+        {
+            GameObject saveSlotObject = UnityEngine.Object.Instantiate(m_saveSlotPrefab, m_saveContent);
+            m_saveSlots.Add(saveSlotObject);
+        }
+
+        UpdateSaveLoadSlots();
+    }
+        
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="isLoad"></param>
+    public void UpdateSaveLoadSlots(bool isLoad = false)
+    {
+        List<SaveData> saveDatas = m_gameData.GetSaves();
+        
+        for (int i = 0; i < m_saveSlots.Count; i++)
+        {
+            GameObject saveSlotObject = m_saveSlots[i];
+            SaveData saveData = saveDatas[i];
+            SaveSlot saveSlot = saveSlotObject.GetComponent<SaveSlot>();
+
+            // assign slot number and scene
+            Text scene = saveSlot.GetSlotScene();
+            scene.text = "Slot " + (i + 1) + " - ";
+
+            if (saveData != null)
+            {
+                if (saveData.GetCurrentScene() != null)
+                    scene.text += saveData.GetCurrentScene().name;
+                else
+                    scene.text += "Empty";
+
+                //
+                Image snapshot = saveSlot.GetSnapshot();
+                snapshot.sprite = saveData.GetSnapshot();
+
+                // assign playtime
+
+
+                // assign date
+                Text dateTime = saveSlot.GetDate();
+                dateTime.text = saveData.GetDateTime();
+            }
+
+            // add listeners
+            Button saveButton = saveSlotObject.GetComponent<Button>();
+            int saveIndex = i;
+            saveButton.onClick.RemoveAllListeners();
+            saveButton.onClick.AddListener(() => m_savePanel.SetActive(false));
+
+            if (isLoad)
+            {
+                saveButton.onClick.AddListener(() => Load(saveIndex));
+
+                if (saveData == null)
+                    saveButton.interactable = false;
+            }
+            else
+            {
+                saveButton.onClick.AddListener(() => Save(saveIndex));
+                TakeSnapshot();
+            }
+        }
+    }
 
 	/// <summary>
 	/// 
 	/// </summary>
-	/// <param name="currentScene"></param>
-	/// <param name="node"></param>
-	public void Update(Scene currentScene, BaseNode node)
+	/// <param name="saveIndex"></param>
+    /// <param name="currentScene"></param>
+	public void Save(int saveIndex)
 	{
-		//m_currentData.GetNodePath().Add(node);
 		m_currentData.SetBlackboards(m_sceneManager.GetBlackboards());
 
-		m_currentData.SetCurrentScene(currentScene);
+		m_currentData.SetCurrentScene(m_sceneManager.GetCurrentScene());
 		m_currentData.SetCurrentNode(m_sceneManager.GetCurrentNode());
 
 		// save background
@@ -55,62 +139,19 @@ public class SaveManager
 		// save characters
 		List<GameObject> characters = m_sceneManager.GetCharacterManager().GetCharacters();
 		m_currentData.SetCharacters(characters);
-	}
+        
+        //
+        m_currentData.SetSnapshot(m_snapshot);
 
-	/// <summary>
-	/// 
-	/// </summary>
-	public void OpenSaveLoadMenu(bool isLoad = false)
-	{
-		List<SaveData> saveData = m_gameData.GetSaves();
-		
-		for (int i = 0; i < saveData.Count; i++)
-		{
-			GameObject saveSlot = Object.Instantiate(m_saveSlotPrefab, m_saveContent);
-			Button saveButton = saveSlot.GetComponent<Button>();
-			Text saveText = saveSlot.GetComponentInChildren<Text>();
+        // save date/time
+        DateTime now = DateTime.Now;
+        string dateTime = now.ToShortDateString() + "   " + now.ToShortTimeString();
+        m_currentData.SetDateTime(dateTime);
 
-			if (saveData[i] != null && saveData[i].GetCurrentScene() != null)
-				saveText.text = saveData[i].GetCurrentScene().name;
-			else
-				saveText.text = "Empty Save Slot";
-			
-			int saveIndex = i;
-			saveButton.onClick.AddListener(CloseSaveLoadMenu);
-
-			if (isLoad)
-				saveButton.onClick.AddListener(() => Load(saveIndex));
-			else
-				saveButton.onClick.AddListener(() => Save(saveIndex));
-
-			//
-		}
-
-		m_savePanel.SetActive(true); // open save menu
-	}
-
-	/// <summary>
-	/// 
-	/// </summary>
-	public void CloseSaveLoadMenu()
-	{
-		m_savePanel.SetActive(false); // close menu
-		Button[] saveSlots = m_saveContent.GetComponentsInChildren<Button>();
-
-		for (int i = 0; i < saveSlots.Length; i++)
-			Object.Destroy(saveSlots[i].gameObject);
-	}
-
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="saveIndex"></param>
-	public void Save(int saveIndex)
-	{
 		m_gameData.SetSave(m_currentData, saveIndex);
+        m_currentData = new SaveData();
 
 		string path = Application.persistentDataPath + "/data.sav";
-
 		string data = JsonUtility.ToJson(m_gameData);
 		File.WriteAllText(path, data);
 	}
@@ -130,6 +171,7 @@ public class SaveManager
 		GameData gameData = JsonUtility.FromJson<GameData>(data);
 
 		SaveData saveData = gameData.GetSaves()[saveIndex];
+
 		m_sceneManager.GetBackgroundManager().SetBackground(saveData.GetBackground());
 		m_sceneManager.GetCharacterManager().SetCharacters(saveData.GetCharacters());
 
@@ -163,6 +205,18 @@ public class SaveManager
 
 		return gameData; // load successful
 	}
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private void TakeSnapshot()
+    {
+        Texture2D snapshot = ScreenCapture.CaptureScreenshotAsTexture();
+
+        Rect snapshotRect = new Rect(0, 0, snapshot.width, snapshot.height);
+        Vector2 snapshotPivot = new Vector2(0.5f, 0.5f);
+        m_snapshot = Sprite.Create(snapshot, snapshotRect, snapshotPivot);
+    }
 }
 
 }

@@ -1,0 +1,577 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f97195559373da409a1adde84887dff, type: 3}
+  m_Name: Tutorial 1
+  m_EditorClassIdentifier: 
+  m_currentPage: 1
+  m_pages:
+  - {fileID: 114535952419506766}
+  - {fileID: 114132952927548126}
+--- !u!114 &114024448578038142
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b19fd96f384d73488a80aba14d3f33d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 8
+  m_rectangle:
+    serializedVersion: 2
+    x: 1282
+    y: 396
+    width: 340
+    height: 188
+  m_title: Dialogue
+  m_inputs: 07000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 1272
+    y: 480
+    width: 10
+    height: 20
+  m_outputs: ffffffff
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 1622
+    y: 480
+    width: 10
+    height: 20
+  m_character: {fileID: 11400000, guid: 0fac856483a117a45b95d3ea679ec563, type: 2}
+  m_spriteSelection: 3
+  m_audioSelection: 0
+  m_dialogue: Wait, you're joking right?
+--- !u!114 &114072753542990882
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bf1f0fa704193a4d9f493dbabc686e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 0
+  m_rectangle:
+    serializedVersion: 2
+    x: 4
+    y: 32
+    width: 100
+    height: 50
+  m_title: Start
+  m_inputs: 
+  m_inputPoint:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 10
+    height: 20
+  m_outputs: 01000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 104
+    y: 47
+    width: 10
+    height: 20
+--- !u!114 &114132952927548126
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44c786e63f8b54f4eaf62140c9011b53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_currentID: 9
+  m_nodes:
+  - {fileID: 114501699361230100}
+  - {fileID: 114339540403311584}
+  - {fileID: 114990368958947752}
+  - {fileID: 114817195553732452}
+  - {fileID: 114721634910902106}
+  - {fileID: 114153036791402064}
+  - {fileID: 114430180104773748}
+  - {fileID: 114250195448081338}
+  - {fileID: 114024448578038142}
+--- !u!114 &114134399589728024
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 268926b0572e1734695332a363e32b77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 1
+  m_rectangle:
+    serializedVersion: 2
+    x: 140
+    y: 33
+    width: 170
+    height: 212
+  m_title: Background
+  m_inputs: 00000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 130
+    y: 129
+    width: 10
+    height: 20
+  m_outputs: 02000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 310
+    y: 129
+    width: 10
+    height: 20
+  m_toggleSelection: 0
+  m_background: {fileID: 21300000, guid: 0cbda9b28ec363f44bd6cc865621d6e3, type: 3}
+  m_fadeColour: {r: 0, g: 0, b: 0, a: 1}
+  m_fadeTime: 0.25
+  m_waitForFinish: 1
+--- !u!114 &114153036791402064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b19fd96f384d73488a80aba14d3f33d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 5
+  m_rectangle:
+    serializedVersion: 2
+    x: 902
+    y: 6
+    width: 340
+    height: 188
+  m_title: Dialogue
+  m_inputs: 04000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 892
+    y: 90
+    width: 10
+    height: 20
+  m_outputs: 06000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 1242
+    y: 90
+    width: 10
+    height: 20
+  m_character: {fileID: 11400000, guid: 0fac856483a117a45b95d3ea679ec563, type: 2}
+  m_spriteSelection: 2
+  m_audioSelection: 0
+  m_dialogue: 'Great! So my boss'' hard work of writing the documentation
+
+    didn''t go to waste.'
+--- !u!114 &114190815530451832
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4736a76f54eabd498ec4ac540793476, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 2
+  m_rectangle:
+    serializedVersion: 2
+    x: 356
+    y: 33
+    width: 310.38016
+    height: 204
+  m_title: Character
+  m_inputs: 01000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 346
+    y: 125
+    width: 10
+    height: 20
+  m_outputs: 03000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 666.3801
+    y: 125
+    width: 10
+    height: 20
+  m_toggleSelection: 0
+  m_character: {fileID: 11400000, guid: 0fac856483a117a45b95d3ea679ec563, type: 2}
+  m_sprite: {fileID: 21300000, guid: 0f2bd585e44b6664b87b6b7b9ad015cd, type: 3}
+  m_spriteSelection: 0
+  m_xPosition: 50
+  m_fadeTime: 0.25
+  m_isInverted: 0
+  m_waitForFinish: 1
+--- !u!114 &114250195448081338
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b19fd96f384d73488a80aba14d3f33d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 7
+  m_rectangle:
+    serializedVersion: 2
+    x: 903
+    y: 395
+    width: 340
+    height: 188
+  m_title: Dialogue
+  m_inputs: 04000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 893
+    y: 479
+    width: 10
+    height: 20
+  m_outputs: 08000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 1243
+    y: 479
+    width: 10
+    height: 20
+  m_character: {fileID: 11400000, guid: 0fac856483a117a45b95d3ea679ec563, type: 2}
+  m_spriteSelection: 0
+  m_audioSelection: 0
+  m_dialogue: DEVN is a Unity editor tool for...
+--- !u!114 &114339540403311584
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b19fd96f384d73488a80aba14d3f33d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 1
+  m_rectangle:
+    serializedVersion: 2
+    x: 142
+    y: -20
+    width: 340
+    height: 188
+  m_title: Dialogue
+  m_inputs: 00000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 132
+    y: 64
+    width: 10
+    height: 20
+  m_outputs: 04000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 482
+    y: 64
+    width: 10
+    height: 20
+  m_character: {fileID: 11400000, guid: 0fac856483a117a45b95d3ea679ec563, type: 2}
+  m_spriteSelection: 0
+  m_audioSelection: 0
+  m_dialogue: Okay, I'm assuming you've read the documentation?
+--- !u!114 &114430180104773748
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b19fd96f384d73488a80aba14d3f33d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 6
+  m_rectangle:
+    serializedVersion: 2
+    x: 1282
+    y: 6
+    width: 340
+    height: 188
+  m_title: Dialogue
+  m_inputs: 05000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 1272
+    y: 90
+    width: 10
+    height: 20
+  m_outputs: ffffffff
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 1622
+    y: 90
+    width: 10
+    height: 20
+  m_character: {fileID: 11400000, guid: 0fac856483a117a45b95d3ea679ec563, type: 2}
+  m_spriteSelection: 1
+  m_audioSelection: 0
+  m_dialogue: 'You''re likely perfectly capable then, but for the purposes
+
+    of the tutorial, i''ll assume you''re a complete beginner.'
+--- !u!114 &114463790520941690
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f5d16997c22cc241bd5f4c6cf433796, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 3
+  m_rectangle:
+    serializedVersion: 2
+    x: 710
+    y: 35
+    width: 128
+    height: 40
+  m_title: Dialogue Box
+  m_inputs: 02000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 700
+    y: 45
+    width: 10
+    height: 20
+  m_outputs: 05000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 838
+    y: 45
+    width: 10
+    height: 20
+  m_toggleSelection: 0
+--- !u!114 &114466368109901860
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a09d2a8121535245b15ad72ab2ac3e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 5
+  m_rectangle:
+    serializedVersion: 2
+    x: 871
+    y: 36
+    width: 100
+    height: 58
+  m_title: Page
+  m_inputs: 03000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 861
+    y: 55
+    width: 10
+    height: 20
+  m_outputs: 
+  m_outputPoints: []
+  m_pageNumber: 1
+--- !u!114 &114501699361230100
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bf1f0fa704193a4d9f493dbabc686e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 0
+  m_rectangle:
+    serializedVersion: 2
+    x: -4
+    y: -20
+    width: 100
+    height: 50
+  m_title: Start
+  m_inputs: 
+  m_inputPoint:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 10
+    height: 20
+  m_outputs: 01000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 96
+    y: -5
+    width: 10
+    height: 20
+--- !u!114 &114535952419506766
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44c786e63f8b54f4eaf62140c9011b53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_currentID: 6
+  m_nodes:
+  - {fileID: 114072753542990882}
+  - {fileID: 114134399589728024}
+  - {fileID: 114190815530451832}
+  - {fileID: 114463790520941690}
+  - {fileID: 114466368109901860}
+--- !u!114 &114721634910902106
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 269eb79aee5fdb040bf0e653d6e9d202, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 4
+  m_rectangle:
+    serializedVersion: 2
+    x: 516
+    y: 221
+    width: 340
+    height: 150
+  m_title: Branch
+  m_inputs: 01000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 506
+    y: 286
+    width: 10
+    height: 20
+  m_outputs: 050000000200000007000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 856
+    y: 248.5
+    width: 10
+    height: 20
+  - serializedVersion: 2
+    x: 856
+    y: 286
+    width: 10
+    height: 20
+  - serializedVersion: 2
+    x: 856
+    y: 323.5
+    width: 10
+    height: 20
+  m_branches:
+  - Yes.
+  - No.
+  - Wait, what is DEVN?
+--- !u!114 &114817195553732452
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b19fd96f384d73488a80aba14d3f33d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 3
+  m_rectangle:
+    serializedVersion: 2
+    x: 1281
+    y: 201
+    width: 340
+    height: 188
+  m_title: Dialogue
+  m_inputs: 02000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 1271
+    y: 285
+    width: 10
+    height: 20
+  m_outputs: ffffffff
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 1621
+    y: 285
+    width: 10
+    height: 20
+  m_character: {fileID: 11400000, guid: 0fac856483a117a45b95d3ea679ec563, type: 2}
+  m_spriteSelection: 1
+  m_audioSelection: 0
+  m_dialogue: '(Sigh...) Okay, I''ll assume that you''re a complete beginner
+
+    to DEVN.'
+--- !u!114 &114990368958947752
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b19fd96f384d73488a80aba14d3f33d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nodeID: 2
+  m_rectangle:
+    serializedVersion: 2
+    x: 902
+    y: 202
+    width: 340
+    height: 188
+  m_title: Dialogue
+  m_inputs: 04000000
+  m_inputPoint:
+    serializedVersion: 2
+    x: 892
+    y: 286
+    width: 10
+    height: 20
+  m_outputs: 03000000
+  m_outputPoints:
+  - serializedVersion: 2
+    x: 1242
+    y: 286
+    width: 10
+    height: 20
+  m_character: {fileID: 11400000, guid: 0fac856483a117a45b95d3ea679ec563, type: 2}
+  m_spriteSelection: 4
+  m_audioSelection: 0
+  m_dialogue: What do you mean, 'no'!?

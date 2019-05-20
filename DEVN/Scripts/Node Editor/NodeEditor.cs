@@ -224,6 +224,9 @@ public class NodeEditor : EditorWindow
                 if (e.button == (int)MouseButton.ScrollWheel)
                     DragAll(e.delta);
 
+                if (e.button == (int)MouseButton.LeftClick && e.alt)
+                    DragAll(e.delta);
+
                 break;
         }
     }

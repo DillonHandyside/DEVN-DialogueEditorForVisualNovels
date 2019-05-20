@@ -23,7 +23,7 @@ public class DialogueManager
 	private IEnumerator m_typewriteEvent;
 
 	// other text typing relevant variables
-	private float m_textSpeed;
+	private float m_textSpeed = 1.0f;
 	private bool m_isTyping = false;
 
     private float m_autoSpeed;
@@ -61,12 +61,7 @@ public class DialogueManager
 	/// 
 	/// </summary>
 	public void SetDialogue(DialogueNode dialogueNode)
-	{
-		// allow input during dialogue, to allow skip & continue
-		InputManager inputManager = m_sceneManager.GetInputManager();
-		if (inputManager != null)
-			m_sceneManager.GetInputManager().SetIsInputAllowed(true);
-			
+	{			
 		// attempt to get this dialogue node's character, log an error if there is none
 		Character character = dialogueNode.GetCharacter();
 		Debug.Assert(character != null, "DEVN: Dialogue requires a speaking character!");
@@ -154,7 +149,7 @@ public class DialogueManager
     public void ToggleAuto()
     {
         m_isAutoEnabled = !m_isAutoEnabled;
-        m_sceneManager.GetInputManager().SetIsInputAllowed(!m_isAutoEnabled);
+        m_sceneManager.SetIsInputAllowed(!m_isAutoEnabled);
 
         if (m_sceneManager.GetCurrentNode() is DialogueNode &&
             m_isAutoEnabled && m_isTyping == false)
@@ -191,7 +186,9 @@ public class DialogueManager
 			yield return new WaitForSeconds((1 - m_textSpeed) * 0.1f);
 		}
 		
+		// allow input during dialogue, to allow skip & continue
 		m_isTyping = false;
+		m_sceneManager.SetIsInputAllowed(true);
 
         if (m_isAutoEnabled)
             m_sceneManager.StartCoroutine(WaitForAuto());

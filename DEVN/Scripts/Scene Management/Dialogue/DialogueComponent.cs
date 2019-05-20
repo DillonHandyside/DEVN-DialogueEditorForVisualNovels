@@ -32,6 +32,17 @@ public class DialogueComponent : MonoBehaviour
 	public void ToggleAuto() { GetComponent<SceneManager>().GetDialogueManager().ToggleAuto(); }
 
 	#endregion
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void ProceedDialogue()
+    {
+        SceneManager sceneManager = SceneManager.GetInstance();
+
+        if (sceneManager.GetIsInputAllowed())
+            SceneManager.GetInstance().NextNode();
+    }
 }
 
 }
