@@ -1,8 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using DEVN;
+﻿using System.Collections.Generic;
+using DEVN.Nodes;
+using DEVN.ScriptableObjects;
 
+namespace DEVN
+{
+
+namespace SceneManagement
+{
 
 public class VariableManager
 {
@@ -185,4 +189,8 @@ public class VariableManager
 
         return null; // blackboard not found
     }
+}
+
+}
+
 }

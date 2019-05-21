@@ -4,6 +4,9 @@ using UnityEngine;
 namespace DEVN
 {
 
+namespace SceneManagement
+{
+
 /// <summary>
 /// utility manager class responsible for performing various miscellaneous functions
 /// </summary>
@@ -36,6 +39,8 @@ public class UtilityManager
 		if (nextNode)
 			m_sceneManager.NextNode(); 
 	}
+}
+
 }
 
 }

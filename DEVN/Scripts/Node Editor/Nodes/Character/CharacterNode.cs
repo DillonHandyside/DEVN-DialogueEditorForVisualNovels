@@ -1,13 +1,16 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using DEVN.ScriptableObjects;
 
 namespace DEVN
 {
 
+namespace Nodes
+{
+
 /// <summary>
-/// node used to determine the entering and exiting of a character, including
-/// position, fade time and default sprite
+/// node used to determine the entering and exiting of a character, including position, fade time and default sprite
 /// </summary>
 [System.Serializable]
 public class CharacterNode : BaseNode
@@ -52,12 +55,14 @@ public class CharacterNode : BaseNode
 
         m_title = "Character";
 
+		m_rectangle.width = 340;
+
         AddOutputPoint(); // linear
     }
 
 	/// <summary>
-	/// overridden copy constructor, copies relevant character variables
-	/// such as the default sprite, position and fade time
+	/// overridden copy constructor, copies relevant character variables such as the default sprite, position 
+    /// and fade time
 	/// </summary>
 	/// <param name="node"></param>
 	/// <param name="position"></param>
@@ -81,104 +86,175 @@ public class CharacterNode : BaseNode
 	}
 
 	/// <summary>
-	/// overridden draw function, draws character object field, sprite
-	/// object field, dropdowns and sliders etc.
+	/// overridden draw function, draws character object field, sprite object field, dropdowns and sliders etc.
 	/// </summary>
 	/// <param name="id">the ID of the node window</param>
 	protected override void DrawNodeWindow(int id)
     {
-		float fieldWidth = 160;
-		float fieldHeight = 16;
-		float windowWidth = fieldWidth;
-			
-        Rect fieldRect = new Rect(5, 20, fieldWidth, fieldHeight);
+        // draw the sprite in the background, if one is selected
+        DrawSpriteBackground();
 
-		// enter/exit toggle
-		m_toggleSelection = EditorGUI.Popup(fieldRect, m_toggleSelection, m_toggle);
-        fieldRect.y += fieldHeight;
-
-		// character
-		GUI.Label(fieldRect, "Character");
-        fieldRect.y += fieldHeight;
-		m_character = EditorGUI.ObjectField(fieldRect, m_character, typeof(Character), false) as Character;
-        fieldRect.y += fieldHeight;
+		// enter/exit popup
+		m_toggleSelection = EditorGUILayout.Popup(m_toggleSelection, m_toggle);
+                
+        DrawCharacterObjectField(); // character object field
 
 		if (m_character != null)
 		{
-			// draw sprite label
-			GUI.Label(fieldRect, "Sprite");
-			fieldRect.y += fieldHeight;
-
-			// get sprites and sprite names
-			List<Sprite> sprites = m_character.m_sprites;
-			string[] spriteNames = new string[sprites.Count];
-            for (int i = 0; i < sprites.Count; i++)
+            // draw all of the relevant GUI elements
+            if (DrawSpritePopup())
             {
-				Sprite sprite = sprites[i];
-
-                if (sprite == null)
-				{
-					spriteNames[i] = "Null";
-					Debug.LogError("DEVN: Character contains null sprites!");
-				}
-                else
-                    spriteNames[i] = sprite.name;
+                DrawAlignmentSlider(); 
+                DrawFadeTimeSlider(); 
+                DrawInvertToggle(); 
+                DrawWaitForFinishToggle(); 
             }
 
-			// draw drop-down sprite selection menu
-			m_spriteSelection = EditorGUI.Popup(fieldRect, m_spriteSelection, spriteNames);
-			fieldRect.y += fieldHeight + 2;
-
-			if (sprites[m_spriteSelection] != null && spriteNames[m_spriteSelection] != null)
-			{
-				// determine sprite width and height
-				m_sprite = sprites[m_spriteSelection];
-				float aspectRatio = m_sprite.rect.width / m_sprite.rect.height;
-				float spriteHeight = m_rectangle.height - 24;
-				float spriteWidth = spriteHeight * aspectRatio;
-				windowWidth += spriteWidth + 4;
-
-				// draw sprite
-				Rect spriteRect = new Rect(fieldWidth + 10, 20, spriteWidth, spriteHeight);
-				GUI.Box(spriteRect, m_sprite.texture);
-
-				// alignment
-				GUI.Label(fieldRect, "X Position (%)");
-				fieldRect.y += fieldHeight;
-				m_xPosition = EditorGUI.Slider(fieldRect, m_xPosition, 0.0f, 100.0f);
-				fieldRect.y += fieldHeight;
-
-				// fade time
-				GUI.Label(fieldRect, "Fade Time");
-				fieldRect.y += fieldHeight;
-				m_fadeTime = EditorGUI.Slider(fieldRect, m_fadeTime, 0.0f, 3.0f);
-				fieldRect.y += fieldHeight + 2;
-
-				Rect toggleRect = new Rect(fieldWidth - 10, fieldRect.y, fieldHeight, fieldHeight);
-
-				if (m_toggleSelection == 0)
-				{
-					// inverted?
-					GUI.Label(fieldRect, "Invert");
-					m_isInverted = EditorGUI.Toggle(toggleRect, m_isInverted);
-					fieldRect.y += fieldHeight;
-					toggleRect.y += fieldHeight;
-				}
-
-				// wait for finish?
-				GUI.Label(fieldRect, "Wait For Finish");
-				m_waitForFinish = EditorGUI.Toggle(toggleRect, m_waitForFinish);
-				fieldRect.y += fieldHeight;
-			}
+            // end vertical layout group started in DrawSpriteBackground, if necessary
+            if (m_sprite != null)
+                EditorGUILayout.EndVertical();
 		}
 
-		m_rectangle.width = windowWidth + 12;
-		m_rectangle.height = fieldRect.y + 4;
+        // resize node
+        if (Event.current.type == EventType.Repaint)
+        {
+            Rect lastRect = GUILayoutUtility.GetLastRect();
+            m_rectangle.height = lastRect.y + lastRect.height + 4;
+        }
 
 		base.DrawNodeWindow(id);
     }
 
+    /// <summary>
+    /// function which draws a semi-transparent sprite in the background of the node
+    /// </summary>
+    private void DrawSpriteBackground()
+    {
+		if (m_sprite == null)
+		    return; // no sprite selected, don't draw
+		
+		// determine sprite width and height
+		float aspectRatio = m_sprite.rect.width / m_sprite.rect.height;
+		float spriteWidth = m_rectangle.width;
+		float spriteHeight = spriteWidth / aspectRatio;
+
+        // draw sprite
+        GUI.color = new Color(1, 1, 1, 0.45f);
+		GUI.DrawTexture(new Rect(72, 16, spriteWidth, spriteHeight), m_sprite.texture);
+        GUI.color = Color.white;
+                
+        // begin vertical layout such that the rest of the GUI elements are half the width of the node
+        EditorGUILayout.BeginVertical(GUILayout.Width(m_rectangle.width * 0.5f));
+    }
+
+	/// <summary>
+	/// function which draws an object field for selecting a character asset
+	/// </summary>
+	private void DrawCharacterObjectField()
+	{
+		// draw label & object field
+		EditorGUILayout.LabelField("Character");
+		m_character = EditorGUILayout.ObjectField(m_character, typeof(Character), false) as Character;
+
+        if (m_character == null)
+            m_sprite = null; // reset sprite if no character is selected
+	}
+     
+    /// <summary>
+    /// function which draws a dropdown list for all available sprites
+    /// </summary>
+	private bool DrawSpritePopup()
+	{
+		// get sprites
+		List<Sprite> sprites = m_character.GetSprites();
+
+        // character contains no sprites, therefore no need to enter/exit the character
+        if (sprites.Count == 0)
+        {
+            Debug.LogError("DEVN: Character has no sprites! If you want an off-screen character, there is no need to enter/exit.");
+            m_sprite = null;
+            return false;
+        }
+
+        // get a list of all the character's sprite names
+		string[] spriteNames = new string[sprites.Count];
+		for (int i = 0; i < sprites.Count; i++)
+		{
+			Sprite sprite = sprites[i];
+
+            // log an error and stop function if null sprites are found
+			if (sprite == null)
+			{
+				Debug.LogError("DEVN: Character contains null sprites!");
+                return false;
+			}
+			else
+				spriteNames[i] = sprite.name;
+		}
+        
+		// draw label and drop-down sprite selection menu
+		EditorGUILayout.LabelField("Sprite");
+		m_spriteSelection = EditorGUILayout.Popup(m_spriteSelection, spriteNames);
+        m_sprite = sprites[m_spriteSelection];
+
+		// clamp to prevent index out of range errors
+		m_spriteSelection = Mathf.Clamp(m_spriteSelection, 0, sprites.Count - 1);
+        return true;
+	}
+
+    /// <summary>
+    /// function which draws a slider for setting a character's alignment (x-position) on entry
+    /// </summary>
+    private void DrawAlignmentSlider()
+    {
+        // only draw alignment slider on character "Enter"
+        if (m_toggleSelection == 0)
+        {
+            EditorGUILayout.LabelField("X Position (%)");
+            m_xPosition = EditorGUILayout.Slider(m_xPosition, 0.0f, 100.0f);
+        }
+    }
+
+    /// <summary>
+    /// function which draws a slider for setting a character's fade in/out time on entry/exit
+    /// </summary>
+    private void DrawFadeTimeSlider()
+    {
+        EditorGUILayout.LabelField("Fade Time");
+        m_fadeTime = EditorGUILayout.Slider(m_fadeTime, 0.0f, 3.0f);
+    }
+
+    /// <summary>
+    /// function which draws a toggle for determining whether or not a character is inverted on entry
+    /// </summary>
+    private void DrawInvertToggle()
+    {
+        // only draw toggle on character "Enter"
+        if (m_toggleSelection == 0)
+        {
+            // draw label and toggle field on same line
+            EditorGUILayout.LabelField("Invert");
+            Rect toggleRect = GUILayoutUtility.GetLastRect();
+            toggleRect.x = toggleRect.width - 8;
+            m_isInverted = EditorGUI.Toggle(toggleRect, m_isInverted);
+        }
+    }
+
+    /// <summary>
+    /// function which draws a toggle for setting "wait for finish"
+    /// </summary>
+    private void DrawWaitForFinishToggle()
+    {
+        // draw label and toggle field on same line
+        EditorGUILayout.LabelField("Wait For Finish");
+        Rect toggleRect = GUILayoutUtility.GetLastRect();
+        toggleRect.x = toggleRect.width - 8;
+        m_waitForFinish = EditorGUI.Toggle(toggleRect, m_waitForFinish);
+    }
+
 #endif
+}
+
 }
 
 }

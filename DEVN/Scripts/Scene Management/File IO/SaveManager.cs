@@ -3,8 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
+using DEVN.Components;
+using DEVN.ScriptableObjects;
 
 namespace DEVN
+{
+
+namespace SceneManagement
 {
 
 /// <summary>
@@ -217,6 +222,8 @@ public class SaveManager
         Vector2 snapshotPivot = new Vector2(0.5f, 0.5f);
         m_snapshot = Sprite.Create(snapshot, snapshotRect, snapshotPivot);
     }
+}
+
 }
 
 }

@@ -4,6 +4,9 @@ using UnityEngine.Audio;
 namespace DEVN
 {
 
+namespace SceneManagement
+{
+
 /// <summary>
 /// singleton settings class which houses the game settings such as
 /// text speed, game audio, etc.
@@ -87,6 +90,8 @@ public class SettingsManager : MonoBehaviour
 		audioMixer.SetFloat("volumeSFX", Mathf.Log10(m_sfxVolume) * 20); // SFX
 		audioMixer.SetFloat("volumeVoice", Mathf.Log10(m_voiceVolume) * 20); // voice
 	}
+}
+
 }
 
 }

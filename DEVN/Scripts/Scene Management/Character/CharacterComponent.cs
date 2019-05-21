@@ -3,6 +3,9 @@
 namespace DEVN
 {
 
+namespace Components
+{
+
 /// <summary>
 /// component to be placed on the gameobject containing "SceneManager", contains
 /// references to the character prefab and the character panel UI elements
@@ -25,6 +28,8 @@ public class CharacterComponent : MonoBehaviour
 	public RectTransform GetForegroundPanel() { return m_foregroundPanel; }
 
 		#endregion
+}
+
 }
 
 }

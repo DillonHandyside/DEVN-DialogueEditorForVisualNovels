@@ -4,6 +4,9 @@ using UnityEngine;
 namespace DEVN
 {
 
+namespace ScriptableObjects
+{
+
 /// <summary>
 /// a singleton scriptableobject class which houses the important data related to
 /// the game
@@ -49,6 +52,8 @@ public class GameData
 	{
 		m_saves[saveSlot] = saveData;
 	}
+}
+
 }
 
 }

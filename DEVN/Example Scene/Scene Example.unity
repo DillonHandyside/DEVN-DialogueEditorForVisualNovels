@@ -156,7 +156,7 @@ Prefab:
         type: 2}
       propertyPath: m_startScene
       value: 
-      objectReference: {fileID: 11400000, guid: c6545ff4b172aaf459591c1b102fa4b9,
+      objectReference: {fileID: 11400000, guid: a5d8d34d4a215b94d8aa7d2708af3771,
         type: 2}
     - target: {fileID: 1025589883586564, guid: b14ea4fcf459f4a42a6c20c48957f627, type: 2}
       propertyPath: m_IsActive
@@ -173,6 +173,35 @@ Prefab:
     - target: {fileID: 1415309640258744, guid: b14ea4fcf459f4a42a6c20c48957f627, type: 2}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1038078834304422, guid: b14ea4fcf459f4a42a6c20c48957f627, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224343379817486690, guid: b14ea4fcf459f4a42a6c20c48957f627,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: -345.70688
+      objectReference: {fileID: 0}
+    - target: {fileID: 224411800068216364, guid: b14ea4fcf459f4a42a6c20c48957f627,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114456330948071684, guid: b14ea4fcf459f4a42a6c20c48957f627,
+        type: 2}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114929989168918608, guid: b14ea4fcf459f4a42a6c20c48957f627,
+        type: 2}
+      propertyPath: m_Padding.m_Top
+      value: 48
+      objectReference: {fileID: 0}
+    - target: {fileID: 224343379817486690, guid: b14ea4fcf459f4a42a6c20c48957f627,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 60
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114812858826411686, guid: b14ea4fcf459f4a42a6c20c48957f627, type: 2}

@@ -1,8 +1,16 @@
 ﻿using UnityEngine;
+using DEVN.ScriptableObjects;
 
 namespace DEVN
 {
 
+namespace Components
+{
+
+/// <summary>
+/// character info component which is stored on the character prefab. Used to set and get information of the
+/// current character
+/// </summary>
 public class CharacterInfo : MonoBehaviour
 {
 	[HideInInspector]
@@ -19,6 +27,8 @@ public class CharacterInfo : MonoBehaviour
 	public void SetCharacter(Character character) { m_character = character; }
 
 	#endregion
+}
+
 }
 
 }

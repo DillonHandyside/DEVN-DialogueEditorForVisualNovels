@@ -1,12 +1,15 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using DEVN.ScriptableObjects;
 
 namespace DEVN
 {
 
+namespace Nodes
+{
+
 /// <summary>
-/// node used for translating a particular character, either instantly
-/// or lerped over time
+/// node used for translating a particular character, either instantly or lerped over time
 /// </summary>
 [System.Serializable]
 public class CharacterTranslateNode : BaseNode
@@ -15,7 +18,7 @@ public class CharacterTranslateNode : BaseNode
 	[SerializeField] private Character m_character;
 
 	// the translation value
-	[SerializeField] private Vector2 m_translation;
+	[SerializeField] private float m_xPosition = 50;
 
 	// lerp values
 	[SerializeField] private bool m_isLerp = false;
@@ -24,7 +27,7 @@ public class CharacterTranslateNode : BaseNode
 	#region getters
 
 	public Character GetCharacter() { return m_character; }
-	public Vector2 GetTranslation() { return m_translation; }
+	public float GetXPosition() { return m_xPosition; }
 	public bool GetIsLerp() { return m_isLerp; }
 	public float GetLerpTime() { return m_lerpTime; }
 
@@ -60,14 +63,13 @@ public class CharacterTranslateNode : BaseNode
 
         // copy relevant variables, character, translation, lerp etc.
 		m_character = characterMoveNode.m_character;
-		m_translation = characterMoveNode.m_translation;
+		m_xPosition = characterMoveNode.m_xPosition;
 		m_isLerp = characterMoveNode.m_isLerp;
 		m_lerpTime = characterMoveNode.m_lerpTime;
     }
 
 	/// <summary>
-	/// overridden draw function, draws character object field, vector2
-    /// translation field, lerp toggle/slider. Resizes window if necessary
+	/// overridden draw function, draws character object field, vector2 translation field, lerp toggle/slider
 	/// </summary>
 	/// <param name="id">the node window ID</param>
     protected override void DrawNodeWindow(int id)
@@ -77,13 +79,14 @@ public class CharacterTranslateNode : BaseNode
 		m_character = EditorGUILayout.ObjectField(m_character, typeof(Character), false) as Character;
 
 		// draw vector2 translate field
-		m_translation = EditorGUILayout.Vector2Field("Translation", m_translation);
+        EditorGUILayout.LabelField("X Position (%)");
+        m_xPosition = EditorGUILayout.Slider(m_xPosition, 0, 100);
 
 		// draw lerp toggle
 		EditorGUILayout.LabelField("Lerp");
         Rect toggleRect = GUILayoutUtility.GetLastRect();
         toggleRect.x = m_rectangle.width - 18;
-		m_isLerp = EditorGUILayout.Toggle(m_isLerp);
+		m_isLerp = EditorGUI.Toggle(toggleRect, m_isLerp);
 
 		// if lerp is toggled, draw lerp time slider
 		if (m_isLerp)
@@ -103,6 +106,8 @@ public class CharacterTranslateNode : BaseNode
 	}
 
 #endif
+}
+
 }
 
 }

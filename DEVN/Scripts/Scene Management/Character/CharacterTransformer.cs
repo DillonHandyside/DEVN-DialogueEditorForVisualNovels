@@ -4,6 +4,9 @@ using UnityEngine;
 namespace DEVN
 {
 
+namespace SceneManagement
+{
+
 public class CharacterTransformer
 {
 	/// <summary>
@@ -108,6 +111,8 @@ public class CharacterTransformer
 			yield return null;
 		}
 	}
+}
+
 }
 
 }

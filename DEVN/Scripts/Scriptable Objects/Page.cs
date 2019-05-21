@@ -1,7 +1,12 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using DEVN.Editor;
+using DEVN.Nodes;
 
 namespace DEVN
+{
+
+namespace ScriptableObjects
 {
 
 /// <summary>
@@ -39,6 +44,8 @@ public class Page : ScriptableObject
     }
 
 #endif
+}
+
 }
 
 }

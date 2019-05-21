@@ -4,6 +4,9 @@ using UnityEditor;
 namespace DEVN
 {
 
+namespace Nodes
+{
+
 /// <summary>
 /// a template node which showcases all of the required code to
 /// initialise, copy and draw a node
@@ -63,6 +66,8 @@ public class TemplateNode : BaseNode
 	}
 
 #endif
+}
+
 }
 
 }

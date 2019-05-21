@@ -1,7 +1,11 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using DEVN.ScriptableObjects;
 
 namespace DEVN
+{
+
+namespace Nodes
 {
 
 /// <summary>
@@ -57,6 +61,8 @@ public class EndNode : BaseNode
 	}
 
 #endif
+}
+
 }
 
 }

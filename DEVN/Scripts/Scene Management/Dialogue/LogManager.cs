@@ -1,7 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using DEVN.Components;
 
 namespace DEVN
+{
+
+namespace SceneManagement
 {
 
 /// <summary>
@@ -64,6 +68,8 @@ public class LogManager
         for (int i = 0; i < logMessages.Length; i++)
             Object.Destroy(logMessages[i]);
     }
+}
+
 }
 
 }

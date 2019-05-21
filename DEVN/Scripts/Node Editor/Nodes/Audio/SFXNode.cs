@@ -4,9 +4,11 @@ using UnityEditor;
 namespace DEVN
 {
 
+namespace Nodes
+{
+
 /// <summary>
-/// a node which houses sound effect variables such as the SFX itself
-/// and a "wait for finish" flag
+/// a node which houses sound effect variables such as the SFX itself and a "wait for finish" flag
 /// </summary>
 [System.Serializable]
 public class SFXNode : BaseNode
@@ -75,6 +77,8 @@ public class SFXNode : BaseNode
 	}
 
 #endif
+}
+
 }
 
 }

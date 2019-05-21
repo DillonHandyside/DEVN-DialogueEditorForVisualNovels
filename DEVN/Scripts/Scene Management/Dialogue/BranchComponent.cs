@@ -4,6 +4,9 @@ using UnityEngine.UI;
 namespace DEVN
 {
 	
+namespace Components
+{
+
 /// <summary>
 /// component to be placed on the gameobject containing "SceneManager", contains
 /// references to the branch panel and it's content, and a branch prefab 
@@ -29,6 +32,8 @@ public class BranchComponent : MonoBehaviour
 	public Transform GetBranchContent() { return m_branchContent; }
 
 	#endregion
+}
+
 }
 
 }

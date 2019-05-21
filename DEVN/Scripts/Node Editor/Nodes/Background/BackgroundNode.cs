@@ -1,12 +1,15 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using DEVN.ScriptableObjects;
 
 namespace DEVN
 {
 
+namespace Nodes
+{
+
 /// <summary>
-/// node which determines background behaviour, including enter/exit,
-/// fade time and colour
+/// node which determines background behaviour, including enter/exit, fade time and colour
 /// </summary>
 public class BackgroundNode : BaseNode
 {
@@ -14,7 +17,8 @@ public class BackgroundNode : BaseNode
     private string[] m_toggle = { "Enter", "Exit" };
     [SerializeField] private int m_toggleSelection = 0;
 		
-    [SerializeField] private Sprite m_background; // background sprite
+    [SerializeField] private Background m_background;
+    //[SerializeField] private Sprite m_background; // background sprite
 
 	// background fade variables
 	[SerializeField] private Color m_fadeColour = Color.black;
@@ -24,7 +28,7 @@ public class BackgroundNode : BaseNode
 	#region getters
 
 	public int GetToggleSelection() { return m_toggleSelection; }
-	public Sprite GetBackground() { return m_background; }
+	public Background GetBackground() { return m_background; }
 	public Color GetFadeColour() { return m_fadeColour; }
 	public float GetFadeTime() { return m_fadeTime; }
 	public bool GetWaitForFinish() { return m_waitForFinish; }
@@ -50,8 +54,7 @@ public class BackgroundNode : BaseNode
     }
 
 	/// <summary>
-	/// overridden copy constructor, background and other associated 
-	/// properties
+	/// overridden copy constructor, background and other associated properties
 	/// </summary>
 	/// <param name="node">node to copy</param>
 	/// <param name="position">position to copy to</param>
@@ -64,7 +67,7 @@ public class BackgroundNode : BaseNode
 		// copy enter/exit toggle
 		m_toggleSelection = backgroundNode.m_toggleSelection;
 
-		// copy sprite selection
+		// copy background selection
 		m_background = backgroundNode.m_background; 
 
 		// copy fade attributes
@@ -74,61 +77,62 @@ public class BackgroundNode : BaseNode
 	}
 
 	/// <summary>
-	/// overridden draw function
+	/// overridden draw function, draws relevant background fields, such as Enter/Exit popup, background object
+    /// and preview, colour and fade time
 	/// </summary>
 	/// <param name="id">the ID of the node window</param>
 	protected override void DrawNodeWindow(int id)
 	{
-		float width = m_rectangle.width - 10.0f;
-        float fieldHeight = 16;
-
-		Rect fieldRect = new Rect(5, 20, width, fieldHeight);
-
 		// enter/exit toggle
-		m_toggleSelection = EditorGUI.Popup(fieldRect, m_toggleSelection, m_toggle);
-		fieldRect.y += fieldHeight + 2;
+		m_toggleSelection = EditorGUILayout.Popup(m_toggleSelection, m_toggle);
+        
+        // if "Enter" is selected, show background object field and preview
+        if (m_toggleSelection == 0)
+        {
+            // background object field
+            EditorGUILayout.LabelField("Background");
+            m_background = EditorGUILayout.ObjectField(m_background, typeof(Background), false) as Background;
 
-		// if "Enter" is selected, show background sprite object field
-		if (m_toggleSelection == 0)
-		{
-			Rect spriteRect = fieldRect;
-			spriteRect.height = 90;
-
-			// draw background object field
-			m_background = EditorGUI.ObjectField(spriteRect, m_background, typeof(Sprite), false) as Sprite;
-			fieldRect.y += spriteRect.height;
-		}
+            // if a background is selected, display a preview of it
+            if (m_background != null)
+            {
+                GUILayoutOption[] options = { GUILayout.Width(160), GUILayout.Height(90) };
+                GUILayout.Box(m_background.GetBackground().texture, options);
+            }
+        }
 
 		// fade colour field
-		GUI.Label(fieldRect, "Fade Colour");
-        fieldRect.y += fieldHeight;
-        m_fadeColour = EditorGUI.ColorField(fieldRect, m_fadeColour);
-        fieldRect.y += fieldHeight;
+		EditorGUILayout.LabelField("Fade Colour");
+        m_fadeColour = EditorGUILayout.ColorField(m_fadeColour);
 
         // fade time
-        GUI.Label(fieldRect, "Fade Time");
-        fieldRect.y += fieldHeight;
-        m_fadeTime = EditorGUI.Slider(fieldRect, m_fadeTime, 0.01f, 3);
-		fieldRect.y += fieldHeight;
+        EditorGUILayout.LabelField("Fade Time");
+        m_fadeTime = EditorGUILayout.Slider(m_fadeTime, 0.01f, 3);
 
 		// if "Enter" is selected, show "wait for finish" toggle
 		if (m_toggleSelection == 0)
 		{
 			// draw "wait for finish" label and toggle
-			GUI.Label(fieldRect, "Wait For Finish");
-			fieldRect.x = m_rectangle.width - 20;
-			fieldRect.width = fieldHeight;
-			m_waitForFinish = EditorGUI.Toggle(fieldRect, m_waitForFinish);
-			fieldRect.y += fieldHeight;
-		}
+			EditorGUILayout.LabelField("Wait For Finish");
+            Rect toggleRect = GUILayoutUtility.GetLastRect();
+            toggleRect.x = m_rectangle.width - 20;
 
-		// adjust node height
-		m_rectangle.height = fieldRect.y + 4;
+			m_waitForFinish = EditorGUI.Toggle(toggleRect, m_waitForFinish);
+		}
+        
+		// resize node
+        if (Event.current.type == EventType.Repaint)
+        {
+            Rect lastRect = GUILayoutUtility.GetLastRect();
+            m_rectangle.height = lastRect.y + lastRect.height + 4;
+        }
 
         base.DrawNodeWindow(id);
     }
 
 #endif
+}
+
 }
 
 }

@@ -1,8 +1,14 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using DEVN.Nodes;
+using DEVN.Components;
+using DEVN.ScriptableObjects;
 
 namespace DEVN
+{
+
+namespace SceneManagement
 {
 
 /// <summary>
@@ -67,7 +73,7 @@ public class DialogueManager
 		Debug.Assert(character != null, "DEVN: Dialogue requires a speaking character!");
 		
 		// update speaker text field
-		m_speaker.text = character.m_name; 
+		m_speaker.text = character.GetName(); 
 		m_sceneManager.StartCoroutine(m_typewriteEvent = TypewriteText(dialogueNode.GetDialogue()));
 
 		Sprite currentSprite = dialogueNode.GetSprite();
@@ -98,7 +104,7 @@ public class DialogueManager
 		// only log dialogue if a log exists
 		LogManager logManager = m_sceneManager.GetLogManager();
 		if (logManager != null)
-			logManager.LogDialogue(currentSprite, character.m_name, dialogueNode.GetDialogue());
+			logManager.LogDialogue(currentSprite, character.GetName(), dialogueNode.GetDialogue());
 	}
 
 	/// <summary>
@@ -206,6 +212,8 @@ public class DialogueManager
 
 		m_isTyping = false;
 	}
+}
+
 }
 
 }

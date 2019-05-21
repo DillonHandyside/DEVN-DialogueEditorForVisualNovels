@@ -4,6 +4,9 @@ using UnityEditor;
 namespace DEVN
 {
 
+namespace Nodes
+{
+
 /// <summary>
 /// utility delay node used for delaying node proceeding for an arbitrary
 /// amount of time
@@ -66,6 +69,8 @@ public class DelayNode : BaseNode
 	}
 
 #endif
+}
+
 }
 
 }

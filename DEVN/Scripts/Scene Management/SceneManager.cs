@@ -1,7 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using DEVN.Nodes;
+using DEVN.Components;
+using DEVN.ScriptableObjects;
 
 namespace DEVN
+{
+
+namespace SceneManagement
 {
 	
 /// <summary>
@@ -28,7 +34,6 @@ public class SceneManager : MonoBehaviour
 	private BranchManager m_branchManager;
     private CharacterManager m_characterManager;
     private DialogueManager m_dialogueManager;
-	private InputManager m_inputManager;
     private LogManager m_logManager;
 	private SaveManager m_saveManager;
 	private UtilityManager m_utilityManager;
@@ -46,7 +51,6 @@ public class SceneManager : MonoBehaviour
     public BackgroundManager GetBackgroundManager() { return m_backgroundManager; }
     public CharacterManager GetCharacterManager() { return m_characterManager; }
     public DialogueManager GetDialogueManager() { return m_dialogueManager; }
-	public InputManager GetInputManager() { return m_inputManager; }
 	public SaveManager GetSaveManager() { return m_saveManager; }
 	public UtilityManager GetUtilityManager() { return m_utilityManager; }
     public LogManager GetLogManager() { return m_logManager; }
@@ -83,7 +87,6 @@ public class SceneManager : MonoBehaviour
 		BranchComponent branchComponent = GetComponent<BranchComponent>();
 		CharacterComponent characterComponent = GetComponent<CharacterComponent>();
 		DialogueComponent dialogueComponent = GetComponent<DialogueComponent>();
-		InputComponent inputComponent = GetComponent<InputComponent>();
 		LogComponent logComponent = GetComponent<LogComponent>();
 		SaveComponent saveComponent = GetComponent<SaveComponent>();
 
@@ -98,8 +101,6 @@ public class SceneManager : MonoBehaviour
 			m_characterManager = new CharacterManager(this, characterComponent);
 		if (dialogueComponent != null)
 			m_dialogueManager = new DialogueManager(this, dialogueComponent);
-		if (inputComponent != null)
-			m_inputManager = new InputManager(this, inputComponent);
 		if (logComponent != null)
 			m_logManager = new LogManager(logComponent);
 		if (saveComponent != null)
@@ -110,15 +111,6 @@ public class SceneManager : MonoBehaviour
 
         // delete this later
 		NewScene(m_startScene);
-	}
-	
-	/// <summary>
-	/// 
-	/// </summary>
-	void Update ()
-	{
-		if (m_inputManager != null)
-			m_inputManager.Update();
 	}
 
 	/// <summary>
@@ -417,7 +409,7 @@ public class SceneManager : MonoBehaviour
 		if (backgroundNode.GetToggleSelection() == 0) // enter
 		{
 			// perform background fade-in
-			Sprite background = backgroundNode.GetBackground();
+			Sprite background = backgroundNode.GetBackground().GetBackground();
 			bool waitForFinish = backgroundNode.GetWaitForFinish();
 			m_backgroundManager.EnterBackground(background, fadeColour, fadeTime, true, waitForFinish);
 		}
@@ -490,7 +482,7 @@ public class SceneManager : MonoBehaviour
 	{
 		CharacterTranslateNode translateNode = m_currentNode as CharacterTranslateNode;
 		GameObject character = m_characterManager.TryGetCharacter(translateNode.GetCharacter());
-		Vector2 position = translateNode.GetTranslation();
+		Vector2 position = new Vector2(translateNode.GetXPosition(), 0);
 
 		if (translateNode.GetIsLerp())
             StartCoroutine(characterTransformer.LerpCharacterPosition(character, position, translateNode.GetLerpTime()));
@@ -501,6 +493,8 @@ public class SceneManager : MonoBehaviour
 	}
 
     #endregion
+}
+
 }
 
 }

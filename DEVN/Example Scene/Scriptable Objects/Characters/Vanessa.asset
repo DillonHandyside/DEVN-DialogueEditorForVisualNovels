@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 103f3cff3124c3f409d3d50d7232d094, type: 3}
   m_Name: Vanessa
   m_EditorClassIdentifier: 
-  m_name: Vanessa
+  m_name: 
   m_sprites:
   - {fileID: 21300000, guid: 0f2bd585e44b6664b87b6b7b9ad015cd, type: 3}
   - {fileID: 21300000, guid: 8ce99759b93fa4b47994fe4a250ec27c, type: 3}

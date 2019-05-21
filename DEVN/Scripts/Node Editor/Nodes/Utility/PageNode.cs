@@ -1,7 +1,11 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using DEVN.Editor;
 
 namespace DEVN
+{
+
+namespace Nodes
 {
 
 /// <summary>
@@ -35,8 +39,7 @@ public class PageNode : BaseNode
     }
 
     /// <summary>
-    /// overridden copy constructor, copies the desired page number
-    /// to jump to
+    /// overridden copy constructor, copies the desired page number to jump to
     /// </summary>
     /// <param name="node">the node to copy</param>
     /// <param name="position">the position to copy to</param>
@@ -51,8 +54,7 @@ public class PageNode : BaseNode
     }
 
     /// <summary>
-    /// overridden draw function, gets all existing pages and lists
-    /// them in a popup for the user to select
+    /// overridden draw function, gets all existing pages and lists them in a popup for the user to select
     /// </summary>
     /// <param name="id">the node window ID</param>
     protected override void DrawNodeWindow(int id)
@@ -75,6 +77,8 @@ public class PageNode : BaseNode
 	}
 
 #endif
+}
+
 }
 
 }

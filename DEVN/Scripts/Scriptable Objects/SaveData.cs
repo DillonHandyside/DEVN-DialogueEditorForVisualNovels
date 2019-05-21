@@ -1,9 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using DEVN.Nodes;
 
 namespace DEVN
+{
+
+namespace ScriptableObjects
 {
 
 /// <summary>
@@ -61,6 +63,8 @@ public class SaveData
 				m_characters.Add(characters[i]);
 			}
 		}
+}
+
 }
 
 }

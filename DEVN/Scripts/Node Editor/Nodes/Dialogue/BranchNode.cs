@@ -1,8 +1,12 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using DEVN.Editor;
 
 namespace DEVN
+{
+
+namespace Nodes
 {
 
 /// <summary>
@@ -58,8 +62,7 @@ public class BranchNode : BaseNode
 	}
 
 	/// <summary>
-	/// overridden draw function. Draws as many text fields as there
-	/// are branches
+	/// overridden draw function. Draws as many text fields as there are branches
 	/// </summary>
 	/// <param name="id">the ID of the node window</param>
 	protected override void DrawNodeWindow(int id)
@@ -96,8 +99,7 @@ public class BranchNode : BaseNode
     }
 
     /// <summary>
-    /// helper function which adds a new branch, output point and
-	/// resizes the node window
+    /// helper function which adds a new branch, output point and resizes the node window
     /// </summary>
     private void AddBranch()
     {
@@ -107,8 +109,7 @@ public class BranchNode : BaseNode
 	}
 
     /// <summary>
-    /// helper function which removes the last branch, the last output
-	/// point and resizes the node window
+    /// helper function which removes the last branch, the last output point and resizes the node window
     /// </summary>
     private void RemoveBranch()
     {
@@ -131,6 +132,8 @@ public class BranchNode : BaseNode
     }
 
 #endif
+}
+
 }
 
 }

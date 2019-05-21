@@ -3,6 +3,9 @@
 namespace DEVN
 {
 
+namespace Components
+{
+
 /// <summary>
 /// component to be placed on the gameobject containing "SceneManager", contains
 /// references to the log prefab and the log panel
@@ -25,6 +28,8 @@ public class LogComponent : MonoBehaviour
 	public Transform GetLogContent() { return m_logContent; }
 
 	#endregion
+}
+
 }
 
 }

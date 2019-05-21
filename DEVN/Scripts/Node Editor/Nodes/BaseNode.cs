@@ -1,8 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using DEVN.Editor;
+using DEVN.ScriptableObjects;
 
 namespace DEVN
+{
+
+namespace Nodes
 {
 
 /// <summary>
@@ -11,7 +16,7 @@ namespace DEVN
 /// </summary>
 public abstract class BaseNode : ScriptableObject
 {
-    [SerializeField] private int m_nodeID; // node ID
+    [SerializeField] protected int m_nodeID; // node ID
 
     // node window properties
     [SerializeField] protected Rect m_rectangle;
@@ -28,6 +33,7 @@ public abstract class BaseNode : ScriptableObject
     #region getters
     
     public int GetNodeID() { return m_nodeID; }
+    public Rect GetNodeRect() { return m_rectangle; }
     
     #endregion
 
@@ -255,7 +261,7 @@ public abstract class BaseNode : ScriptableObject
             case EventType.MouseDown:
                 
                 // node right click events
-                if (e.button == (int)MouseButton.RightClick)
+                if (e.button == 1)
                 {
                     ProcessContextMenu(); // open right-click menu
                     e.Use();
@@ -268,10 +274,7 @@ public abstract class BaseNode : ScriptableObject
 
                 // handle deletion using delete key
                 if (e.keyCode == KeyCode.Delete)
-                {
                     NodeEditor.GetNodeManager().RemoveNode(this); // perform removal
-                    GUI.changed = true;
-                }
 
                 break;
         }
@@ -287,6 +290,8 @@ public abstract class BaseNode : ScriptableObject
 	}
 
 #endif
+}
+
 }
 
 }

@@ -1,10 +1,18 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using DEVN.ScriptableObjects;
 
 namespace DEVN
 {
 
+namespace Nodes
+{
+
+/// <summary>
+/// condition node which stores all of the relevant blackboard information to make comparisons between 
+/// blackboard-value or blackboard-blackboard
+/// </summary>
 [System.Serializable]
 public class ConditionNode : BaseNode
 {
@@ -215,6 +223,8 @@ public class ConditionNode : BaseNode
     }
         
 #endif
+}
+
 }
 
 }

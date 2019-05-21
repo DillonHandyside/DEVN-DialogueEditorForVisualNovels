@@ -4,9 +4,12 @@ using UnityEngine.UI;
 namespace DEVN
 {
 
+namespace Components
+{
+
 /// <summary>
-/// helper class which is stored on the "Log Message" prefab. Used to retrieve
-/// references to the log messages different UI elements, e.g. sprites, dialogue, etc.
+/// log message component which is stored on the "Log Message" prefab. Used to retrieve references to the log 
+/// message's different UI elements, e.g. sprites, dialogue, etc.
 /// </summary>
 public class LogMessage : MonoBehaviour
 {
@@ -22,6 +25,8 @@ public class LogMessage : MonoBehaviour
     public Text GetDialogue() { return m_dialogue; }
 
     #endregion
+}
+
 }
 
 }

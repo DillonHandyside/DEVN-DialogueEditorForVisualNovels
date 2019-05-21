@@ -1,8 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using DEVN.Nodes;
+using DEVN.Editor;
 
 namespace DEVN
+{
+
+namespace ScriptableObjects
 {
 
 /// <summary>
@@ -87,9 +92,10 @@ public class Scene : ScriptableObject
         int nodeCount = nodes.Count;
 
 		// remove all of the nodes in the page
+        NodeManager nodeManager = NodeEditor.GetNodeManager();
 		Undo.RegisterFullObjectHierarchyUndo(currentPage, "Delete Page");
         for (int i = nodeCount - 1; i >= 0; i--)
-            NodeEditor.GetNodeManager().RemoveNode(nodes[i]);
+            nodeManager.RemoveNode(nodes[i], false);
         
 		// record scene and remove page from scene
         Undo.RecordObject(this, "Delete Page");
@@ -104,6 +110,8 @@ public class Scene : ScriptableObject
     }
 
 #endif
+}
+
 }
 
 }

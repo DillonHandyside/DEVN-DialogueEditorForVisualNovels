@@ -4,9 +4,12 @@ using UnityEngine.UI;
 namespace DEVN
 {
 
+namespace Components
+{
+
 /// <summary>
-/// save slot component used to house references to save slot UI
-/// elements
+/// save slot component which is stored on the save slot prefab. Used to retrieve references to save slot UI 
+/// image and text elements
 /// </summary>
 public class SaveSlot : MonoBehaviour
 {
@@ -26,6 +29,8 @@ public class SaveSlot : MonoBehaviour
     public Text GetDate() { return m_date; }
 
     #endregion
+}
+
 }
 
 }

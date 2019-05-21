@@ -1,9 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DEVN.Components;
 
 namespace DEVN
+{
+
+namespace SceneManagement
 {
 
 public class BranchManager
@@ -32,16 +35,10 @@ public class BranchManager
 	/// <param name="branches"></param>
 	public void DisplayChoices(List<string> branches)
 	{
-		Button firstBranch = null;
-		Button previousBranch = null;
-
 		for (int i = 0; i < branches.Count; i++)
 		{
 			GameObject branch = Object.Instantiate(m_branchPrefab, m_branchContent); // create branch
 			Button branchButton = branch.GetComponent<Button>(); // get reference to button component
-			
-			if (i == 0)
-				firstBranch = branchButton;
 			
 			// set branch text
 			Text branchText = branch.GetComponentInChildren<Text>();
@@ -52,32 +49,7 @@ public class BranchManager
 			branchButton.onClick.AddListener(() => m_sceneManager.NextNode(branchIndex));
 			branchButton.onClick.AddListener(() => { m_branches.SetActive(false); });
 			branchButton.onClick.AddListener(() => { ClearChoices(); });
-
-			//if (previousBranch != null)
-			//{
-			//	Navigation verticalNavigation = previousBranch.navigation;
-			//	verticalNavigation.selectOnDown = branchButton;
-			//	previousBranch.navigation = verticalNavigation;
-
-			//	verticalNavigation.selectOnDown = null;
-			//	verticalNavigation.selectOnUp = previousBranch;
-			//	branchButton.navigation = verticalNavigation;
-
-			//}
-
-			////
-			//previousBranch = branchButton;
 		}
-		
-		//Navigation firstNavigation = firstBranch.navigation;
-		//firstNavigation.selectOnUp = previousBranch;
-		//firstBranch.navigation = firstNavigation;
-
-		//Navigation lastNavigation = previousBranch.navigation;
-		//lastNavigation.selectOnDown = firstBranch;
-		//previousBranch.navigation = lastNavigation;
-
-		//m_sceneManager.GetInputManager().SetSelectedGameObject(firstBranch.gameObject);
 
 		// display the branch panel
 		m_branches.SetActive(true);
@@ -93,6 +65,8 @@ public class BranchManager
 		for (int i = 0; i < branches.Length; i++)
 			Object.Destroy(branches[i].gameObject);
 	}
+}
+
 }
 
 }

@@ -1,12 +1,20 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using DEVN.Nodes;
+using DEVN.ScriptableObjects;
 
 #if UNITY_EDITOR
 
 namespace DEVN
 {
 
+namespace Editor
+{
+
+/// <summary>
+/// node manager class which is responsible for drawing, adding, copying, pasting and removing nodes.
+/// </summary>
 public class NodeManager
 {
     // collection of all nodes in graph
@@ -29,10 +37,13 @@ public class NodeManager
 
     #endregion
             
-    public void UpdateNodes()
+    /// <summary>
+    /// update function which gets called by NodeEditor OnGUI
+    /// </summary>
+    public void Update()
     {
-        Scene currentScene = NodeEditor.GetScene();
-        m_nodes = currentScene.GetNodes(currentScene.GetCurrentPageID());
+        Scene currentScene = NodeEditor.GetScene(); // retrieve current scene
+        m_nodes = currentScene.GetNodes(currentScene.GetCurrentPageID()); // update nodes depending on the page
     }
 
     /// <summary>
@@ -43,71 +54,70 @@ public class NodeManager
         for (int i = 0; i < m_nodes.Count; i++)
         {
             BaseNode node = m_nodes[i];
-            Undo.RecordObject(node, "Node Changes");
-            node.Draw();
+            Undo.RecordObject(node, "Node Changes"); // record any changes
+            node.Draw(); // draw the node
         }
     }
 
     /// <summary>
-    /// 
+    /// helper function which performs a linear search to find a node using a node ID
     /// </summary>
-    /// <param name="nodeID"></param>
-    /// <returns></returns>
+    /// <param name="nodeID">the ID of the desired node</param>
+    /// <returns>if search was unsuccessful, this will return null, otherwise it returns the found node</returns>
     public BaseNode FindNode(int nodeID)
     {
         for (int i = 0; i < m_nodes.Count; i++)
         {
             if (m_nodes[i].GetNodeID() == nodeID)
-                return m_nodes[i];
+                return m_nodes[i]; // node found!
         }
 
-        return null;
+        return null; // node not found
     }
 
     /// <summary>
-    /// 
+    /// function which handles node creation
     /// </summary>
-    /// <param name="nodeType"></param>
-    public BaseNode AddNode(System.Type type)
+    /// <param name="nodeType">the type of node to create, e.g. typeof(DialogueNode)</param>
+    /// <param name="nodeToCopy">optional argument used to handle copying of nodes</param>
+    public BaseNode AddNode(System.Type type, BaseNode nodeToCopy = null)
     {
-        Scene currentScene = NodeEditor.GetScene();
+        Scene currentScene = NodeEditor.GetScene(); // retrieve current scene
 
+        // create a new node asset
         BaseNode node = ScriptableObject.CreateInstance(type) as BaseNode;
-        node.Init(NodeEditor.GetMousePosition());
+        if (nodeToCopy != null)
+            node.Copy(nodeToCopy, NodeEditor.GetMousePosition()); // perform copy
+        else
+            node.Init(NodeEditor.GetMousePosition()); // perform initialisation
 
+        // disallow undo functionality for StartNode
         if (type != typeof(StartNode))
         {
-            Page currentPage = currentScene.GetCurrentPage();
-            Undo.RecordObject(currentPage, "New Node");
-            m_nodes.Add(node);
+            Undo.RecordObject(currentScene.GetCurrentPage(), "New Node"); // record changes to the current page
+            m_nodes.Add(node); // add node to list of all nodes in scene
 
-            Undo.RegisterCreatedObjectUndo(node, "New Node");
+            Undo.RegisterCreatedObjectUndo(node, "New Node"); // record creation
         }
 
+        // if an input point is selected, immediately connect new node with the selected node
 		ConnectionManager connectionManager = NodeEditor.GetConnectionManager();
 		BaseNode selectedLeftNode = connectionManager.GetSelectedLeftNode();
-		BaseNode selectedRightNode = connectionManager.GetSelectedRightNode();
-		if (selectedLeftNode != null || selectedRightNode != null)
+		if (selectedLeftNode != null)
 		{
-			if (selectedLeftNode != null)
-				connectionManager.SetSelectedRightNode(node);
-			else
-				connectionManager.SetSelectedLeftNode(node);
-
-			connectionManager.CreateConnection();
-			connectionManager.ClearConnectionSelection();
+			connectionManager.SetSelectedRightNode(node);
+			connectionManager.CreateConnection(); // connect the two nodes
+			connectionManager.ClearConnectionSelection(); // clear selection
 		}
 
-		// add node to scene
+		// parent node to scene asset
         string path = AssetDatabase.GetAssetPath(currentScene);
         AssetDatabase.AddObjectToAsset(node, path);
 
 		// hide node asset from unity project window
         node.hideFlags = HideFlags.HideInHierarchy;
-        AssetDatabase.SaveAssets();
-
-		GUI.changed = true;
-
+        AssetDatabase.SaveAssets(); // save!
+                
 		return node;
     }
 
@@ -118,7 +128,6 @@ public class NodeManager
     public void CopyNode(BaseNode node)
     {
         m_clipboard = node;
-        GUI.changed = true;
     }
 
     /// <summary>
@@ -126,30 +135,23 @@ public class NodeManager
     /// </summary>
     public void PasteNode()
     {
-        BaseNode node = ScriptableObject.CreateInstance(m_clipboard.GetType()) as BaseNode;
-        node.Copy(m_clipboard, NodeEditor.GetMousePosition());
-
-        string path = AssetDatabase.GetAssetPath(NodeEditor.GetScene());
-        AssetDatabase.AddObjectToAsset(node, path);
-
-        m_nodes.Add(node);
-        GUI.changed = true;
+        AddNode(m_clipboard.GetType(), m_clipboard);
     }
 
     /// <summary>
     /// handles node removal
     /// </summary>
     /// <param name="node">the desired node to remove</param>
-    public void RemoveNode(BaseNode node)
+    /// <param name="saveAssets">optional argument, used to determine whether to save assets after removal</param>
+    public void RemoveNode(BaseNode node, bool saveAssets = true)
     {
-        NodeManager nodeManager = NodeEditor.GetNodeManager();
-        ConnectionManager connectionManager = NodeEditor.GetConnectionManager();
+        ConnectionManager connectionManager = NodeEditor.GetConnectionManager(); // retrieve connection manager
 
 		// iterate through all connected input nodes
 		int noOfInputs = node.m_inputs.Count;
 		for (int i = 0; i < noOfInputs; i++)
         {
-            BaseNode connectedNode = nodeManager.FindNode(node.m_inputs[0]);
+            BaseNode connectedNode = FindNode(node.m_inputs[0]);
 
             // find the index of the desired node to remove in the connected node's outputs
             int indexOfThisNode = connectedNode.m_outputs.IndexOf(node.GetNodeID());
@@ -173,8 +175,12 @@ public class NodeManager
 
         // destroy node and record
         Undo.DestroyObjectImmediate(node);
-        AssetDatabase.SaveAssets();
+        
+        if (saveAssets)
+            AssetDatabase.SaveAssets(); // save, if required
     }
+}
+
 }
 
 }

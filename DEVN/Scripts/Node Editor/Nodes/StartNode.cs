@@ -3,6 +3,9 @@
 namespace DEVN
 {
 
+namespace Nodes
+{
+
 /// <summary>
 /// a node which dictates the start of a scene. Is instantiated
 /// upon the creation of a DEVN Scene
@@ -38,6 +41,8 @@ public class StartNode : BaseNode
     }
 
 #endif
+}
+
 }
 
 }

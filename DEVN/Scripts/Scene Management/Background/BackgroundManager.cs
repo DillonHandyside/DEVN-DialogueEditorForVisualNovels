@@ -1,8 +1,12 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using DEVN.Components;
 
 namespace DEVN
+{
+
+namespace SceneManagement
 {
 
 /// <summary>
@@ -143,6 +147,8 @@ public class BackgroundManager
 		if (nextNode)
 			m_sceneManager.NextNode();
 	}
+}
+
 }
 
 }

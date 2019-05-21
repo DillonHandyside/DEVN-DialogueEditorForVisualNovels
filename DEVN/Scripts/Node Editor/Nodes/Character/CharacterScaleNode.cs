@@ -1,12 +1,15 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using DEVN.ScriptableObjects;
 
 namespace DEVN
 {
 
+namespace Nodes
+{
+
 /// <summary>
-/// node used for scaling a particular character, either instantly
-/// or lerped over time
+/// node used for scaling a particular character, either instantly or lerped over time
 /// </summary>
 [System.Serializable]
 public class CharacterScaleNode : BaseNode
@@ -66,8 +69,7 @@ public class CharacterScaleNode : BaseNode
     }
 
 	/// <summary>
-	/// overridden draw function, draws character object field, vector2 
-    /// field, and lerp toggle/slider. Resizes the window if necessary
+	/// overridden draw function, draws character object field, vector2 field, and lerp toggle/slider. 
 	/// </summary>
 	/// <param name="id">the node window ID</param>
     protected override void DrawNodeWindow(int id)
@@ -103,6 +105,8 @@ public class CharacterScaleNode : BaseNode
 	}
 
 #endif
+}
+
 }
 
 }

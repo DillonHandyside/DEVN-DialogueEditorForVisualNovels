@@ -1,9 +1,13 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using DEVN.SceneManagement;
 
 namespace DEVN
 {
 	
+namespace Components
+{
+
 /// <summary>
 /// component to be placed on the gameobject containing "SceneManager", contains
 /// references to the dialogue box and it's child text elements
@@ -43,6 +47,8 @@ public class DialogueComponent : MonoBehaviour
         if (sceneManager.GetIsInputAllowed())
             SceneManager.GetInstance().NextNode();
     }
+}
+
 }
 
 }

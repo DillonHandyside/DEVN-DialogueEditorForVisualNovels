@@ -1,8 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using DEVN.SceneManagement;
 
 namespace DEVN
+{
+
+namespace Components
 {
 
 /// <summary>
@@ -38,6 +40,8 @@ public class SaveComponent : MonoBehaviour
 	{
 		SceneManager.GetInstance().GetSaveManager().UpdateSaveLoadSlots(true);
 	}
+}
+
 }
 
 }

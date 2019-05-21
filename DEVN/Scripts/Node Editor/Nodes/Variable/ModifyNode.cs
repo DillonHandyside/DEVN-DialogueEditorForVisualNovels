@@ -1,9 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using DEVN.ScriptableObjects;
 
 namespace DEVN
+{
+
+namespace Nodes
 {
     
 [System.Serializable]
@@ -194,6 +197,8 @@ public class ModifyNode : BaseNode
     }
 
 #endif
+}
+
 }
 
 }

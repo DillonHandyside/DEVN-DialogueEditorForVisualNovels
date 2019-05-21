@@ -4,6 +4,9 @@ using UnityEditor;
 namespace DEVN
 {
 
+namespace Nodes
+{
+
 /// <summary>
 /// node used to toggle (show/hide) the dialogue box
 /// </summary>
@@ -39,8 +42,7 @@ public class DialogueBoxNode : BaseNode
     }
 
 	/// <summary>
-	/// overridden copy constructor. Copies whether the dialogue
-	/// box is set to 'show' or 'hide'
+	/// overridden copy constructor. Copies whether the dialogue box is set to 'show' or 'hide'
 	/// </summary>
 	/// <param name="node">the node to copy</param>
 	/// <param name="position">the position to copy to</param>
@@ -55,8 +57,7 @@ public class DialogueBoxNode : BaseNode
 	}
 
 	/// <summary>
-	/// overridden draw function, draws a dropdown for toggling between
-	/// hide/show dialogue node
+	/// overridden draw function, draws a dropdown for toggling between hide/show dialogue node
 	/// </summary>
 	/// <param name="id"></param>
 	protected override void DrawNodeWindow(int id)
@@ -68,6 +69,8 @@ public class DialogueBoxNode : BaseNode
     }
 
 #endif
+}
+
 }
 
 }

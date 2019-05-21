@@ -4,6 +4,9 @@ using UnityEngine.Audio;
 namespace DEVN
 {
 
+namespace Components
+{
+
 /// <summary>
 /// component to be placed on the gameobject containing "SceneManager", contains
 /// references to an audio mixer and it's different groups
@@ -35,6 +38,8 @@ public class AudioComponent : MonoBehaviour
 	public AudioMixerGroup GetVoice() { return m_voice; }
 
 	#endregion
+}
+
 }
 
 }

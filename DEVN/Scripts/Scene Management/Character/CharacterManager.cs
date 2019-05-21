@@ -2,8 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DEVN.Components;
+using DEVN.ScriptableObjects;
 
 namespace DEVN
+{
+
+namespace SceneManagement
 {
 
 /// <summary>
@@ -85,13 +90,13 @@ public class CharacterManager
 		m_characterTransformer.SetCharacterPosition(characterObject, new Vector2(xPosition, 0)); 
 
 		// set character info
-		CharacterInfo characterInfo = characterObject.GetComponent<CharacterInfo>();
+		Components.CharacterInfo characterInfo = characterObject.GetComponent<Components.CharacterInfo>();
 		characterInfo.SetCharacter(character);
 
 		m_characters.Add(characterObject);
 
 		// perform fade-in
-		m_sceneManager.StartCoroutine(FadeIn(characterObject, fadeInTime));
+		m_sceneManager.StartCoroutine(FadeIn(characterObject, fadeInTime, waitForFinish));
 	}
 
 	/// <summary>
@@ -111,7 +116,7 @@ public class CharacterManager
 			SetSprite(characterObject, sprite); // set sprite
 
 			// perform fade-out and removal
-			m_sceneManager.StartCoroutine(FadeOut(characterObject, fadeOutTime));
+			m_sceneManager.StartCoroutine(FadeOut(characterObject, fadeOutTime, waitForFinish));
 			return; // exit succeeded
 		}
 
@@ -130,7 +135,7 @@ public class CharacterManager
 		for (int i = 0; i < m_characters.Count; i++)
 		{
 			GameObject existingCharacter = m_characters[i];
-			CharacterInfo characterInfo = existingCharacter.GetComponent<CharacterInfo>();
+			Components.CharacterInfo characterInfo = existingCharacter.GetComponent<Components.CharacterInfo>();
 
 			if (characterInfo.GetCharacter() == character)
 				return existingCharacter; // character found
@@ -250,6 +255,8 @@ public class CharacterManager
 		if (waitForFinish)
 			m_sceneManager.NextNode();
 	}
+}
+
 }
 
 }

@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using DEVN.Components;
 
 namespace DEVN
+{
+
+namespace SceneManagement
 {
 
 /// <summary>
@@ -223,6 +227,8 @@ public class AudioManager
 		// destroy the voice clip
 		Object.Destroy(voice.gameObject);
 	}
+}
+
 }
 
 }

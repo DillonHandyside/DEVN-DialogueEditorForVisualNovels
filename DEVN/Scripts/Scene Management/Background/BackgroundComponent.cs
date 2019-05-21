@@ -4,6 +4,9 @@ using UnityEngine.UI;
 namespace DEVN
 {
 
+namespace Components
+{
+
 /// <summary>
 /// component to be placed on the gameobject containing "SceneManager", contains
 /// references to the background UI elements
@@ -23,6 +26,8 @@ public class BackgroundComponent : MonoBehaviour
 	public Image GetColourBackground() { return m_colourBackground; }
 
 	#endregion
+}
+
 }
 
 }

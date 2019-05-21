@@ -5,6 +5,9 @@ using UnityEditor;
 namespace DEVN
 {
 
+namespace Nodes
+{
+
 /// <summary>
 /// node which determines which background music and ambient audio to play
 /// </summary>
@@ -109,8 +112,7 @@ public class BGMNode : BaseNode
     }
 
     /// <summary>
-    /// helper function which removes the last ambient track and 
-	/// re-adjusts node height
+    /// helper function which removes the last ambient track and re-adjusts node height
     /// </summary>
     private void RemoveAmbientAudio()
     {
@@ -126,6 +128,8 @@ public class BGMNode : BaseNode
     }
 
 #endif
+}
+
 }
 
 }
