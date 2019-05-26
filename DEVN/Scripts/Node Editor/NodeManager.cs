@@ -4,13 +4,13 @@ using UnityEditor;
 using DEVN.Nodes;
 using DEVN.ScriptableObjects;
 
-#if UNITY_EDITOR
-
 namespace DEVN
 {
 
 namespace Editor
 {
+
+#if UNITY_EDITOR
 
 /// <summary>
 /// node manager class which is responsible for drawing, adding, copying, pasting and removing nodes.
@@ -181,8 +181,8 @@ public class NodeManager
     }
 }
 
-}
-
-}
-
 #endif
+
+}
+
+}

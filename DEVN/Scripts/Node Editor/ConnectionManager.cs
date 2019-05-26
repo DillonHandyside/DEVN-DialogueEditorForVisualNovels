@@ -2,13 +2,13 @@
 using UnityEditor;
 using DEVN.Nodes;
 
-#if UNITY_EDITOR
-
 namespace DEVN
 {
 
 namespace Editor
 {
+
+#if UNITY_EDITOR
 
 /// <summary>
 /// connection manager class which is responsible for the creation and removal of connections between nodes.
@@ -218,8 +218,8 @@ public class ConnectionManager
 	}
 }
 
-}
-
-}
-
 #endif
+
+}
+
+}

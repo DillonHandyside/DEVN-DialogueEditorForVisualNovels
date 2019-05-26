@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
+using DEVN.SceneManagement;
 
 namespace DEVN
 {
@@ -21,17 +21,27 @@ public class BranchComponent : MonoBehaviour
 	// references to branch UI elements
 	[Header("Branch UI Element/s")]
 	[Tooltip("Plug in a parent panel, this is used to enable/disable the branches when a choice occurs")]
-	[SerializeField] private GameObject m_branches;
+	[SerializeField] private GameObject m_branchPanel;
 	[Tooltip("Plug in a scroll-view content panel, the branch prefabs will be added to this")]
 	[SerializeField] private Transform m_branchContent;
+
+    private BranchManager m_branchManager;
 
 	#region getters
 	
 	public GameObject GetBranchPrefab() { return m_branchPrefab; }
-	public GameObject GetBranches() { return m_branches; }
+	public GameObject GetBranches() { return m_branchPanel; }
 	public Transform GetBranchContent() { return m_branchContent; }
 
 	#endregion
+
+    public BranchManager GetBranchManager()
+    {
+        if (m_branchManager == null)
+            m_branchManager = new BranchManager(this);
+
+        return m_branchManager;
+    }
 }
 
 }

@@ -17,9 +17,8 @@ namespace SceneManagement
 /// </summary>
 public class DialogueManager
 {
-	// scene manager ref
-	private SceneManager m_sceneManager;
-
+    private DialogueComponent m_dialogueComponent;
+        
 	// references to dialogue box UI elements
 	private GameObject m_dialogueBox;
 	private Text m_speaker;
@@ -29,55 +28,50 @@ public class DialogueManager
 	private IEnumerator m_typewriteEvent;
 
 	// other text typing relevant variables
+    private string m_currentDialogue;
 	private float m_textSpeed = 1.0f;
-	private bool m_isTyping = false;
-
     private float m_autoSpeed;
+	private bool m_isTyping = false;
+    private bool m_isProceedAllowed = false;
     private bool m_isAutoEnabled = false;
 
-	#region getters
-		
-	public bool GetIsTyping() { return m_isTyping; }
+    #region setters
 
-	#endregion
-
-	#region setters
-
-	public void SetDialogueSpeed(float speed) { m_textSpeed = speed; }
+    public void SetDialogueSpeed(float speed) { m_textSpeed = speed; }
     public void SetAutoSpeed(float speed) { m_autoSpeed = speed; }
 
 	#endregion
 
 	/// <summary>
-	/// 
+	/// are you sure you want to construct your own DialogueManager? You may want to use 
+	/// SceneManager.GetInstance().GetDialogueManager() instead
 	/// </summary>
-	/// <param name="sceneManager">reference to the scene manager instance</param>
 	/// <param name="dialogueComponent">a dialogue component which houses the relevent UI elements</param>
-	public DialogueManager(SceneManager sceneManager, DialogueComponent dialogueComponent)
+	public DialogueManager(DialogueComponent dialogueComponent)
 	{
-		m_sceneManager = sceneManager; // assign scene manager reference
-			
+        m_dialogueComponent = dialogueComponent;
+
 		// assign references to all the relevant dialogue elements
 		m_dialogueBox = dialogueComponent.GetDialogueBox();
 		m_speaker = dialogueComponent.GetSpeaker();
 		m_dialogue = dialogueComponent.GetDialogue();
 	}
 
-	/// <summary>
-	/// 
-	/// </summary>
-	public void SetDialogue(DialogueNode dialogueNode)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="character"></param>
+    /// <param name="sprite"></param>
+    /// <param name="dialogue"></param>
+    /// <param name="characterManager"></param>
+    /// <param name="logManager"></param>
+	public void SetDialogue(Character character, Sprite sprite, string dialogue,
+        CharacterManager characterManager = null, LogManager logManager = null)
 	{			
-		// attempt to get this dialogue node's character, log an error if there is none
-		Character character = dialogueNode.GetCharacter();
-		Debug.Assert(character != null, "DEVN: Dialogue requires a speaking character!");
-		
 		// update speaker text field
-		m_speaker.text = character.GetName(); 
-		m_sceneManager.StartCoroutine(m_typewriteEvent = TypewriteText(dialogueNode.GetDialogue()));
-
-		Sprite currentSprite = dialogueNode.GetSprite();
-		CharacterManager characterManager = m_sceneManager.GetCharacterManager();
+        m_currentDialogue = dialogue;
+		m_speaker.text = character.GetName();
+		m_dialogueComponent.StartCoroutine(m_typewriteEvent = TypewriteText());       
 
 		// only update character sprite if a character manager exists
 		if (characterManager != null)
@@ -85,30 +79,65 @@ public class DialogueManager
 			// find the character in the scene
 			GameObject characterObject = characterManager.TryGetCharacter(character);
 			
-			if (currentSprite != null)
+			if (sprite != null)
 			{
 				if (characterObject != null)
-					characterManager.SetSprite(characterObject, currentSprite);
+					characterManager.SetSprite(characterObject, sprite);
 				else
 					Debug.LogWarning("DEVN: Do not attempt to change the sprite of a character that is not in the scene.");
 			}
 			else if (characterObject != null)
-				currentSprite = characterObject.GetComponent<Image>().sprite;
+				sprite = characterObject.GetComponent<Image>().sprite;
 			else
-				currentSprite = null;
+				sprite = null;
 		
 			if (characterObject)
 				characterManager.HighlightSpeakingCharacter(character);
 		}
 
-		// only log dialogue if a log exists
-		LogManager logManager = m_sceneManager.GetLogManager();
+		// only log dialogue if a log manager exists
 		if (logManager != null)
-			logManager.LogDialogue(currentSprite, character.GetName(), dialogueNode.GetDialogue());
+			logManager.LogDialogue(sprite, character.GetName(), dialogue);
+	}
+    
+    /// <summary>
+    /// coroutine which incrementally types the dialogue out like a typewriter
+    /// </summary>
+    private IEnumerator TypewriteText()
+	{
+		m_dialogue.text = "";
+		m_isTyping = true; // is currently typing
+
+		for (int i = 0; i < m_currentDialogue.Length; i++)
+		{
+			m_dialogue.text += m_currentDialogue[i]; // type one letter at a time
+            yield return new WaitForSeconds((1 - m_textSpeed) * 0.1f);
+		}
+		
+		m_isProceedAllowed = true;
+		m_isTyping = false; // no longer typing
+
+        // if auto is enabled, wait for an arbitrary amount of time then proceed
+        if (m_isAutoEnabled)
+            m_dialogueComponent.StartCoroutine(WaitForAuto());
 	}
 
 	/// <summary>
-	/// 
+	/// function which forces the typewriter coroutine to stop, and sets the dialogue manually
+	/// </summary>
+	public void SkipTypewrite()
+	{
+        // force typewrite to stop and manuallyset the dialogue
+		m_dialogueComponent.StopCoroutine(m_typewriteEvent);
+		m_dialogue.text = m_currentDialogue;
+
+        // no longer typing, player can proceed
+        m_isProceedAllowed = true;
+		m_isTyping = false;
+	}
+
+	/// <summary>
+	/// function which toggles the dialogue box on/off depending on it's current state
 	/// </summary>
 	public void ToggleDialogueBox()
 	{
@@ -117,9 +146,9 @@ public class DialogueManager
 	}
 
 	/// <summary>
-	/// 
+	/// function which toggles the dialogue box on/off depending on input
 	/// </summary>
-	/// <param name="toggle"></param>
+	/// <param name="toggle">true: dialogue box on, false: dialogue box off</param>
 	public void ToggleDialogueBox(bool toggle)
 	{
 		ClearDialogueBox();
@@ -127,21 +156,7 @@ public class DialogueManager
 	}
 
 	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="dialogueBoxNode"></param>
-	public void SetDialogueBox(DialogueBoxNode dialogueBoxNode)
-	{
-		if (dialogueBoxNode.GetToggleSelection() == 0)
-			ToggleDialogueBox(true);
-		else
-			ToggleDialogueBox(false);
-
-		m_sceneManager.NextNode();
-	}
-
-	/// <summary>
-	/// 
+	/// helper function which clears the contents of the dialogue box
 	/// </summary>
 	private void ClearDialogueBox()
 	{
@@ -149,23 +164,47 @@ public class DialogueManager
 		m_dialogue.text = "";
 	}
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public void ToggleAuto()
-    {
-        m_isAutoEnabled = !m_isAutoEnabled;
-        m_sceneManager.SetIsInputAllowed(!m_isAutoEnabled);
+    #region SceneManager-reliant functions
 
-        if (m_sceneManager.GetCurrentNode() is DialogueNode &&
-            m_isAutoEnabled && m_isTyping == false)
-            m_sceneManager.StartCoroutine(WaitForAuto());
+    /// <summary>
+    /// function which proceeds to the next node upon user input
+    /// </summary>
+    public void ProceedDialogue()
+    {
+        if (m_isAutoEnabled)
+            return; // disallow manual proceed if auto is enabled
+
+        if (m_isTyping)
+            SkipTypewrite(); // currently typing, so skip typewrite
+        else if (m_isProceedAllowed)
+        {
+            m_isProceedAllowed = false;
+
+            SceneManager sceneManager = SceneManager.GetInstance();
+            if (sceneManager == null)
+                Debug.LogError("DEVN: Need a SceneManager to proceed dialogue!");
+            else
+                sceneManager.NextNode(); // proceed
+        }
     }
 
     /// <summary>
-    /// 
+    /// function which toggles auto on/off depending on it's current state
     /// </summary>
-    /// <returns></returns>
+    public void ToggleAuto()
+    {
+        m_isAutoEnabled = !m_isAutoEnabled; // toggle
+
+        SceneManager sceneManager = SceneManager.GetInstance();
+        if (sceneManager == null)
+            Debug.LogError("DEVN: Need a SceneManager to use Auto functionality!");
+        else if (sceneManager.GetCurrentNode() is DialogueNode && m_isAutoEnabled && m_isTyping == false)
+            m_dialogueComponent.StartCoroutine(WaitForAuto()); // perform auto even if current dialogue is complete
+    }
+
+    /// <summary>
+    /// coroutine which waits for an arbitrary amount of time before proceeding to the next node
+    /// </summary>
     private IEnumerator WaitForAuto()
     {
         // determine wait time
@@ -174,44 +213,14 @@ public class DialogueManager
 
         // if auto is still enabled at the end of wait, proceed
         if (m_isAutoEnabled)
-            m_sceneManager.NextNode();
+        {
+            SceneManager sceneManager = SceneManager.GetInstance();
+            if (sceneManager != null)
+                sceneManager.NextNode();
+        }
     }
-    
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator TypewriteText(string dialogue)
-	{
-		m_dialogue.text = "";
-		m_isTyping = true;
 
-		for (int i = 0; i < dialogue.Length; i++)
-		{
-			m_dialogue.text += dialogue[i];
-			yield return new WaitForSeconds((1 - m_textSpeed) * 0.1f);
-		}
-		
-		// allow input during dialogue, to allow skip & continue
-		m_isTyping = false;
-		m_sceneManager.SetIsInputAllowed(true);
-
-        if (m_isAutoEnabled)
-            m_sceneManager.StartCoroutine(WaitForAuto());
-	}
-
-	/// <summary>
-	/// 
-	/// </summary>
-	public void SkipTypewrite()
-	{
-		m_sceneManager.StopCoroutine(m_typewriteEvent);
-			
-		DialogueNode dialogueNode = m_sceneManager.GetCurrentNode() as DialogueNode;
-		m_dialogue.text = dialogueNode.GetDialogue();
-
-		m_isTyping = false;
-	}
+    #endregion
 }
 
 }

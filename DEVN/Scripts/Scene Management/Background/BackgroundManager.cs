@@ -14,12 +14,11 @@ namespace SceneManagement
 /// </summary>
 public class BackgroundManager
 {
-	// scene manager ref
-	private SceneManager m_sceneManager;
-
 	// references to the background elements in the scene
 	private Image m_imageBackground;
 	private Image m_colourBackground;
+
+    private BackgroundComponent m_backgroundComponent;
 
 	#region getters
 
@@ -29,16 +28,15 @@ public class BackgroundManager
 
 	/// <summary>
 	/// are you sure you want to construct your own BackgroundManager? You may want to use 
-	/// SceneManager.GetBackgroundManager() instead
+	/// SceneManager.GetInstance().GetBackgroundManager() instead
 	/// </summary>
-	/// <param name="sceneManager">reference to the scene manager instance</param>
 	/// <param name="backgroundComponent">a background component which houses the relevent UI elements</param>
-	public BackgroundManager(SceneManager sceneManager, BackgroundComponent backgroundComponent)
+	public BackgroundManager(BackgroundComponent backgroundComponent)
 	{
-		m_sceneManager = sceneManager; // assign scene manager reference
-			
-		// assign references to the relevant UI elements
-		m_imageBackground = backgroundComponent.GetImageBackground();
+        m_backgroundComponent = backgroundComponent;
+
+        // assign references to the relevant UI elements
+        m_imageBackground = backgroundComponent.GetImageBackground();
 		m_colourBackground = backgroundComponent.GetColourBackground();
 	}
 		
@@ -58,7 +56,7 @@ public class BackgroundManager
 		m_colourBackground.color = fadeColour; // set fade colour
 
 		// perform fade in
-		m_sceneManager.StartCoroutine(FadeIn(background, fadeInTime, nextNode, waitForFinish)); 
+		m_backgroundComponent.StartCoroutine(FadeIn(background, fadeInTime, nextNode, waitForFinish)); 
 	}
 
 	/// <summary>
@@ -70,13 +68,13 @@ public class BackgroundManager
 	{
 		m_colourBackground.color = fadeColour; // set fade colour
 
-		m_sceneManager.StartCoroutine(FadeOut(fadeOutTime, nextNode)); // perform fade out
+		m_backgroundComponent.StartCoroutine(FadeOut(fadeOutTime, nextNode)); // perform fade out
 	}
 
 	/// <summary>
-	/// 
+	/// use this to instantly set a background, without fade-in!
 	/// </summary>
-	/// <param name="background"></param>
+	/// <param name="background">the background/environment image</param>
 	public void SetBackground(Sprite background)
 	{
 		m_imageBackground.sprite = background;
@@ -97,9 +95,11 @@ public class BackgroundManager
 
 		m_imageBackground.sprite = background;
 
+        SceneManager sceneManager = SceneManager.GetInstance();
+
 		// instantly proceed to next node if "wait for finish" is false
-		if (!waitForFinish && nextNode)
-			m_sceneManager.NextNode();
+		if (sceneManager != null && !waitForFinish && nextNode)
+			sceneManager.NextNode();
 
 		float elapsedTime = 0.0f;
 
@@ -116,8 +116,8 @@ public class BackgroundManager
 		}
 
 		// proceed to next node if "wait for finish" is true
-		if (waitForFinish && nextNode)
-			m_sceneManager.NextNode();
+		if (sceneManager != null && waitForFinish && nextNode)
+			sceneManager.NextNode();
 	}
 
 	/// <summary>
@@ -144,8 +144,9 @@ public class BackgroundManager
 
 		m_imageBackground.sprite = null; // clear the background
 
-		if (nextNode)
-			m_sceneManager.NextNode();
+        SceneManager sceneManager = SceneManager.GetInstance();
+		if (sceneManager != null && nextNode)
+			sceneManager.NextNode();
 	}
 }
 

@@ -37,7 +37,7 @@ public class SFXNode : BaseNode
 			
         m_title = "SFX";
 			
-        m_rectangle.width = 192;
+        m_rectangle.width = 170;
         m_rectangle.height = 74;
 			
         AddOutputPoint(); // linear
@@ -64,7 +64,7 @@ public class SFXNode : BaseNode
     protected override void DrawNodeWindow(int id)
 	{
 		// draw SFX audio label and object field
-		EditorGUILayout.LabelField("SFX Node");
+		EditorGUILayout.LabelField("SFX");
 		m_sfxAudio = EditorGUILayout.ObjectField(m_sfxAudio, typeof(AudioClip), false) as AudioClip;
 
 		// draw "wait for finish" label and boolean toggle

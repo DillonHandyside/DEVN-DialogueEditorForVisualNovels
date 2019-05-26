@@ -216,11 +216,6 @@ public class SaveManager
     /// </summary>
     private void TakeSnapshot()
     {
-        Texture2D snapshot = ScreenCapture.CaptureScreenshotAsTexture();
-
-        Rect snapshotRect = new Rect(0, 0, snapshot.width, snapshot.height);
-        Vector2 snapshotPivot = new Vector2(0.5f, 0.5f);
-        m_snapshot = Sprite.Create(snapshot, snapshotRect, snapshotPivot);
     }
 }
 

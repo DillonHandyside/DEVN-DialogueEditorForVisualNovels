@@ -17,7 +17,7 @@ public class UtilityManager
 
 	/// <summary>
 	/// are you sure you want to construct your own UtilityManager? You may want to use 
-	/// SceneManager.GetUtilityManager() instead
+	/// SceneManager.GetInstance().GetUtilityManager() instead
 	/// </summary>
 	/// <param name="sceneManager">reference to the scene manager instance</param>
 	public UtilityManager(SceneManager sceneManager)

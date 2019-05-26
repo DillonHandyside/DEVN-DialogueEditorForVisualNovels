@@ -3,15 +3,15 @@ using UnityEngine;
 using UnityEditor;
 using DEVN.ScriptableObjects;
 
-#if UNITY_EDITOR
-
-using UnityEditorInternal;
-
 namespace DEVN
 {
 
 namespace Editor
 {
+
+#if UNITY_EDITOR
+
+using UnityEditorInternal;
 
 /// <summary>
 /// An editor window which allows the user to create and edit blackboards.
@@ -275,8 +275,8 @@ public class BlackboardEditor : EditorWindow
     }
 }
 
-}
-
-}
-
 #endif
+
+}
+
+}

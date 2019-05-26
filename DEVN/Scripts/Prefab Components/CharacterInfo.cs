@@ -20,7 +20,7 @@ public class CharacterInfo : MonoBehaviour
 
 	public Character GetCharacter() { return m_character; }
 
-		#endregion
+    #endregion
 
 	#region setters
 

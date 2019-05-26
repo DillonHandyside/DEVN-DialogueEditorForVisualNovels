@@ -91,7 +91,7 @@ public class CharacterScaleNode : BaseNode
 		if (m_isLerp)
 		{
 			EditorGUILayout.LabelField("Lerp Time");
-			m_lerpTime = EditorGUILayout.Slider(m_lerpTime, 0, 3);
+			m_lerpTime = EditorGUILayout.Slider(m_lerpTime, 0.1f, 5);
 		}
 
 		// resize node

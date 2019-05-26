@@ -16,9 +16,7 @@ namespace SceneManagement
 /// </summary>
 public class CharacterManager
 {
-	// scene manager ref
-	private SceneManager m_sceneManager;
-
+    private CharacterComponent m_characterComponent;
 	private CharacterTransformer m_characterTransformer;
 		
 	private GameObject m_characterPrefab;
@@ -37,15 +35,14 @@ public class CharacterManager
 
 	/// <summary>
 	/// are you sure you want to construct your own CharacterManager? You may want to use 
-	/// SceneManager.GetCharacterManager() instead
+	/// SceneManager.GetInstance().GetCharacterManager() instead
 	/// </summary>
-	/// <param name="sceneManager">reference to the scene manager instance</param>
 	/// <param name="characterComponent">a character component which houses the relevant prefab
 	/// and UI elements</param>
-	public CharacterManager(SceneManager sceneManager, CharacterComponent characterComponent)
+	public CharacterManager(CharacterComponent characterComponent)
 	{
-		m_sceneManager = sceneManager; // assign scene manager reference
-			
+        m_characterComponent = characterComponent;
+
 		// assign references to all the relevant character elements
 		m_characterPrefab = characterComponent.GetCharacterPrefab();
 		m_backgroundPanel = characterComponent.GetBackgroundPanel();
@@ -64,15 +61,19 @@ public class CharacterManager
 	/// <param name="xPosition"></param>
 	/// <param name="fadeInTime"></param>
 	/// <param name="waitForFinish"></param>
+    /// <param name="nextNode"></param>
 	/// <param name="isInvert"></param>
 	public void EnterCharacter(Character character, Sprite sprite, float xPosition,
-		float fadeInTime = 0.5f, bool waitForFinish = false, bool isInvert = false)
+		float fadeInTime = 0.5f, bool nextNode = false, bool waitForFinish = false, bool isInvert = false)
 	{
 		// check to see if the character already exists in the scene
 		if (TryGetCharacter(character) != null)
 		{
 			Debug.LogWarning("DEVN: Do not attempt to enter two of the same characters.");
-			m_sceneManager.NextNode();
+
+            SceneManager sceneManager = SceneManager.GetInstance();
+            if (sceneManager != null && nextNode)
+                sceneManager.NextNode();
 			return;
 		}
 
@@ -96,7 +97,7 @@ public class CharacterManager
 		m_characters.Add(characterObject);
 
 		// perform fade-in
-		m_sceneManager.StartCoroutine(FadeIn(characterObject, fadeInTime, waitForFinish));
+		m_characterComponent.StartCoroutine(FadeIn(characterObject, fadeInTime, nextNode, waitForFinish));
 	}
 
 	/// <summary>
@@ -105,23 +106,27 @@ public class CharacterManager
 	/// <param name="character"></param>
 	/// <param name="sprite"></param>
 	/// <param name="fadeOutTime"></param>
+    /// <param name="nextNode"></param>
 	/// <param name="waitForFinish"></param>
 	public void ExitCharacter(Character character, Sprite sprite, float fadeOutTime = 0.5f, 
-		bool waitForFinish = false)
+		bool nextNode = false, bool waitForFinish = false)
 	{
 		GameObject characterObject = TryGetCharacter(character);
 
-		if (characterObject != null)
+		if (characterObject == null)
 		{
-			SetSprite(characterObject, sprite); // set sprite
+		    Debug.LogWarning("DEVN: Do not attempt to exit a character that is not in the scene.");
 
-			// perform fade-out and removal
-			m_sceneManager.StartCoroutine(FadeOut(characterObject, fadeOutTime, waitForFinish));
-			return; // exit succeeded
+            SceneManager sceneManager = SceneManager.GetInstance();
+            if (sceneManager != null && nextNode)
+                sceneManager.NextNode();
+            return;
 		}
 
-		Debug.LogWarning("DEVN: Do not attempt to exit a character that is not in the scene.");
-		m_sceneManager.NextNode();
+		SetSprite(characterObject, sprite); // set sprite
+
+		// perform fade-out and removal
+		m_characterComponent.StartCoroutine(FadeOut(characterObject, fadeOutTime, nextNode, waitForFinish));
 	}
 
 	/// <summary>
@@ -197,13 +202,17 @@ public class CharacterManager
 	/// </summary>
 	/// <param name="character"></param>
 	/// <param name="fadeInTime"></param>
+    /// <param name="nextNode"></param>
 	/// <param name="waitForFinish"></param>
 	/// <returns></returns>
-	private IEnumerator FadeIn(GameObject character, float fadeInTime = 0.5f, bool waitForFinish = false)
+	private IEnumerator FadeIn(GameObject character, float fadeInTime = 0.5f, 
+        bool nextNode = false, bool waitForFinish = false)
 	{
+        SceneManager sceneManager = SceneManager.GetInstance();
+
 		// if not "wait for finish", jump straight to next node
-		if (!waitForFinish)
-			m_sceneManager.NextNode();
+		if (sceneManager != null && nextNode && !waitForFinish)
+			sceneManager.NextNode();
 
 		float elapsedTime = 0.0f;
 
@@ -218,8 +227,8 @@ public class CharacterManager
 		}
 
 		// if "wait for finish", go to next node after fade
-		if (waitForFinish)
-			m_sceneManager.NextNode(); 
+		if (sceneManager != null && nextNode && waitForFinish)
+			sceneManager.NextNode();
 	}
 
 	/// <summary>
@@ -227,13 +236,17 @@ public class CharacterManager
 	/// </summary>
 	/// <param name="character"></param>
 	/// <param name="fadeOutTime"></param>
+    /// <param name="nextNode"></param>
 	/// <param name="waitForFinish"></param>
 	/// <returns></returns>
-	private IEnumerator FadeOut(GameObject character, float fadeOutTime = 0.5f, bool waitForFinish = false)
+	private IEnumerator FadeOut(GameObject character, float fadeOutTime = 0.5f, 
+        bool nextNode = false, bool waitForFinish = false)
 	{
+        SceneManager sceneManager = SceneManager.GetInstance();
+
 		// if not "wait for finish", jump straight to next node
-		if (!waitForFinish)
-			m_sceneManager.NextNode();
+		if (sceneManager != null && nextNode && !waitForFinish)
+			sceneManager.NextNode();
 
 		float elapsedTime = 0.0f;
 
@@ -252,8 +265,8 @@ public class CharacterManager
 		Object.Destroy(character);
 
 		// if "wait for finish", go to next node after fade
-		if (waitForFinish)
-			m_sceneManager.NextNode();
+		if (sceneManager != null && nextNode && waitForFinish)
+			sceneManager.NextNode();
 	}
 }
 

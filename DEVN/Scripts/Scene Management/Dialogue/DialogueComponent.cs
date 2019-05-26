@@ -22,6 +22,8 @@ public class DialogueComponent : MonoBehaviour
 	[SerializeField] private Text m_speaker;
 	[Tooltip("Plug in the text field that displays the dialogue")]
 	[SerializeField] private Text m_dialogue;
+
+    private DialogueManager m_dialogueManager;
 	
 	#region getters
 
@@ -29,23 +31,30 @@ public class DialogueComponent : MonoBehaviour
 	public Text GetSpeaker() { return m_speaker; }
 	public Text GetDialogue() { return m_dialogue; }
 
+    public DialogueManager GetDialogueManager()
+    {
+        if (m_dialogueManager == null)
+            m_dialogueManager = new DialogueManager(this);
+
+        return m_dialogueManager;
+    }
+
 	#endregion
-
-	#region setters
-
-	public void ToggleAuto() { GetComponent<SceneManager>().GetDialogueManager().ToggleAuto(); }
-
-	#endregion
-
+      
     /// <summary>
-    /// 
+    /// proceed dialogue function which calls DialogueManager's ProceedDialogue function 
     /// </summary>
     public void ProceedDialogue()
     {
-        SceneManager sceneManager = SceneManager.GetInstance();
+        m_dialogueManager.ProceedDialogue();
+    }
 
-        if (sceneManager.GetIsInputAllowed())
-            SceneManager.GetInstance().NextNode();
+    /// <summary>
+    /// toggle auto function which calls DialogueManager's ToggleAuto function 
+    /// </summary>
+    public void ToggleAuto()
+    {
+        m_dialogueManager.ToggleAuto();
     }
 }
 

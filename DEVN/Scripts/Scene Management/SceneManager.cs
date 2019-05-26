@@ -21,6 +21,15 @@ public class SceneManager : MonoBehaviour
     // delete later
 	[SerializeField] private Scene m_startScene;
     
+    [Header("Scene Components")]
+    [SerializeField] private AudioComponent m_audioComponent;
+    [SerializeField] private BackgroundComponent m_backgroundComponent;
+    [SerializeField] private BranchComponent m_branchComponent;
+    [SerializeField] private CharacterComponent m_characterComponent;
+    [SerializeField] private DialogueComponent m_dialogueComponent;
+    [SerializeField] private LogComponent m_logComponent;
+    [SerializeField] private SaveComponent m_saveComponent;
+
     // scene management variables
 	private Scene m_currentScene; 
     private BaseNode m_currentNode;
@@ -28,7 +37,8 @@ public class SceneManager : MonoBehaviour
 
     private List<Blackboard> m_blackboards;
 
-    // reference to all of the different managers
+    #region component managers
+
     private AudioManager m_audioManager;
     private BackgroundManager m_backgroundManager;
 	private BranchManager m_branchManager;
@@ -39,11 +49,11 @@ public class SceneManager : MonoBehaviour
 	private UtilityManager m_utilityManager;
     private VariableManager m_variableManager;
 
-    private bool m_isInputAllowed = false;
-	
-	#region getters
+    #endregion
 
-	public static SceneManager GetInstance() { return m_instance; }
+    #region getters
+
+    public static SceneManager GetInstance() { return m_instance; }
     public Scene GetCurrentScene() { return m_currentScene; }
 	public BaseNode GetCurrentNode() { return m_currentNode; }
     public List<Blackboard> GetBlackboards() { return m_blackboards; }
@@ -54,13 +64,6 @@ public class SceneManager : MonoBehaviour
 	public SaveManager GetSaveManager() { return m_saveManager; }
 	public UtilityManager GetUtilityManager() { return m_utilityManager; }
     public LogManager GetLogManager() { return m_logManager; }
-    public bool GetIsInputAllowed() { return m_isInputAllowed; }
-
-        #endregion
-
-    #region setters
-
-    public void SetIsInputAllowed(bool isInputAllowed) { m_isInputAllowed = isInputAllowed; }
 
     #endregion
 
@@ -81,30 +84,21 @@ public class SceneManager : MonoBehaviour
             m_blackboards.Add(blackboard);
         }
 
-		// cache references to all possible components
-		AudioComponent audioComponent = GetComponent<AudioComponent>();
-		BackgroundComponent backgroundComponent = GetComponent<BackgroundComponent>();
-		BranchComponent branchComponent = GetComponent<BranchComponent>();
-		CharacterComponent characterComponent = GetComponent<CharacterComponent>();
-		DialogueComponent dialogueComponent = GetComponent<DialogueComponent>();
-		LogComponent logComponent = GetComponent<LogComponent>();
-		SaveComponent saveComponent = GetComponent<SaveComponent>();
-
-		// create a manager for each component
-		if (audioComponent != null)
-			m_audioManager = new AudioManager(this, audioComponent);
-		if (backgroundComponent != null)
-			m_backgroundManager = new BackgroundManager(this, backgroundComponent);
-		if (branchComponent != null)
-			m_branchManager = new BranchManager(this, branchComponent);
-		if (characterComponent != null)
-			m_characterManager = new CharacterManager(this, characterComponent);
-		if (dialogueComponent != null)
-			m_dialogueManager = new DialogueManager(this, dialogueComponent);
-		if (logComponent != null)
-			m_logManager = new LogManager(logComponent);
-		if (saveComponent != null)
-			m_saveManager = new SaveManager(this, saveComponent);
+		// retrieve manager from each component
+		if (m_audioComponent != null)
+			m_audioManager = m_audioComponent.GetAudioManager();
+		if (m_backgroundComponent != null)
+			m_backgroundManager = m_backgroundComponent.GetBackgroundManager();
+		if (m_branchComponent != null)
+			m_branchManager = m_branchComponent.GetBranchManager();
+		if (m_characterComponent != null)
+			m_characterManager = m_characterComponent.GetCharacterManager();
+		if (m_dialogueComponent != null)
+			m_dialogueManager = m_dialogueComponent.GetDialogueManager();
+		if (m_logComponent != null)
+			m_logManager = m_logComponent.GetLogManager();
+		if (m_saveComponent != null)
+			m_saveManager = new SaveManager(this, m_saveComponent);
 		
 		m_utilityManager = new UtilityManager(this);
         m_variableManager = new VariableManager(this);
@@ -187,20 +181,20 @@ public class SceneManager : MonoBehaviour
 	/// </summary>
     private void UpdateScene()
 	{
-		SetIsInputAllowed(false);
-			
 		// evaluate all the different node types
 		if (EvaluateAudioNode())
 			return;
-		if (EvaluateBackgroundNode())
+		else if (EvaluateBackgroundNode())
 			return;
-		if (EvaluateCharacterNode())
+        else if (EvaluateBranchNode())
+            return;
+		else if (EvaluateCharacterNode())
 			return;
-		if (EvaluateDialogueNode())
+		else if (EvaluateDialogueNode())
 			return;
-		if (EvaluateUtilityNode())
+		else if (EvaluateUtilityNode())
 			return;
-		if (EvaluateVariableNode())
+		else if (EvaluateVariableNode())
 			return;
 		EvaluateTransitionNodes();
     }
@@ -217,9 +211,8 @@ public class SceneManager : MonoBehaviour
 		{
 			if (m_currentNode is BGMNode)
 			{
-				BGMNode bgmNode = m_currentNode as BGMNode;
-				m_audioManager.SetBGM(bgmNode.GetBGM(), bgmNode.GetAmbientAudio(), true);
-				return true;
+                ProcessBGM();
+                return true;
 			}
 			else if (m_currentNode is SFXNode)
 			{
@@ -231,10 +224,7 @@ public class SceneManager : MonoBehaviour
 		else
 		{
 			if (m_currentNode is BGMNode || m_currentNode is SFXNode)
-			{
-				Debug.LogWarning("DEVN: SceneManager needs an AudioComponent if you are using audio nodes!");
-				NextNode();
-			}
+				Debug.LogError("DEVN: SceneManager needs an AudioComponent if you are using audio nodes!");
 		}
 
 		return false;
@@ -250,21 +240,41 @@ public class SceneManager : MonoBehaviour
 		{
 			if (m_currentNode is BackgroundNode)
 			{
-				UpdateBackground();
+				ProcessBackground();
 				return true;
 			}
 		}
 		else
 		{
 			if (m_currentNode is BackgroundNode)
-			{
-				Debug.LogWarning("DEVN: SceneManager needs a BackgroundComponent if you are using background nodes!");
-				NextNode();
-			}
+				Debug.LogError("DEVN: SceneManager needs a BackgroundComponent if you are using background nodes!");
 		}
 
 		return false;
 	}
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    private bool EvaluateBranchNode()
+    {
+        if (m_branchManager != null)
+        {
+            if (m_currentNode is BranchNode)
+            {
+                m_branchManager.DisplayChoices((m_currentNode as BranchNode).GetBranches(), true);
+                return true;
+            }
+        }
+        else
+        {
+            if (m_currentNode is BranchNode)
+                Debug.LogError("DEVN: SceneManager needs a BranchComponent is you are using branch nodes!");
+        }
+
+        return false;
+    }
 
 	/// <summary>
 	/// 
@@ -276,22 +286,19 @@ public class SceneManager : MonoBehaviour
 		{
 			if (m_currentNode is CharacterNode)
 			{
-				EnterExitCharacter();
+				ProcessCharacter();
 				return true;
 			}
 			else if (m_currentNode is CharacterScaleNode || m_currentNode is CharacterTranslateNode)
 			{
-				EvaluateTransformNode();
+				ProcessCharacterTransform();
 				return true;
 			}
 		}
 		else
 		{
 			if (m_currentNode is CharacterNode || m_currentNode is CharacterScaleNode || m_currentNode is CharacterTranslateNode)
-			{
-				Debug.LogWarning("DEVN: SceneManager needs a CharacterComponent if you are using character nodes!");
-				NextNode();
-			}
+				Debug.LogError("DEVN: SceneManager needs a CharacterComponent if you are using character nodes!");
 		}
 		
 		return false;
@@ -305,29 +312,21 @@ public class SceneManager : MonoBehaviour
 	{
 		if (m_dialogueManager != null)
 		{
-			if (m_currentNode is BranchNode)
+			if (m_currentNode is DialogueNode)
 			{
-				m_branchManager.DisplayChoices((m_currentNode as BranchNode).GetBranches());
-				return true;
-			}
-			else if (m_currentNode is DialogueNode)
-			{
-				m_dialogueManager.SetDialogue(m_currentNode as DialogueNode);
+                ProcessDialogue();
 				return true;
 			}
 			else if (m_currentNode is DialogueBoxNode)
 			{
-				m_dialogueManager.SetDialogueBox(m_currentNode as DialogueBoxNode);
-				return true;
+                ProcessDialogueBox();
+                return true;
 			}
 		}
 		else
 		{
 			if (m_currentNode is BranchNode || m_currentNode is DialogueNode || m_currentNode is DialogueBoxNode)
-			{
-				Debug.LogWarning("DEVN: SceneManager needs a DialogueComponent if you are using dialogue nodes!");
-				NextNode();
-			}
+				Debug.LogError("DEVN: SceneManager needs a DialogueComponent if you are using dialogue nodes!");
 		}
 
 		return false;
@@ -391,14 +390,14 @@ public class SceneManager : MonoBehaviour
 		}
     }
 
-        #endregion
+    #endregion
 
     #region node processing functions
 
     /// <summary>
     /// 
     /// </summary>
-    private void UpdateBackground()
+    private void ProcessBackground()
 	{
 		// get background node
 		BackgroundNode backgroundNode = m_currentNode as BackgroundNode;
@@ -417,10 +416,35 @@ public class SceneManager : MonoBehaviour
 			m_backgroundManager.ExitBackground(fadeColour, fadeTime, true);
 	}
 	
+   /// <summary>
+   /// 
+   /// </summary>
+   private void ProcessBGM()
+   {
+       BGMNode bgmNode = m_currentNode as BGMNode;
+
+       switch (bgmNode.GetToggleSelection())
+       {
+           case 0:
+               m_audioManager.SetBGM(bgmNode.GetBGM(), bgmNode.GetAmbientAudio());
+               break;
+
+           case 1:
+               m_audioManager.PauseBGM();
+               break;
+
+           case 2:
+               m_audioManager.ResumeBGM();
+               break;
+       }
+       
+       NextNode();
+   }
+
 	/// <summary>
 	/// 
 	/// </summary>
-	private void EnterExitCharacter()
+	private void ProcessCharacter()
 	{
 		// get character enter/exit details such as fadeTime, default sprite etc.
 		CharacterNode characterNode = m_currentNode as CharacterNode;
@@ -435,16 +459,16 @@ public class SceneManager : MonoBehaviour
 			// get xPosition and invert, then enter character
 			float xPosition = characterNode.GetXPosition();
 			bool isInvert = characterNode.GetIsInverted();
-			m_characterManager.EnterCharacter(character, sprite, xPosition, fadeTime, waitForFinish, isInvert);
+			m_characterManager.EnterCharacter(character, sprite, xPosition, fadeTime, true, waitForFinish, isInvert);
 		}
 		else // exit
-			m_characterManager.ExitCharacter(character, sprite, fadeTime, waitForFinish);
+			m_characterManager.ExitCharacter(character, sprite, fadeTime, true, waitForFinish);
 	}
 
 	/// <summary>
 	/// 
 	/// </summary>
-	private void EvaluateTransformNode()
+	private void ProcessCharacterTransform()
 	{
 		// get CharacterTransformer
 		CharacterTransformer characterTransformer = m_characterManager.GetCharacterTransformer();
@@ -491,6 +515,36 @@ public class SceneManager : MonoBehaviour
 
 		NextNode();
 	}
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private void ProcessDialogue()
+    {
+        DialogueNode dialogueNode = m_currentNode as DialogueNode;
+
+        // attempt to get this dialogue node's character, log an error if there is none
+        Character character = dialogueNode.GetCharacter();
+        Debug.Assert(character != null, "DEVN: Dialogue requires a speaking character!");
+
+        m_dialogueManager.SetDialogue(character, dialogueNode.GetSprite(), dialogueNode.GetDialogue(),
+            m_characterManager, m_logManager);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private void ProcessDialogueBox()
+    {
+        DialogueBoxNode dialogueBoxNode = m_currentNode as DialogueBoxNode;
+
+        if (dialogueBoxNode.GetToggleSelection() == 0)
+            m_dialogueManager.ToggleDialogueBox(true);
+        else
+            m_dialogueManager.ToggleDialogueBox(false);
+
+        NextNode();
+    }
 
     #endregion
 }

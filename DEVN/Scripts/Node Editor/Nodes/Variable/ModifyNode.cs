@@ -26,7 +26,7 @@ public class ModifyNode : BaseNode
     [SerializeField] private int m_booleanSelection = 0;
 
     // float modification
-    [SerializeField] private float m_floatValue = 0.0f;
+    [SerializeField] private float m_floatValue = 0;
     [SerializeField] private int m_floatSelection = 0;
     
     // string modification
@@ -53,7 +53,7 @@ public class ModifyNode : BaseNode
         
         m_title = "Modify";
 
-        m_rectangle.width = 180;
+        m_rectangle.width = 170;
         m_rectangle.height = 90;
 
         AddOutputPoint(); // linear

@@ -17,8 +17,7 @@ public class BackgroundNode : BaseNode
     private string[] m_toggle = { "Enter", "Exit" };
     [SerializeField] private int m_toggleSelection = 0;
 		
-    [SerializeField] private Background m_background;
-    //[SerializeField] private Sprite m_background; // background sprite
+    [SerializeField] private Background m_background; // background asset
 
 	// background fade variables
 	[SerializeField] private Color m_fadeColour = Color.black;
@@ -48,13 +47,12 @@ public class BackgroundNode : BaseNode
         m_title = "Background";
 
         m_rectangle.width = 170;
-        m_rectangle.height = 108;
 
         AddOutputPoint(); // linear
     }
 
 	/// <summary>
-	/// overridden copy constructor, background and other associated properties
+	/// overridden copy constructor, copies background and other associated properties
 	/// </summary>
 	/// <param name="node">node to copy</param>
 	/// <param name="position">position to copy to</param>
@@ -107,7 +105,7 @@ public class BackgroundNode : BaseNode
 
         // fade time
         EditorGUILayout.LabelField("Fade Time");
-        m_fadeTime = EditorGUILayout.Slider(m_fadeTime, 0.01f, 3);
+        m_fadeTime = EditorGUILayout.Slider(m_fadeTime, 0.1f, 5);
 
 		// if "Enter" is selected, show "wait for finish" toggle
 		if (m_toggleSelection == 0)

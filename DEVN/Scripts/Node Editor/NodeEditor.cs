@@ -4,13 +4,13 @@ using UnityEditor;
 using DEVN.Nodes;
 using DEVN.ScriptableObjects;
 
-#if UNITY_EDITOR
-
 namespace DEVN
 {
 
 namespace Editor
 {
+
+#if UNITY_EDITOR
 
 /// <summary>
 /// the node-based graph editor window. Provides all of the functionality for drawing the various graph elements, 
@@ -273,7 +273,12 @@ public class NodeEditor : EditorWindow
 		Rect contentRect = GUILayoutUtility.GetLastRect();
         contentRect.y += contentRect.height;
         contentRect.height = Screen.height - 56;
-                
+
+                //Texture2D texture = new Texture2D(1, 1);
+                //texture.SetPixel(0, 0, Color.green);
+                //texture.wrapMode = TextureWrapMode.Repeat;
+                //texture.Apply();
+                //GUI.DrawTexture(contentRect, texture);
         GUI.BeginScrollView(contentRect, new Vector2(0, 0), contentRect);
 
         // draw grid
@@ -409,8 +414,8 @@ public class NodeEditor : EditorWindow
     }
 }
 
-}
-
-}
-
 #endif
+
+}
+
+}

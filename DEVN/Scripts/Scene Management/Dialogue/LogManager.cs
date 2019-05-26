@@ -21,7 +21,7 @@ public class LogManager
         
 	/// <summary>
 	/// are you sure you want to construct your own LogManager? You may want to use 
-	/// SceneManager.GetLogManager() instead
+	/// SceneManager.GetInstance().GetLogManager() instead
 	/// </summary>
 	/// <param name="logComponent">a log component which houses the relevent prefab/UI elements</param>
 	public LogManager(LogComponent logComponent)
@@ -52,6 +52,7 @@ public class LogManager
         logMessage.GetSpeaker().text = speaker;
         logMessage.GetDialogue().text = dialogue;
 
+        // resize the logged message depending on the amount of new-lines in the dialogue
         int noOfLines = dialogue.Split('\n').Length;
         log.GetComponent<LayoutElement>().preferredHeight = 18 + noOfLines * 18;
 	}

@@ -21,11 +21,11 @@ public class DialogueNode : BaseNode
     [SerializeField] private Character m_character;
 
     // sprite variables
-    private Sprite m_sprite;
+    [SerializeField] private Sprite m_sprite;
 	[SerializeField] private int m_spriteSelection;
 
     // audio variables
-    private AudioClip m_characterAudio;
+    [SerializeField] private AudioClip m_characterAudio;
 	[SerializeField] private int m_audioSelection;
 
     // dialogue
@@ -41,7 +41,7 @@ public class DialogueNode : BaseNode
 	public AudioClip GetCharacterAudio() { return m_characterAudio; }
 	public string GetDialogue() { return m_dialogue; }
 
-		#endregion
+    #endregion
 
 #if UNITY_EDITOR
 
@@ -86,7 +86,7 @@ public class DialogueNode : BaseNode
 	/// </summary>
 	/// <param name="id">the ID of the node window</param>
 	protected override void DrawNodeWindow(int id)
-	{ 
+	{
         // draw the sprite in the background, if one is selected
         DrawSpriteBackground();
 		DrawCharacterObjectField(); // draw character object field
@@ -94,19 +94,19 @@ public class DialogueNode : BaseNode
 		// if a character is selected, draw all the other node stuffs
 		if (m_character != null)
 		{
-			DrawSpritePopup(); // sprite selection
-			DrawAudioPopup(); // audio selection
-            
+		    DrawSpritePopup(); // sprite selection
+		    DrawAudioPopup(); // audio selection
+        
             if (m_sprite != null)
                 EditorGUILayout.EndVertical();
-            
-			DrawDialogueTextArea(); // dialogue text area
+        
+		    DrawDialogueTextArea(); // dialogue text area
 		}
 
         // draw a button which allows the user to easily create new, already-connected dialogue nodes
         if (GUI.Button(new Rect(m_rectangle.width - 40, 0, 20, 15), "+"))
             CreateNextDialogue();
-		
+        
         // resize node
         if (Event.current.type == EventType.Repaint)
         {

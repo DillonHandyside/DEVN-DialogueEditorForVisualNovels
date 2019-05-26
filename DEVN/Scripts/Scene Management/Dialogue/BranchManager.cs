@@ -11,21 +11,16 @@ namespace SceneManagement
 
 public class BranchManager
 {
-	// scene manager ref
-	private SceneManager m_sceneManager;
-
 	// references to branch UI elements
 	private GameObject m_branchPrefab;
-	private GameObject m_branches;
+	private GameObject m_branchPanel;
 	private Transform m_branchContent;
 
-	public BranchManager(SceneManager sceneManager, BranchComponent branchComponent)
+	public BranchManager(BranchComponent branchComponent)
 	{
-		m_sceneManager = sceneManager; // assign scene manager reference
-
 		// assign references to all the relevant branch elements
 		m_branchPrefab = branchComponent.GetBranchPrefab();
-		m_branches = branchComponent.GetBranches();
+		m_branchPanel = branchComponent.GetBranches();
 		m_branchContent = branchComponent.GetBranchContent();
 	}
 		
@@ -33,7 +28,8 @@ public class BranchManager
 	/// 
 	/// </summary>
 	/// <param name="branches"></param>
-	public void DisplayChoices(List<string> branches)
+    /// <param name="nextNode"></param>
+	public void DisplayChoices(List<string> branches, bool nextNode = false)
 	{
 		for (int i = 0; i < branches.Count; i++)
 		{
@@ -46,13 +42,16 @@ public class BranchManager
 
 			// add an onClick event to each button so that they hide the panel and proceed to the desired node
 			int branchIndex = i;
-			branchButton.onClick.AddListener(() => m_sceneManager.NextNode(branchIndex));
-			branchButton.onClick.AddListener(() => { m_branches.SetActive(false); });
+			branchButton.onClick.AddListener(() => { m_branchPanel.SetActive(false); });
 			branchButton.onClick.AddListener(() => { ClearChoices(); });
+
+            SceneManager sceneManager = SceneManager.GetInstance();
+            if (sceneManager != null && nextNode)
+			    branchButton.onClick.AddListener(() => sceneManager.NextNode(branchIndex));
 		}
 
 		// display the branch panel
-		m_branches.SetActive(true);
+		m_branchPanel.SetActive(true);
 	}
 
 	/// <summary>

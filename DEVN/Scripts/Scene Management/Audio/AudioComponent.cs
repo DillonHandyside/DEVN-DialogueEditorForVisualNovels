@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Audio;
+using DEVN.SceneManagement;
 
 namespace DEVN
 {
@@ -13,7 +14,7 @@ namespace Components
 /// </summary>
 public class AudioComponent : MonoBehaviour
 {
-	// reference to mixer
+    // reference to mixer
 	[Header("Audio Mixer")]
 	[Tooltip("Plug in the DEVN Mixer found in \"DEVN\\Audio\"")]
 	[SerializeField] private AudioMixer m_audioMixer;
@@ -28,6 +29,8 @@ public class AudioComponent : MonoBehaviour
 	[SerializeField] private AudioMixerGroup m_SFX;
 	[Tooltip("Plug in the voice mixer group found in the DEVN mixer")]
 	[SerializeField] private AudioMixerGroup m_voice;
+
+    private AudioManager m_audioManager;
 		
 	#region getters
 
@@ -37,7 +40,15 @@ public class AudioComponent : MonoBehaviour
 	public AudioMixerGroup GetSFX() { return m_SFX; }
 	public AudioMixerGroup GetVoice() { return m_voice; }
 
-	#endregion
+    public AudioManager GetAudioManager()
+    {
+        if (m_audioManager == null)
+            m_audioManager = new AudioManager(this);
+
+        return m_audioManager;
+    }
+
+    #endregion
 }
 
 }

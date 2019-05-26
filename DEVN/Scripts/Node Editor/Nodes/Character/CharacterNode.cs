@@ -26,7 +26,7 @@ public class CharacterNode : BaseNode
 	[SerializeField] private Sprite m_sprite;
 	[SerializeField] private int m_spriteSelection = 0;
 		
-	[SerializeField] private float m_xPosition = 50.0f; // character alignment
+	[SerializeField] private float m_xPosition = 50; // character alignment
 	[SerializeField] private float m_fadeTime = 0.5f; // fade time
 	[SerializeField] private bool m_isInverted = false; // y scale invert?
 	[SerializeField] private bool m_waitForFinish = true; // wait before next node?
@@ -211,7 +211,7 @@ public class CharacterNode : BaseNode
         if (m_toggleSelection == 0)
         {
             EditorGUILayout.LabelField("X Position (%)");
-            m_xPosition = EditorGUILayout.Slider(m_xPosition, 0.0f, 100.0f);
+            m_xPosition = EditorGUILayout.Slider(m_xPosition, 0, 100);
         }
     }
 
@@ -221,7 +221,7 @@ public class CharacterNode : BaseNode
     private void DrawFadeTimeSlider()
     {
         EditorGUILayout.LabelField("Fade Time");
-        m_fadeTime = EditorGUILayout.Slider(m_fadeTime, 0.0f, 3.0f);
+        m_fadeTime = EditorGUILayout.Slider(m_fadeTime, 0.1f, 5);
     }
 
     /// <summary>

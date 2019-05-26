@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using DEVN.SceneManagement;
 
 namespace DEVN
 {
@@ -21,13 +22,23 @@ public class CharacterComponent : MonoBehaviour
 	[SerializeField] private RectTransform m_backgroundPanel;
 	[SerializeField] private RectTransform m_foregroundPanel;
 
+    private CharacterManager m_characterManager;
+
 	#region getters
 
 	public GameObject GetCharacterPrefab() { return m_characterPrefab; }
 	public RectTransform GetBackgroundPanel() { return m_backgroundPanel; }
 	public RectTransform GetForegroundPanel() { return m_foregroundPanel; }
 
-		#endregion
+    public CharacterManager GetCharacterManager()
+    {
+        if (m_characterManager == null)
+            m_characterManager = new CharacterManager(this);
+
+        return m_characterManager;
+    }
+
+	#endregion
 }
 
 }
