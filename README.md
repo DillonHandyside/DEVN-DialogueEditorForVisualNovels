@@ -1,15 +1,26 @@
 # DEVN - Dialogue Editor for Visual Novels
 > A custom Unity Editor tool. A node-based graph editor for creating visual novel scenes.
 
-<img src="https://github.com/DillonHandyside/DEVN---Dialogue-Editor-for-Visual-Novels/blob/master/DEVN/Textures/logoDEVN.png" width="200" height="`00"> 
+<a href="https://ibb.co/r49Qwnz"><img src="https://i.ibb.co/bzt6KpC/sample-Screenshot.png" alt="sample-Screenshot" border="0"></a><br /><a target='_blank' href='https://imgbb.com/'></a><br/>
 
 ## Features
-> to do
+> DEVN offers all of the expected functionality and features that are provided with a visual novel. This includes:
+##### Completed
+* Audio (BGM, ambience, SFX & voice)
+* Backgrounds (includes CGs)
+* Characters
+* Dialogue
+* Choices, conditions & branching paths
+* Auto & Log
+##### Coming Soon
+* Save/Load
+* Settings
+
 
 ## Installation
 > Follow these instructions to set-up DEVN for your Unity Project.
 ### Clone
-* Clone this repository using ``` https://github.com/DillonHandyside/DEVN---Dialogue-Editor-for-Visual-Novels.git/trunk ```
+* Clone this repository using ``` https://github.com/DillonHandyside/DEVN-DialogueEditorforVisualNovels.git/trunk ```
 * Or, alternatively, download the .zip file containing the repository.
 ### Directory
 * Ensure the DEVN folder is placed inside of the assets folder of your Unity Project, e.g. ``` UnityProject\Assets\DEVN\ ```
@@ -28,16 +39,26 @@
 > For more details, refer to the FAQs, and/or internal documentation.
 
 
-## Author/s
-> to do
-
-
 ## FAQ
 > to do
 
 
 ## Contact
-> Reach out to me on one of these platforms for support/enquiries
+> Reach out to me on one of these platforms for support/enquiries.
 * Website: ``` to do ```
 * Email: 		 [dj_handyside@hotmail.com](mailto:dj_handyside@hotmail.com?subject=[GitHub]%20DEVN%20Enquiry)
 * Twitter:	 [@DillonHandyside](https://twitter.com/DillonHandyside)
+
+
+## Special Thanks
+> Here are a few notable people who helped me out on this project! :)
+##### Devin Steward (Zelus) - Character Artist
+* Instagram: [z.elus](https://www.instagram.com/z.elus/)
+* Twitter:   [@z_elus](https://twitter.com/z_elus)
+##### Dale Giroud-Grumley (design decisions & testing) 
+* Twitter:   [@Delicious_Hams](https://twitter.com/Delicious_Hams)
+##### Drake Barclay (design decisions & troubleshooting)
+* Twitter:   
+##### Christopher Poermandya (design decisions) 
+* Twitter:   [@ChrispyDesign](https://twitter.com/ChrispyDesign)
+##### And finally, the Discord boys (for "ooh"ing and "aah"ing at my gifs and screenshots)
