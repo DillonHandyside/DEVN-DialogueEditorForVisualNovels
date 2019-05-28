@@ -16,12 +16,12 @@ namespace SceneManagement
 /// </summary>
 public class CharacterManager
 {
-    private CharacterComponent m_characterComponent;
+    private readonly CharacterComponent m_characterComponent;
 	private CharacterTransformer m_characterTransformer;
 		
-	private GameObject m_characterPrefab;
-	private RectTransform m_backgroundPanel;
-	private RectTransform m_foregroundPanel;
+	private readonly GameObject m_characterPrefab;
+	private readonly RectTransform m_backgroundPanel;
+	private readonly RectTransform m_foregroundPanel;
 		
 	private List<GameObject> m_characters;
 

@@ -12,19 +12,6 @@ namespace SceneManagement
 /// </summary>
 public class UtilityManager
 {
-	// scene manager ref
-	SceneManager m_sceneManager;
-
-	/// <summary>
-	/// are you sure you want to construct your own UtilityManager? You may want to use 
-	/// SceneManager.GetInstance().GetUtilityManager() instead
-	/// </summary>
-	/// <param name="sceneManager">reference to the scene manager instance</param>
-	public UtilityManager(SceneManager sceneManager)
-	{
-		m_sceneManager = sceneManager; // assign scene manager reference
-	}
-
 	/// <summary>
 	/// simple coroutine which performs a delay for an arbritrary amount of time. Call
 	/// StartCoroutine on this to perform said delay!
@@ -36,9 +23,18 @@ public class UtilityManager
 	{
 		yield return new WaitForSeconds(delayTime);
 
-		if (nextNode)
-			m_sceneManager.NextNode(); 
+        SceneManager sceneManager = SceneManager.GetInstance();
+		if (sceneManager != null && nextNode)
+			sceneManager.NextNode(); 
 	}
+
+    /// <summary>
+    /// simple utility function which calls Application.Quit()
+    /// </summary>
+    public void ApplicationQuit()
+    {
+        Application.Quit();
+    }
 }
 
 }

@@ -21,9 +21,9 @@ public class SaveManager
 	private SceneManager m_sceneManager;
 		
     // UI elements
-	private GameObject m_saveSlotPrefab;
-	private GameObject m_savePanel;
-	private RectTransform m_saveContent;
+	private readonly GameObject m_saveSlotPrefab;
+	private readonly GameObject m_savePanel;
+	private readonly RectTransform m_saveContent;
 
 	private GameData m_gameData;
 	private SaveData m_currentData = new SaveData();

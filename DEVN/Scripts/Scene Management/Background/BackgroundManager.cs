@@ -14,11 +14,11 @@ namespace SceneManagement
 /// </summary>
 public class BackgroundManager
 {
-	// references to the background elements in the scene
-	private Image m_imageBackground;
-	private Image m_colourBackground;
+    private readonly BackgroundComponent m_backgroundComponent;
 
-    private BackgroundComponent m_backgroundComponent;
+	// references to the background elements in the scene
+	private readonly Image m_imageBackground;
+	private readonly Image m_colourBackground;
 
 	#region getters
 

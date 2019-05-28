@@ -17,12 +17,12 @@ namespace SceneManagement
 /// </summary>
 public class DialogueManager
 {
-    private DialogueComponent m_dialogueComponent;
+    private readonly DialogueComponent m_dialogueComponent;
         
 	// references to dialogue box UI elements
-	private GameObject m_dialogueBox;
-	private Text m_speaker;
-	private Text m_dialogue;
+	private readonly GameObject m_dialogueBox;
+	private readonly Text m_speaker;
+	private readonly Text m_dialogue;
 		
 	// reference to typewrite coroutine, so StopCoroutine can be used
 	private IEnumerator m_typewriteEvent;

@@ -12,9 +12,9 @@ namespace SceneManagement
 public class BranchManager
 {
 	// references to branch UI elements
-	private GameObject m_branchPrefab;
-	private GameObject m_branchPanel;
-	private Transform m_branchContent;
+	private readonly GameObject m_branchPrefab;
+	private readonly GameObject m_branchPanel;
+	private readonly Transform m_branchContent;
 
 	public BranchManager(BranchComponent branchComponent)
 	{

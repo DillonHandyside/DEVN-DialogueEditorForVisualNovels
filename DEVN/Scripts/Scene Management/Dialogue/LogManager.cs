@@ -14,10 +14,10 @@ namespace SceneManagement
 public class LogManager
 {
     // log message prefab reference
-	[SerializeField] private GameObject m_logPrefab;
+	private readonly GameObject m_logPrefab;
 
     // log content panel
-	[SerializeField] private Transform m_logContent;
+	private readonly Transform m_logContent;
         
 	/// <summary>
 	/// are you sure you want to construct your own LogManager? You may want to use 

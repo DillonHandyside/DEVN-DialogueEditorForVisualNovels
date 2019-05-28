@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f97195559373da409a1adde84887dff, type: 3}
   m_Name: Tutorial Intro
   m_EditorClassIdentifier: 
-  m_currentPage: 3
+  m_currentPage: 0
   m_pages:
   - {fileID: 114467562145665014}
   - {fileID: 114253097319348138}
@@ -218,7 +218,7 @@ MonoBehaviour:
   m_rectangle:
     serializedVersion: 2
     x: 706
-    y: 31
+    y: 30
     width: 128
     height: 40
   m_title: Dialogue Box
@@ -226,14 +226,14 @@ MonoBehaviour:
   m_inputPoint:
     serializedVersion: 2
     x: 696
-    y: 41
+    y: 40
     width: 10
     height: 20
   m_outputs: 04000000
   m_outputPoints:
   - serializedVersion: 2
     x: 834
-    y: 41
+    y: 40
     width: 10
     height: 20
   m_toggleSelection: 0
@@ -314,7 +314,7 @@ MonoBehaviour:
   m_rectangle:
     serializedVersion: 2
     x: 865
-    y: 32
+    y: 31
     width: 100
     height: 58
   m_title: Page
@@ -322,7 +322,7 @@ MonoBehaviour:
   m_inputPoint:
     serializedVersion: 2
     x: 855
-    y: 51
+    y: 50
     width: 10
     height: 20
   m_outputs: 
@@ -416,7 +416,7 @@ MonoBehaviour:
   m_rectangle:
     serializedVersion: 2
     x: 131
-    y: 30
+    y: 29
     width: 170
     height: 262
   m_title: Background
@@ -424,14 +424,14 @@ MonoBehaviour:
   m_inputPoint:
     serializedVersion: 2
     x: 121
-    y: 151
+    y: 150
     width: 10
     height: 20
   m_outputs: 05000000
   m_outputPoints:
   - serializedVersion: 2
     x: 301
-    y: 151
+    y: 150
     width: 10
     height: 20
   m_toggleSelection: 0
@@ -833,7 +833,7 @@ MonoBehaviour:
     height: 20
   m_outputs: 
   m_outputPoints: []
-  m_nextScene: {fileID: 0}
+  m_nextScene: {fileID: 11400000, guid: b1d82b4616e13744189d5de4ef02cd03, type: 2}
 --- !u!114 &114689804594337366
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -849,7 +849,7 @@ MonoBehaviour:
   m_rectangle:
     serializedVersion: 2
     x: 334
-    y: 31
+    y: 30
     width: 340
     height: 224
   m_title: Character
@@ -857,14 +857,14 @@ MonoBehaviour:
   m_inputPoint:
     serializedVersion: 2
     x: 324
-    y: 133
+    y: 132
     width: 10
     height: 20
   m_outputs: 03000000
   m_outputPoints:
   - serializedVersion: 2
     x: 674
-    y: 133
+    y: 132
     width: 10
     height: 20
   m_toggleSelection: 0
@@ -872,7 +872,7 @@ MonoBehaviour:
   m_sprite: {fileID: 21300000, guid: 0f2bd585e44b6664b87b6b7b9ad015cd, type: 3}
   m_spriteSelection: 0
   m_xPosition: 50
-  m_fadeTime: 0.5
+  m_fadeTime: 0.25
   m_isInverted: 0
   m_waitForFinish: 1
 --- !u!114 &114736411302770220
@@ -1028,7 +1028,7 @@ MonoBehaviour:
   m_rectangle:
     serializedVersion: 2
     x: 3
-    y: 30
+    y: 29
     width: 100
     height: 50
   m_title: Start
@@ -1043,7 +1043,7 @@ MonoBehaviour:
   m_outputPoints:
   - serializedVersion: 2
     x: 103
-    y: 45
+    y: 44
     width: 10
     height: 20
 --- !u!114 &114827299969302880

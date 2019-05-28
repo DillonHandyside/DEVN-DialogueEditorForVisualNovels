@@ -17,11 +17,11 @@ namespace SceneManagement
 public class AudioManager
 {
 	// reference to mixer & relevant mixer groups
-	private AudioMixer m_audioMixer;
-	private AudioMixerGroup m_BGM;
-	private AudioMixerGroup m_ambience;
-	private AudioMixerGroup m_SFX;
-    private AudioMixerGroup m_voice;
+	private readonly AudioMixer m_audioMixer;
+	private readonly AudioMixerGroup m_BGM;
+	private readonly AudioMixerGroup m_ambience;
+	private readonly AudioMixerGroup m_SFX;
+    private readonly AudioMixerGroup m_voice;
 
 	// reference to the current audio objects in the scene
 	private GameObject m_bgmAudio;

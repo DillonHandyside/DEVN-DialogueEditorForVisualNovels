@@ -152,6 +152,7 @@ public class NodeEditor : EditorWindow
 		// utility nodes
 		contextMenu.AddItem(new GUIContent("New Node/Utility/Delay"), false, () => m_nodeManager.AddNode(typeof(DelayNode)));
 		contextMenu.AddItem(new GUIContent("New Node/Utility/Page"), false, () => m_nodeManager.AddNode(typeof(PageNode)));
+        contextMenu.AddItem(new GUIContent("New Node/Utility/Application Quit"), false, () => m_nodeManager.AddNode(typeof(ApplicationQuitNode)));
 
 		// variable nodes
 		contextMenu.AddItem(new GUIContent("New Node/Variable/Condition"), false, () => m_nodeManager.AddNode(typeof(ConditionNode)));

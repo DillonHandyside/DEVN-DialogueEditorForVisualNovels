@@ -27,10 +27,10 @@ public class EndNode : BaseNode
     {
         base.Init(position);
         
+        m_title = "End";
+
         m_rectangle.width = 100;
         m_rectangle.height = 58;
-
-        m_title = "End";
     }
 
     /// <summary>
