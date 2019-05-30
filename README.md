@@ -20,6 +20,7 @@
 ### Clone
 * Clone this repository using ``` https://github.com/DillonHandyside/DEVN-DialogueEditorforVisualNovels.git/trunk ```
 * Or, alternatively, download the .zip file containing the repository.
+
 ### Directory
 * Ensure the DEVN folder is placed inside of the assets folder of your Unity Project, e.g. ``` UnityProject\Assets\DEVN\ ```
 * Installation complete!
@@ -27,16 +28,20 @@
 
 ## Quick-start
 > Follow these instructions to get started using DEVN. 
+
 ### Scene set-up
 * In the project view, navigate to ``` DEVN/Prefabs/ ``` and locate the prefab named *"DEVN Canvas"*
 * Drag and drop said prefab on to the scene hierarchy
+
 ### Creating a DEVN scene
 * In the project view, navigate to a folder that you would like to create your DEVN scenes in
 * Right-click, and select ``` Create/DEVN/Scene ```
 * Remember the *"DEVN Canvas"* prefab that was placed on the hierarchy? Navigate to the *"Scene Manager"* component and set the newly created DEVN scene as the *"Start Scene"*
+
 ### Editing a DEVN scene
 * To open the scene editor window, under the Unity toolbar, navigate to ``` Window/DEVN/Scene Editor ```
 * In the scene editor window, under *"Current Scene"*, select your newly created DEVN scene
+
 ### Congratulations!
 * You are now ready to edit your scene! Try right-clicking on the graph and have a look at each node and their properties
 * *Hint: Try starting with a background node! Most visual novel scenes will need a background at the start of the scene*
@@ -56,13 +61,17 @@
 
 ## Special Thanks
 > Here are a few notable people who helped me out on this project! :)
+
 ##### Devin Stewart (Zelus) - Character Artist
 * Instagram: [z.elus](https://www.instagram.com/z.elus/)
 * Twitter:   [@z_elus](https://twitter.com/z_elus)
+
 ##### Dale Giroud-Grumley - Designer
 * Twitter:   [@Delicious_Hams](https://twitter.com/Delicious_Hams)
+
 ##### Christopher Poermandya (Chrispy) - Designer 
 * Twitter:   [@ChrispyDesign](https://twitter.com/ChrispyDesign)
+
 ##### Drake Barclay - Programmer
 * Github:    [Pyromage](https://github.com/ThePyromage)
 
