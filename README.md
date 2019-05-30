@@ -5,6 +5,7 @@
 
 ## Features
 > DEVN offers all of the expected functionality and features that are provided with a visual novel. This includes:
+
 * Audio (BGM, ambience, SFX & voice)
 * Backgrounds (includes CGs)
 * Characters
@@ -17,6 +18,7 @@
 
 ## Installation
 > Follow these instructions to set-up DEVN for your Unity Project.
+
 ### Clone
 * Clone this repository using ``` https://github.com/DillonHandyside/DEVN-DialogueEditorforVisualNovels.git/trunk ```
 * Or, alternatively, download the .zip file containing the repository.
@@ -45,6 +47,7 @@
 ### Congratulations!
 * You are now ready to edit your scene! Try right-clicking on the graph and have a look at each node and their properties
 * *Hint: Try starting with a background node! Most visual novel scenes will need a background at the start of the scene*
+
 > For a more detailed explanation, refer to the FAQs, and/or internal documentation.
 
 
@@ -54,6 +57,7 @@
 
 ## Contact
 > Reach out to me on one of these platforms for support/enquiries.
+
 * Website: ``` to do ```
 * Email: 		 [dj_handyside@hotmail.com](mailto:dj_handyside@hotmail.com?subject=[GitHub]%20DEVN%20Enquiry)
 * Twitter:	 [@DillonHandyside](https://twitter.com/DillonHandyside)
