@@ -195,7 +195,29 @@ public class NodeEvaluator
     {
         UtilityManager utilityManager = m_sceneManager.GetUtilityManager();
 
-        if (m_currentNode is DelayNode)
+
+        if (m_currentNode is ConsoleNode) 
+        { 
+            ConsoleType consoleType = (m_currentNode as ConsoleNode).GetConsoleType();
+            string consoleMessage = (m_currentNode as ConsoleNode).GetMessage();
+
+            switch (consoleType)
+            {
+                case ConsoleType.Log:
+                    Debug.Log(consoleMessage);
+                    break;
+                case ConsoleType.Warning:
+                    Debug.LogWarning(consoleMessage);
+                    break;
+                case ConsoleType.Error:
+                    Debug.LogError(consoleMessage);
+                    break;
+            }
+
+            m_sceneManager.NextNode();
+            return true;
+        }
+        else if (m_currentNode is DelayNode)
         {
             m_sceneManager.StartCoroutine(utilityManager.Delay((m_currentNode as DelayNode).GetDelayTime(), true));
             return true;

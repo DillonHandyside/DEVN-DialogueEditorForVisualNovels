@@ -150,6 +150,7 @@ public class NodeEditor : EditorWindow
 		contextMenu.AddItem(new GUIContent("New Node/Dialogue/Dialogue Box"), false, () => m_nodeManager.AddNode(typeof(DialogueBoxNode)));
 
 		// utility nodes
+		contextMenu.AddItem(new GUIContent("New Node/Utility/Console"), false, () => m_nodeManager.AddNode(typeof(ConsoleNode)));
 		contextMenu.AddItem(new GUIContent("New Node/Utility/Delay"), false, () => m_nodeManager.AddNode(typeof(DelayNode)));
 		contextMenu.AddItem(new GUIContent("New Node/Utility/Page"), false, () => m_nodeManager.AddNode(typeof(PageNode)));
         contextMenu.AddItem(new GUIContent("New Node/Utility/Application Quit"), false, () => m_nodeManager.AddNode(typeof(ApplicationQuitNode)));
